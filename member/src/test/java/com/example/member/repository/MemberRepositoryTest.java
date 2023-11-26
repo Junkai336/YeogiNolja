@@ -21,11 +21,11 @@ class MemberRepositoryTest {
     public void createMemberTest() {
 
         Member member = Member.builder()
-                .userName("1")
-                .userEmail("1")
+                .name("1")
+                .email("1")
                 .userRole(UserRole.ADMIN)
-                .userPhoneNumber("01012341234")
-                .userAddress("abc")
+                .phoneNumber("01012341234")
+                .Address("abc")
                         .build();
 
         memberRepository.save(member);
@@ -51,8 +51,8 @@ class MemberRepositoryTest {
         Long id = 1L;
 
         Member member = Member.builder()
-                .userId(id)
-                .userName("hello")
+                .Id(id)
+                .name("hello")
                 .build();
 
         memberRepository.save(member);

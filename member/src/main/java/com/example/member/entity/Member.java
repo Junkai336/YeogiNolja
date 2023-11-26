@@ -21,34 +21,35 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseEntity{
 
     // primary key를 가진 변수 선언
     @Id
     // 해당 id 값을 어떻게 자동으로 생성할 지 전략 선택.
     // 각 데이터베이스에 따라 기본키 자동 생성 (mysql은 identity)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     // 기본적으로 멤버 변수명과 일치하는 데이터베이스 컬럼을 매핑
     // 선언이 꼭 필요한 것은 아님
     // @Column에서 지정한 변수명과 데이터베이스 컬럼명을 서로 다르게 주고 싶다면 (name = "")
-    @Column
-    private Long userId;
+    @Column(name = "member_id")
+    private Long Id;
 
-    @Column(name="user_name")
-    private String userName;
+    @Column
+    private String name;
 
     // 특정 열에 중복값이 입력되지 않는다?
     @Column(unique = true)
-    private String userEmail;
+    private String email;
 
     @Column
     private String password;
 
     @Column
-    private String userPhoneNumber;
+    private String phoneNumber;
 
-    @Column
-    private String userAddress;
+    @Column String postNm;  // 우편번호
+
+    @Column String Address; // 주소
 
     // @Enumberated : 자바 enum 타입을 엔티티 클래스의 속성으로 사용할 수 있다.
     // EnumType.STRING : 각 Enum 이름을 저장한다 (USER, ADMIN)
@@ -56,25 +57,42 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    // ?? builder로 되는지 봐야하고, 안되면 setter로.
 
-    public static Member createMember(MemberDto memberDto, PasswordEncoder passwordEncoder) {
+    public static Member toMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
+        Member member =new Member();
+        String addr = memberDto.getAddress()
+                +memberDto.getDetailAddress()
+                +memberDto.getExtraAddress();
 
-        Member member = new Member();
-
-        String passwordEncode = passwordEncoder.encode(memberDto.getPassword());
-
-        member.builder()
-                .userName(memberDto.getUserName())
-                .userEmail(memberDto.getUserEmail())
-                .password(passwordEncode)
-                .userPhoneNumber(memberDto.getUserPhoneNumber())
-                .userAddress(memberDto.getUserAddress())
-                .userRole(UserRole.ADMIN);
-//        .build();
-
+        member.setName(memberDto.getName());
+        member.setEmail(memberDto.getEmail());
+        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        member.setPhoneNumber(memberDto.getPhoneNumber());
+        member.setPostNm(memberDto.getPostcode());
+        member.setAddress(addr);
+        member.setUserRole(UserRole.ADMIN);
         return member;
     }
+
+    // ?? builder로 되는지 봐야하고, 안되면 setter로.
+
+//    public static Member createMember(MemberDto memberDto, PasswordEncoder passwordEncoder) {
+//
+//        Member member = new Member();
+//
+//        String passwordEncode = passwordEncoder.encode(memberDto.getPassword());
+//
+//        member.builder()
+//                .name(memberDto.getName())
+//                .email(memberDto.getEmail())
+//                .password(passwordEncode)
+//                .phoneNumber(memberDto.getPhoneNumber())
+//                .Address(memberDto.getAddress()+memberDto.getExtraAddress()+memberDto.getDetailAddress())
+//                .userRole(UserRole.ADMIN);
+////        .build();
+//
+//        return member;
+//    }
 
 }
 
