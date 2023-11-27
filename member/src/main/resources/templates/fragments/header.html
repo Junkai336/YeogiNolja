@@ -15,13 +15,17 @@
                         <a class="nav-link" href="/">홈</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/board/boardList">게시판</a>
+                        <a class="nav-link"  href="/board/boardList">게시판</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" href="/members/join">회원가입</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link"  href="/members/mypage">마이페이지</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAnonymous()">
                         <a class="nav-link" href="/members/login">로그인</a>
-                    </li>
-                    <li class="nav-item" sec:authorize="isAnonymous()">
-                        <a class="nav-link" href="/members/join">회원가입</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
                         <a class="nav-link"  href="/members/logout">로그아웃</a>

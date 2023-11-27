@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 // CheckedException or 예외가 없을 때는 Commit
@@ -26,7 +28,9 @@ public class MemberService implements UserDetailsService {
     }
 
     private void validateDuplicateMember(Member member){
-        Member findMember = memberRepository.findByEmail(member.getEmail());
+        Member findMember = memberRepository.findByEmail(member.getEmail())
+                .orElseThrow(EntityNotFoundException::new);
+
         if(findMember != null){
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
@@ -34,10 +38,12 @@ public class MemberService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(email);
-        if (member == null){
-            throw new UsernameNotFoundException(email);
-        }
+
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+
+
+
         return   User.builder()
                 .username(member.getEmail())
                 .password(member.getPassword())
@@ -46,6 +52,14 @@ public class MemberService implements UserDetailsService {
     }
 
 
+    public Member findByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+        return member;
+    }
 }
+
+
+
 
 // https://imiyoungman.tistory.com/9

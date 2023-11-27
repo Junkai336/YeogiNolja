@@ -1,23 +1,20 @@
 package com.example.member.controller;
 
-import com.example.member.dto.MemberDto;
+import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
-import com.example.member.repository.MemberRepository;
 import com.example.member.service.MemberService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -30,7 +27,7 @@ public class MemberController {
 
     @GetMapping(value = "/join")
     public String toJoin(Model model) {
-        model.addAttribute("memberDto", new MemberDto());
+        model.addAttribute("memberDto", new MemberFormDto());
 
         return "member/join";
     }
@@ -39,14 +36,14 @@ public class MemberController {
     // BindingResult : ModelAttribute를 이용해 매개변수를 Bean에 바인딩할 때 발생한 오류 정보를 받기 위해 선언 / 바인딩이 실패하면 400 에러
     // 검증 오류가 발생할 경우 오류 내용을 보관하는 스프링 프레임워크에서 제공하는 객체
     @PostMapping(value = "/join")
-    public String newMember(@Valid MemberDto memberDto, BindingResult bindingResult, Model model){
+    public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             return "member/join";
         }
 
         try {
-            Member member = Member.toMember(memberDto, passwordEncoder);
+            Member member = Member.toMember(memberFormDto, passwordEncoder);
             memberService.saveMember(member);
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -58,16 +55,29 @@ public class MemberController {
 
     @GetMapping(value = "/login")
     public String toLogin() {
+
         return "member/login";
     }
 
+
     @GetMapping(value = "/login/error")
     public String loginError(Model model){
+
         model.addAttribute("loginErrorMsg",
                 "아이디 또는 비밀번호를 확인해주세요");
         return "member/login";
     }
 
+
+    @GetMapping(value = "/members/detail")
+    public String myPage(Principal principal, Model model, MemberFormDto memberFormDto){
+        String email = principal.getName().toString();
+        Member member = memberService.findByEmail(email);
+
+
+
+        return "member/detail";
+    }
 
 
 }

@@ -2,7 +2,7 @@ package com.example.member.entity;
 
 
 import com.example.member.constant.UserRole;
-import com.example.member.dto.MemberDto;
+import com.example.member.dto.MemberFormDto;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -47,9 +47,11 @@ public class Member extends BaseEntity{
     @Column
     private String phoneNumber;
 
-    @Column String postNm;  // 우편번호
+    @Column
+    private String postNm;  // 우편번호
 
-    @Column String Address; // 주소
+    @Column
+    private String Address; // 주소
 
     // @Enumberated : 자바 enum 타입을 엔티티 클래스의 속성으로 사용할 수 있다.
     // EnumType.STRING : 각 Enum 이름을 저장한다 (USER, ADMIN)
@@ -58,17 +60,17 @@ public class Member extends BaseEntity{
     private UserRole userRole;
 
 
-    public static Member toMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
+    public static Member toMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member = new Member();
-        String addr = memberDto.getAddress()
-                +memberDto.getDetailAddress()
-                +memberDto.getExtraAddress();
+        String addr = memberFormDto.getAddress()
+                + memberFormDto.getDetailAddress()
+                + memberFormDto.getExtraAddress();
 
-        member.setName(memberDto.getName());
-        member.setEmail(memberDto.getEmail());
-        member.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        member.setPhoneNumber(memberDto.getPhoneNumber());
-        member.setPostNm(memberDto.getPostcode());
+        member.setName(memberFormDto.getName());
+        member.setEmail(memberFormDto.getEmail());
+        member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+        member.setPhoneNumber(memberFormDto.getPhoneNumber());
+        member.setPostNm(memberFormDto.getPostcode());
         member.setAddress(addr);
         member.setUserRole(UserRole.ADMIN);
         return member;
