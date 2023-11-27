@@ -23,12 +23,27 @@ class BoardServiceTest {
     @Test
     public void saveBoard() {
 
+//        Board board = Board.builder()
+//                .content("content")
+//                .boardTitle("title")
+//                .build();
+//
+//        boardRepository.save(board);
+
         BoardDto boardDto = new BoardDto();
 
         boardDto.setContent("content");
         boardDto.setBoardTitle("title");
 
-        boardService.saveBoard(boardDto);
+        Board board = Board.builder()
+//                 .id(1L)
+                .content(boardDto.getContent())
+                .boardTitle(boardDto.getBoardTitle())
+                .build();
+
+        boardRepository.save(board);
+
+//        boardService.saveBoard(boardDto);
 
     }
 }

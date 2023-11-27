@@ -28,6 +28,8 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
+        <!--        csrf를 입력하지 않은게 무지성 403 에러의 원인 -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
     </div>
 

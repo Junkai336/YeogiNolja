@@ -49,7 +49,6 @@ public class BoardController {
 
         //redirect : 브라우저가 해당 URL로 재요청
 //        return "redirect:/board/" + savedBoard.getId();
-//return "board/boardList";
-        return "/";
+        return "redirect:/board/boardList";
     }
 }
