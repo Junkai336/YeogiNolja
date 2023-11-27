@@ -32,26 +32,24 @@ public class BoardController {
     }
 
     @GetMapping(value = "/boardWrite")
-    public String newBoard() {
+    public String newBoard(Model model) {
+        BoardDto boardDto =new BoardDto();
+        model.addAttribute("boardDto", boardDto);
         return "board/boardWrite";
     }
 
-    @PostMapping("/boardCreate")
+    @PostMapping(value = "/boardCreate")
     public String createBoard(BoardDto boardDto) {
 
-        log.info(boardDto.toString());
 
-        Board board = boardDto.toEntity();
+    boardService.saveBoard(boardDto);
 
-        log.info(board.toString());
 
-        Board saved = boardRepository.save(board);
-
-        log.info(saved.toString());
+//        Board saved = boardService.create(boardDto);
 
         //redirect : 브라우저가 해당 URL로 재요청
-        return "redirect:/board/" + saved.getId();
-
-
+//        return "redirect:/board/" + savedBoard.getId();
+//return "board/boardList";
+        return "/";
     }
 }

@@ -1,17 +1,16 @@
 package com.example.member.dto;
 
 import com.example.member.constant.BoardCategoryStatus;
+import com.example.member.entity.BaseEntity;
 import com.example.member.entity.Board;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class BoardDto {
+@ToString
+public class BoardDto extends BaseEntity {
 
     private Long id;
 
@@ -32,7 +31,5 @@ public class BoardDto {
 //    // 추천수
 //    private Long recommendations;
 
-    public Board toEntity() {
-        return new Board(id, boardTitle, content);
-    }
+
 }

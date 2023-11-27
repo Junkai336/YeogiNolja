@@ -1,6 +1,7 @@
 package com.example.member.entity;
 
 import com.example.member.constant.BoardCategoryStatus;
+import com.example.member.dto.BoardDto;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -14,11 +15,12 @@ import javax.persistence.Id;
 @Builder
 @ToString
 @Getter
+@Setter
 public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
 
     private String boardTitle;
 
@@ -33,5 +35,12 @@ public class Board extends BaseEntity {
 //
 //    // 추천수
 //    private Long recommendations;
+
+    public static Board toBoard(BoardDto boardDto){
+        Board board =new Board();
+        board.setBoardTitle(boardDto.getBoardTitle());
+        board.setContent(boardDto.getContent());
+        return board;
+    }
 
 }
