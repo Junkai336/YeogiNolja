@@ -38,12 +38,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
+<!--            <a href="/board/${boardList.id}">게시글 누르면 들어가게 하기?</a>-->
+            <tr th:each="boardList : ${boardLists}">
+                <td th:text="${boardList.id}"></td>
                 <td>a</td>
-                <td>a</td>
-                <td>a</td>
-                <td>a</td>
-                <td>a</td>
+<!--                <td th:text="${boardList.boardTitle}">a</td>-->
+                <td><a href="/board/${boardList.id}" th:utext="${boardList.boardTitle}">a</a></td>
+                <td th:text="${boardList.createdBy}">a</td>
+                <td th:text="${boardList.regTime}">a</td>
                 <td>a</td>
                 <td>a</td>
             </tr>

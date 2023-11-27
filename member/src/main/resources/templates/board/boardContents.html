@@ -17,6 +17,28 @@
 
 <div layout:fragment="content">
 
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Content</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board : ${boards}">
+      <th th:text="${board.id}">a</th>
+      <td th:text="${board.boardTitle}">a</td>
+      <td th:text="${board.content}">a</td>
+    </tr>
+    </tbody>
+
+  </table>
+  <a href="/board/{{boards.id}}/edit" class="btn btn-primary">수정</a>
+  <a href="/board/{{boards.id}}/delete" class="btn btn-danger">삭제</a>
+
+  <!--<button onclick="confirmDelete(1)">삭제</button>-->
+  <a href="/board/boardList">게시글 목록</a>
 
 
   <script>
