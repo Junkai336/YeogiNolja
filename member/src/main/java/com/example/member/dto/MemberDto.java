@@ -28,9 +28,9 @@ public class MemberDto {
     private UserRole userRole;
 
 
-    public static MemberDto toMemberDto(Member member){
-        MemberDto memberDto =new MemberDto();
-
-
-    }
+//    public static MemberDto toMemberDto(Member member){
+//        MemberDto memberDto =new MemberDto();
+//
+//
+//    }
 }
