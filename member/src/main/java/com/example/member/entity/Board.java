@@ -20,16 +20,18 @@ public class Board extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
-    private BoardCategoryStatus boardCategoryStatus;
-
     private String boardTitle;
 
-    private String author;
+    private String content;
 
-    // 조회수
-    private Long views;
-
-    // 추천수
-    private Long recommendations;
+//    private String author;
+//
+//    private BoardCategoryStatus boardCategoryStatus;
+//
+//    // 조회수
+//    private Long views;
+//
+//    // 추천수
+//    private Long recommendations;
 
 }

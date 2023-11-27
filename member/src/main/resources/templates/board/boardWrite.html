@@ -17,31 +17,18 @@
 
 <div layout:fragment="content">
 
-    <div class="card m-2" id="comments-new">
-        <div class="card-body">
-            <!--     댓글작성폼   -->
-            <form>
-                <!--       닉네임입력-->
-                <div class="mb-3">
-                    <label for="" class="form-label">닉네임</label>
-                    <input type="text" class="form-control form-control-sm"
-                           id="new-comment-nickname">
-                </div>
-                <!--       댓글 본문 입력-->
-                <div class="mb-3">
-                    <label for="" class="form-label">댓글내용</label>
-                    <textarea type="text" class="form-control form-control-sm"
-                              id="new-comment-body" rows="3"> </textarea>
-                </div>
-                <!--         히든인풋   -->
-                {{#article}}
-                <input type="hidden" id="new-comment-article-id" value="{{id}}">
-                {{/article}}
-                <!--            전송버튼-->
-                <button type="button" class="btn btn-outline-primary btn-sm"
-                        id="comment-create-btn">댓글 작성</button>
-            </form>
+    <form class="container" action="/board/boardCreate" method="post">
+        <div class="mb-3">
+            <label class="form-label">제목</label>
+            <input type="text" class="form-control" name="boardTitle">
         </div>
+        <div class="mb-3">
+            <label class="form-label">내용</label>
+            <textarea class="form-control" rows="3" name="content"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
     </div>
 
     <script>
