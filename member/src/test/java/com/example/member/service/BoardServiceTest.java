@@ -29,5 +29,6 @@ class BoardServiceTest {
         boardDto.setBoardTitle("title");
 
         boardService.saveBoard(boardDto);
+
     }
 }
