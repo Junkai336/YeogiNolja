@@ -43,6 +43,8 @@
             <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
 
             <button type="submit" class="btn btn-primary">로그인</button>
+            <input type="hidden" th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
 
         </form>
 

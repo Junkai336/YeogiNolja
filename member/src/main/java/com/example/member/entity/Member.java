@@ -59,7 +59,7 @@ public class Member extends BaseEntity{
 
 
     public static Member toMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
-        Member member =new Member();
+        Member member = new Member();
         String addr = memberDto.getAddress()
                 +memberDto.getDetailAddress()
                 +memberDto.getExtraAddress();
