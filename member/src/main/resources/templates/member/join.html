@@ -57,14 +57,14 @@
 <!--            <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>-->
 <!--        </div>-->
 
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-6 mb-3">-->
-<!--                <label for="adrBtn">주소지</label>-->
-<!--                <input type="text" class="form-control" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">-->
-<!--                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" id="adrBtn"><br>-->
-<!--                <input type="text" class="form-control" th:field="*{address}" id="address" placeholder="주소" value=""><br>-->
-<!--                <input type="text" class="form-control" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">-->
-<!--                <input type="text" class="form-control" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">-->
+        <div class="form-group row">
+            <div class="col-md-6 mb-3">
+                <label for="adrBtn">주소지</label>
+                <input type="text" class="form-control" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">
+                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" id="adrBtn"><br>
+                <input type="text" class="form-control" th:field="*{address}" id="address" placeholder="주소" value=""><br>
+                <input type="text" class="form-control" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">
+                <input type="text" class="form-control" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">
 
 <!--                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>-->
 <!--                <script>-->
@@ -120,8 +120,8 @@
 
 
 
-<!--            </div>-->
-<!--        </div>-->
+            </div>
+        </div>
 
         <div style="text-align: center">
             <button type="submit" class="btn btn-primary" style="">Submit</button>

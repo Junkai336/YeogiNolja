@@ -1,5 +1,6 @@
 package com.example.member.dto;
 
+import com.example.member.constant.BoardCategoryStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ public class BoardDto {
 
     private Long id;
 
-    private String boardCategoryStatus;
+    private BoardCategoryStatus boardCategoryStatus;
 
     private String boardTitle;
 

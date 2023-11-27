@@ -39,7 +39,7 @@ public class MemberController {
     // BindingResult : ModelAttribute를 이용해 매개변수를 Bean에 바인딩할 때 발생한 오류 정보를 받기 위해 선언 / 바인딩이 실패하면 400 에러
     // 검증 오류가 발생할 경우 오류 내용을 보관하는 스프링 프레임워크에서 제공하는 객체
     @PostMapping(value = "/join")
-    public String newMember(@Valid MemberDto memberDto, BindingResult bindingResult, Model model, PasswordEncoder passwordEncoder){
+    public String newMember(@Valid MemberDto memberDto, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             return "member/join";
