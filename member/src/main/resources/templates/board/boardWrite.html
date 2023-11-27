@@ -17,14 +17,14 @@
 
 <div layout:fragment="content">
 
-    <form class="container" action="/board/boardCreate" method="post">
-        <div class="mb-3">
-            <label class="form-label">제목</label>
-            <input type="text" class="form-control" name="boardTitle">
+    <form class="container" action="/board/boardCreate" method="post" th:object="${boardDto}">
+        <div class="mb-3 form-group">
+            <label th:for="boardTitle" class="form-label">제목</label>
+            <input type="text" th:field="*{boardTitle}" id="boardTitle" class="form-control" name="boardTitle">
         </div>
-        <div class="mb-3">
-            <label class="form-label">내용</label>
-            <textarea class="form-control" rows="3" name="content"></textarea>
+        <div class="mb-3 form-group">
+            <label th:for="content" class="form-label">내용</label>
+            <textarea class="form-control" id="content" th:field="*{content}" rows="3" name="content"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>

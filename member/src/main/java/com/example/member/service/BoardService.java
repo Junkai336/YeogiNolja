@@ -16,6 +16,18 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
+//    public Board create(BoardDto boardDto) {
+//        Board board = boardDto.toEntity();
+//        if(board.getId() != null){
+//            return null;
+//        } //기존데이터 수정 방지
+//        return boardRepository.save(board);
+//    }
 
+
+    public void saveBoard(BoardDto boardDto){
+        Board board = Board.toBoard(boardDto);
+        boardRepository.save(board);
+    }
 
 }
