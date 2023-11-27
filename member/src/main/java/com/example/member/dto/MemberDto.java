@@ -36,11 +36,11 @@ public class MemberDto {
 //    @Pattern(regexp = "^(01[1|6|7|8|9|0])-(\\d{3,4})-(\\d{4})$", message = "01x-xxxx-xxxx의 형식으로 작성해주세요")
     private String phoneNumber;
 
-    @NotEmpty(message = "우편번호를 입력해주세요.")
+//    @NotEmpty(message = "우편번호를 입력해주세요.")
     private String postcode;   // 우편 번호
-    @NotEmpty(message = "주소를 입력해주세요.")
+//    @NotEmpty(message = "주소를 입력해주세요.")
     private String address;     // 주소
-    @NotEmpty(message = "상세주소를 입력해주세요.")
+//    @NotEmpty(message = "상세주소를 입력해주세요.")
     private String detailAddress; // 상세주소
 
     private String extraAddress; // 참고항목

@@ -59,7 +59,7 @@ public class Member extends BaseEntity{
 
 
     public static Member toMember(MemberDto memberDto, PasswordEncoder passwordEncoder){
-        Member member =new Member();
+        Member member = new Member();
         String addr = memberDto.getAddress()
                 +memberDto.getDetailAddress()
                 +memberDto.getExtraAddress();
@@ -73,26 +73,6 @@ public class Member extends BaseEntity{
         member.setUserRole(UserRole.ADMIN);
         return member;
     }
-
-    // ?? builder로 되는지 봐야하고, 안되면 setter로.
-
-//    public static Member createMember(MemberDto memberDto, PasswordEncoder passwordEncoder) {
-//
-//        Member member = new Member();
-//
-//        String passwordEncode = passwordEncoder.encode(memberDto.getPassword());
-//
-//        member.builder()
-//                .name(memberDto.getName())
-//                .email(memberDto.getEmail())
-//                .password(passwordEncode)
-//                .phoneNumber(memberDto.getPhoneNumber())
-//                .Address(memberDto.getAddress()+memberDto.getExtraAddress()+memberDto.getDetailAddress())
-//                .userRole(UserRole.ADMIN);
-////        .build();
-//
-//        return member;
-//    }
 
 }
 

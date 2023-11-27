@@ -22,7 +22,7 @@ import javax.validation.Valid;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -35,6 +35,9 @@ public class MemberController {
         return "member/join";
     }
 
+    // @Valid : 들어오는 객체에 대한 검증을 수행한다. (NotNull 등)
+    // BindingResult : ModelAttribute를 이용해 매개변수를 Bean에 바인딩할 때 발생한 오류 정보를 받기 위해 선언 / 바인딩이 실패하면 400 에러
+    // 검증 오류가 발생할 경우 오류 내용을 보관하는 스프링 프레임워크에서 제공하는 객체
     @PostMapping(value = "/join")
     public String newMember(@Valid MemberDto memberDto, BindingResult bindingResult, Model model){
 
@@ -58,8 +61,10 @@ public class MemberController {
         return "member/login";
     }
 
-    @GetMapping(value = "/member/login/error")
-    public String failLogin(){
+    @GetMapping(value = "/login/error")
+    public String loginError(Model model){
+        model.addAttribute("loginErrorMsg",
+                "아이디 또는 비밀번호를 확인해주세요");
         return "member/login";
     }
 

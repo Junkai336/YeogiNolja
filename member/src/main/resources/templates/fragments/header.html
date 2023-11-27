@@ -15,13 +15,19 @@
                         <a class="nav-link" href="/">홈</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/boardList">게시판</a>
+                        <a class="nav-link" href="/board/boardList">게시판</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/member/login">로그인</a>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" href="/members/login">로그인</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/member/join">회원가입</a>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" href="/members/join">회원가입</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link"  href="/members/logout">로그아웃</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <p>안녕하세요, <span th:text="${email}"></span>님! 환영합니다.</p>
                     </li>
                 </ul>
                 <div class="nav-item">dd</div>

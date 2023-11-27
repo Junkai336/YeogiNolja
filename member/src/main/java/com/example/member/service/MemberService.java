@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+// CheckedException or 예외가 없을 때는 Commit
+// UncheckedException이 발생하면 Rollback
 @Transactional
 public class MemberService implements UserDetailsService {
 
@@ -45,3 +47,5 @@ public class MemberService implements UserDetailsService {
 
 
 }
+
+// https://imiyoungman.tistory.com/9

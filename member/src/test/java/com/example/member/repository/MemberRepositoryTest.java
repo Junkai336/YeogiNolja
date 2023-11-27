@@ -5,6 +5,7 @@ import com.example.member.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
@@ -16,13 +17,17 @@ class MemberRepositoryTest {
 
     @Autowired
     MemberRepository memberRepository;
+    PasswordEncoder passwordEncoder;
+
 
     @Test
     public void createMemberTest() {
 
+
         Member member = Member.builder()
-                .name("1")
-                .email("1")
+                .name("nameee")
+                .email("a@a")
+                .password("1234")
                 .userRole(UserRole.ADMIN)
                 .phoneNumber("01012341234")
                 .Address("abc")

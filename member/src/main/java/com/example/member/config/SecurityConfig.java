@@ -16,19 +16,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin()
-                .loginPage("/member/login")
+                .loginPage("/members/login")
                 .defaultSuccessUrl("/")
                 .usernameParameter("email")
-                .failureUrl("/member/login/error")
+                .failureUrl("/members/login/error")
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
                 .logoutSuccessUrl("/")
         ;
 
-
+// mvcMatchers에 permitAll로 등록되지 않은 경우 loginPage(member/login) 으로 이동한다.
         http.authorizeRequests()
-                .mvcMatchers("/member/**", "/").permitAll()
+                .mvcMatchers("/members/**", "/", "/board/**").permitAll()
                 .mvcMatchers("/css/**", "js/**", "img/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
