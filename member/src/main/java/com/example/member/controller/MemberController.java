@@ -1,5 +1,6 @@
 package com.example.member.controller;
 
+import com.example.member.dto.MemberDto;
 import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
 import com.example.member.service.MemberService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -70,15 +72,45 @@ public class MemberController {
     }
 
 
-    @GetMapping(value = "/members/detail")
-    public String myPage(Principal principal, Model model, MemberFormDto memberFormDto){
-        String email = principal.getName().toString();
+    @GetMapping(value = "/edit")
+    public String myPage(Principal principal, Model model){
+        String email = principal.getName();
         Member member = memberService.findByEmail(email);
+        MemberFormDto memberFormDto = MemberFormDto.toMemberFormDto(member);
+        model.addAttribute("memberFormDto", memberFormDto);
 
-
-
-        return "member/detail";
+        return "member/edit";
     }
+
+
+    @PostMapping(value = "/edit")
+    public String editMyPage(@Valid MemberFormDto memberFormDto, BindingResult result,
+                             Model model){
+
+        if(result.hasErrors()){
+            return "member/edit";
+        }
+
+        try {
+            memberService.edit(memberFormDto);
+
+        } catch (IllegalStateException e){
+            model.addAttribute("memberFormDto", memberFormDto);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "member/edit";
+        }
+
+        return "redirect:/";
+    }
+    @GetMapping(value = "/members")
+    public String management(Model model){
+        List<MemberFormDto> memberDtoList = memberService.memberList();
+        model.addAttribute("memberDtoList" ,memberDtoList);
+
+        return "/admin/members";
+
+    }
+
 
 
 }

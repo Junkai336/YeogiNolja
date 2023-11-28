@@ -35,6 +35,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated();
 
 
+        http.csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
         return http.build();
     }

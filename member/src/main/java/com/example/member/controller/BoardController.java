@@ -11,9 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Slf4j
@@ -42,33 +45,47 @@ public class BoardController {
     }
 
     @PostMapping(value = "/boardCreate")
-    public String createBoard(BoardDto boardDto) {
+    public String createBoard(@Valid BoardDto boardDto, BindingResult result, Principal principal, Model model) {
+        String email= principal.getName();
+    try {
+        boardService.saveBoard(boardDto, email);
+    }catch (Exception e){
+      model.addAttribute(e.getMessage());
+    }
 
-    boardService.saveBoard(boardDto);
 
         //redirect : 브라우저가 해당 URL로 재요청
         return "redirect:/board/boardList";
     }
 
-    @GetMapping(value = "/board/{id}")
+    @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model) {
         Board boardEntity = boardRepository.findById(id).orElse(null);
         model.addAttribute("boards", boardEntity);
         return "board/boardContents";
     }
 
-    @GetMapping(value = "/board/{id}/boardEdit")
+//    @GetMapping(value = "/{id}/boardEdit")
+//    public String edit(@PathVariable Long id, Model model) {
+//        Board boardEntity = boardRepository.findById(id).orElse(null);
+//        model.addAttribute("board",boardEntity);
+//        return "board/boardEdit";
+//    }
+
+    @GetMapping(value = "/{id}/boardEdit")
     public String edit(@PathVariable Long id, Model model) {
         Board boardEntity = boardRepository.findById(id).orElse(null);
         model.addAttribute("board",boardEntity);
         return "board/boardEdit";
     }
 
-    @GetMapping(value = "/board/boardUpdate")
+    @PostMapping(value = "/boardUpdate")
     public String update(BoardDto boardDto) {
         Board boardEntity = Board.builder()
+                .id(boardDto.getId())
                 .boardTitle(boardDto.getBoardTitle())
                 .content(boardDto.getContent())
+                .boardCategoryStatus(boardDto.getBoardCategoryStatus())
                 .build();
 
         Board target = boardRepository.findById(boardEntity.getId()).orElse(null);
@@ -80,7 +97,7 @@ public class BoardController {
             return "redirect:/board/boardList";
     }
 
-    @GetMapping(value = "board/{id}/boardDelete")
+    @GetMapping(value = "/{id}/boardDelete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr) {
         Board target = boardRepository.findById(id).orElse(null);
 

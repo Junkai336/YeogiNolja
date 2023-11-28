@@ -1,5 +1,6 @@
 package com.example.member.dto;
 
+import com.example.member.entity.Member;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -26,7 +27,7 @@ public class MemberFormDto {
     // @Pattern : 정규식을 검사할 때 사용한다.
     // min, max = value 이하, 이상의 값만 허용한다.
 
-//    @Length(min=8, max=16, message = "비밀번호는 8자 이상, 16자 이하로 입력해 주세요.")
+    //    @Length(min=8, max=16, message = "비밀번호는 8자 이상, 16자 이하로 입력해 주세요.")
 //    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$)", message = "비밀번호는 영문 대소문자, 숫자, 특수문자를 사용해 주세요.")
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String password;
@@ -49,7 +50,23 @@ public class MemberFormDto {
     private String extraAddress; // 참고항목
 
 
+    public static MemberFormDto toMemberFormDto(Member member) {
+        MemberFormDto memberFormDto = new MemberFormDto();
+        memberFormDto.setId(member.getId());
+        memberFormDto.setName(member.getName());
+        memberFormDto.setEmail(member.getEmail());
 
+        memberFormDto.setPhoneN1(member.getPhoneN1());
+        memberFormDto.setPhoneN2(member.getPhoneN2());
+        memberFormDto.setPhoneN3(member.getPhoneN3());
+
+        memberFormDto.setPostcode(member.getPostcode());
+        memberFormDto.setAddress(member.getAddress());
+        memberFormDto.setDetailAddress(member.getDetailAddress());
+        memberFormDto.setExtraAddress(member.getExtraAddress());
+
+        return memberFormDto;
+    }
 }
 
 // https://dev-coco.tistory.com/123

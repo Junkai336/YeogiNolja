@@ -38,14 +38,14 @@
             </tr>
             </thead>
             <tbody>
-<!--            <a href="/board/${boardList.id}">게시글 누르면 들어가게 하기?</a>-->
             <tr th:each="boardList : ${boardLists}">
                 <td th:text="${boardList.id}"></td>
-                <td>a</td>
-<!--                <td th:text="${boardList.boardTitle}">a</td>-->
-                <td><a href="/board/${boardList.id}" th:utext="${boardList.boardTitle}">a</a></td>
-                <td th:text="${boardList.createdBy}">a</td>
-                <td th:text="${boardList.regTime}">a</td>
+<!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
+<!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
+                <td th:text="${boardList.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+                <td><a th:href="@{/board/{id}(id = ${boardList.id})}" th:utext="${boardList.boardTitle}"></a></td>
+                <td th:text="${boardList.createdBy}"></td>
+                <td th:text="${boardList.regTime}"></td>
                 <td>a</td>
                 <td>a</td>
             </tr>
@@ -81,5 +81,7 @@
 
     <!-- https://7942yongdae.tistory.com/86 -->
     <!-- https://cobook.tistory.com/26 -->
+<!--    https://developer-rooney.tistory.com/181 -->
+<!--    https://jddng.tistory.com/231 -->
 
 </div>

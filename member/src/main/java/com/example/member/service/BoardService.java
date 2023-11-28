@@ -2,11 +2,17 @@ package com.example.member.service;
 
 import com.example.member.dto.BoardDto;
 import com.example.member.entity.Board;
+import com.example.member.entity.Member;
 import com.example.member.repository.BoardRepository;
+import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -15,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
 //    public Board create(BoardDto boardDto) {
 //        Board board = boardDto.toEntity();
@@ -25,9 +32,28 @@ public class BoardService {
 //    }
 
 
-    public void saveBoard(BoardDto boardDto){
+    public void saveBoard(BoardDto boardDto, String email){
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+        boardDto.setWriter(member.getName());
+        boardDto.setMember_id(member.getId());
         Board board = Board.toBoard(boardDto);
         boardRepository.save(board);
+    }
+
+    public List<BoardDto> boardDtos(String email){
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+        Long member_id = member.getId();
+        List<Board> boardList = boardRepository.findAllByMemberId(member_id);
+        List<BoardDto> boardDtoList = new ArrayList<>();
+        for (Board board : boardList){
+            BoardDto boardDto= BoardDto.toBoardDto(board);
+            boardDtoList.add(boardDto);
+
+        }
+        return boardDtoList;
+
     }
 
 }

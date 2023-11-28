@@ -1,6 +1,7 @@
 package com.example.member.service;
 
 
+import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +59,38 @@ public class MemberService implements UserDetailsService {
                 .orElseThrow(EntityNotFoundException::new);
         return member;
     }
+
+    public void edit(MemberFormDto memberFormDto) {
+        Member member = memberRepository.findById(memberFormDto.getId())
+                .orElseThrow(EntityNotFoundException::new);
+
+        member.setName(memberFormDto.getName());
+        member.setEmail(memberFormDto.getEmail());
+        member.setPostcode(memberFormDto.getPostcode());
+        member.setAddress(memberFormDto.getAddress());
+        member.setDetailAddress(memberFormDto.getDetailAddress());
+        member.setExtraAddress(memberFormDto.getExtraAddress());
+        member.setPhoneN1(memberFormDto.getPhoneN1());
+        member.setPhoneN2(memberFormDto.getPhoneN2());
+        member.setPhoneN3(memberFormDto.getPhoneN3());
+//        memberRepository.save(member);
+    }
+
+    public List<MemberFormDto> memberList(){
+        List<Member> memberList = memberRepository.findAllByUser();
+        List<MemberFormDto> memberDtoList = new ArrayList<>();
+        for (Member member:memberList){
+            MemberFormDto memberFormDto = MemberFormDto.toMemberFormDto(member);
+            memberDtoList.add(memberFormDto);
+        }
+        return memberDtoList;
+    }
+
+
+
+
 }
+
 
 
 

@@ -23,16 +23,18 @@ public class Board extends BaseEntity {
     private Long id;
 
     @Column
+    private String writer;
+    @Column
     private String boardTitle;
 
     @Column
     private String content;
 
-//    @Column
-//    private String author;
-//
-//    @Enumerated(EnumType.STRING)
-//    private BoardCategoryStatus boardCategoryStatus;
+    @Enumerated(EnumType.STRING)
+    private BoardCategoryStatus boardCategoryStatus;
+
+    private Long member_id;
+
 //
 //    // 조회수
 //    @Column
@@ -44,8 +46,10 @@ public class Board extends BaseEntity {
 
     public static Board toBoard(BoardDto boardDto){
         Board board = new Board();
+        board.setWriter(boardDto.getWriter());
         board.setBoardTitle(boardDto.getBoardTitle());
         board.setContent(boardDto.getContent());
+        board.setBoardCategoryStatus(boardDto.getBoardCategoryStatus());
         return board;
     }
 
