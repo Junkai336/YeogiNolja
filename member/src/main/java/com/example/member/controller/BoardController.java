@@ -37,17 +37,16 @@ public class BoardController {
         return "board/boardList";
     }
 
-//    @GetMapping(value = "/boardWrite")
-//    public String newBoard(Model model) {
-//
-//        BoardDto boardDto = new BoardDto();
-//        model.addAttribute("boardDto", boardDto);
-//        return "board/boardWrite";
-//
-//    }
-
     @GetMapping(value = "/boardWrite")
-    public String newBoard(Model model) {
+    public String newBoard(Model model, Principal principal) {
+
+        if(principal != null) {
+        } else {
+            List<BoardDto> boardEntityList = boardService.boardDtoList();
+            model.addAttribute("boardLists", boardEntityList);
+           model.addAttribute("boardErrorMsg", "로그인된 사용자만 게시글을 작성할 수 있습니다.");
+           return "board/boardList";
+        }
 
         BoardDto boardDto = new BoardDto();
         model.addAttribute("boardDto", boardDto);
