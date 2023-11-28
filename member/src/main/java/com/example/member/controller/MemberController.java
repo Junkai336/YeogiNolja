@@ -27,7 +27,8 @@ public class MemberController {
 
     @GetMapping(value = "/join")
     public String toJoin(Model model) {
-        model.addAttribute("memberDto", new MemberFormDto());
+        MemberFormDto memberFormDto = new MemberFormDto();
+        model.addAttribute("memberFormDto", memberFormDto);
 
         return "member/join";
     }

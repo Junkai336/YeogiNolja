@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
         ;
 
-// mvcMatchers에 permitAll로 등록되지 않은 경우 loginPage(member/login) 으로 이동한다.
+        // mvcMatchers에 permitAll로 등록되지 않은 경우 loginPage(member/login) 으로 이동한다.
         http.authorizeRequests()
                 .mvcMatchers("/members/**", "/", "/board/**").permitAll()
                 .mvcMatchers("/css/**", "js/**", "img/**").permitAll()
@@ -34,9 +35,9 @@ public class SecurityConfig {
                 .anyRequest().authenticated();
 
 
+
         return http.build();
     }
-
 
 
     @Bean
@@ -45,6 +46,3 @@ public class SecurityConfig {
     }
 
 }
-
-// https://jangjjolkit.tistory.com/27
-//1234676767

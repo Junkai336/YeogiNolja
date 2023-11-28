@@ -45,13 +45,21 @@ public class Member extends BaseEntity{
     private String password;
 
     @Column
-    private String phoneNumber;
+    private String phoneN1;
+    @Column
+    private String phoneN2;
+    @Column
+    private String phoneN3;
+
 
     @Column
-    private String postNm;  // 우편번호
-
+    private String postcode;   // 우편 번호
     @Column
-    private String Address; // 주소
+    private String address;     // 주소
+    @Column
+    private String detailAddress; // 상세주소
+    @Column
+    private String extraAddress; // 참고항목
 
     // @Enumberated : 자바 enum 타입을 엔티티 클래스의 속성으로 사용할 수 있다.
     // EnumType.STRING : 각 Enum 이름을 저장한다 (USER, ADMIN)
@@ -62,20 +70,20 @@ public class Member extends BaseEntity{
 
     public static Member toMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member = new Member();
-        String addr = memberFormDto.getAddress()
-                + memberFormDto.getDetailAddress()
-                + memberFormDto.getExtraAddress();
 
         member.setName(memberFormDto.getName());
         member.setEmail(memberFormDto.getEmail());
         member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
-        member.setPhoneNumber(memberFormDto.getPhoneNumber());
-        member.setPostNm(memberFormDto.getPostcode());
-        member.setAddress(addr);
+        member.setPhoneN1(memberFormDto.getPhoneN1());
+        member.setPhoneN2(memberFormDto.getPhoneN2());
+        member.setPhoneN3(memberFormDto.getPhoneN3());
+        member.setPostcode(memberFormDto.getPostcode());
+        member.setAddress(memberFormDto.getAddress());
+        member.setDetailAddress(memberFormDto.getDetailAddress());
+        member.setExtraAddress(memberFormDto.getExtraAddress());
         member.setUserRole(UserRole.ADMIN);
         return member;
     }
 
 }
 
-// https://jobc.tistory.com/120

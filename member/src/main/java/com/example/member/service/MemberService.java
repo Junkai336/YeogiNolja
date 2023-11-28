@@ -28,8 +28,7 @@ public class MemberService implements UserDetailsService {
     }
 
     private void validateDuplicateMember(Member member){
-        Member findMember = memberRepository.findByEmail(member.getEmail())
-                .orElseThrow(EntityNotFoundException::new);
+        Member findMember = memberRepository.findByEmail(member.getEmail()).orElse(null);
 
         if(findMember != null){
             throw new IllegalStateException("이미 가입된 회원입니다.");
