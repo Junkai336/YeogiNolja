@@ -13,7 +13,8 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Override
-    ArrayList<Board> findAll();
+    List<Board> findAll();
+
 
     @Query(value = "select * from board b where b.member_id= :member_id",nativeQuery = true)
     List<Board> findAllByMemberId(@Param("member_id")Long member_id);

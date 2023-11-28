@@ -6,6 +6,8 @@ import com.example.member.entity.Board;
 import com.example.member.entity.Member;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -14,6 +16,7 @@ import lombok.*;
 public class BoardDto{
 
     private Long id;
+
     private String boardTitle;
 
     private String content;
@@ -21,6 +24,7 @@ public class BoardDto{
     private BoardCategoryStatus boardCategoryStatus;
 
     private Member member;
+
 //    // 조회수
 //    private Long views;
 //

@@ -31,6 +31,17 @@ public class BoardService {
 //        return boardRepository.save(board);
 //    }
 
+    public List<BoardDto> boardDtoList () {
+        List<Board> boardList = boardRepository.findAll();
+        List<BoardDto> boardDtoList =new ArrayList<>();
+
+        for (Board board : boardList) {
+            BoardDto boardDto = BoardDto.toBoardDto(board);
+            boardDtoList.add(boardDto);
+        }
+
+        return boardDtoList;
+    }
 
     public void saveBoard(BoardDto boardDto, String email){
         Member member = memberRepository.findByEmail(email)

@@ -43,7 +43,7 @@
 <!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
 <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
                 <td th:text="${boardList.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
-                <td><a th:href="@{/board/{id}(id = ${boardList.id})}" th:utext="${boardList.boardTitle}"></a></td>
+                <td><a th:href="@{/board/{id}(id = ${boardList.id})}" th:text="${boardList.boardTitle}"></a></td>
                 <td th:text="${boardList.createdBy}"></td>
                 <td th:text="${boardList.regTime}"></td>
                 <td>a</td>

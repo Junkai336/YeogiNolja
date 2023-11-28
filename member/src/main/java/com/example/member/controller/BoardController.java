@@ -31,7 +31,7 @@ public class BoardController {
 
     @GetMapping(value = "/boardList")
     public String toBoard(Model model) {
-        List<Board> boardEntityList = boardRepository.findAll();
+        List<BoardDto> boardEntityList = boardService.boardDtoList();
         model.addAttribute("boardLists", boardEntityList);
 
         return "board/boardList";
@@ -86,6 +86,7 @@ public class BoardController {
                 .boardTitle(boardDto.getBoardTitle())
                 .content(boardDto.getContent())
                 .boardCategoryStatus(boardDto.getBoardCategoryStatus())
+                .member(boardDto.getMember())
                 .build();
 
         Board target = boardRepository.findById(boardEntity.getId()).orElse(null);

@@ -24,6 +24,7 @@ public class Board extends BaseEntity {
 
     @Column
     private String writer;
+
     @Column
     private String boardTitle;
 
