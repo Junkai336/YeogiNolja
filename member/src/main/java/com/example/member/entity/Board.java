@@ -33,7 +33,9 @@ public class Board extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BoardCategoryStatus boardCategoryStatus;
 
-    private Long member_id;
+    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
 
 //
 //    // 조회수
@@ -44,11 +46,11 @@ public class Board extends BaseEntity {
 //    @Column
 //    private Long recommendations;
 
-    public static Board toBoard(BoardDto boardDto){
+    public static Board toBoard(Member member, BoardDto boardDto){
         Board board = new Board();
-        board.setWriter(boardDto.getWriter());
         board.setBoardTitle(boardDto.getBoardTitle());
         board.setContent(boardDto.getContent());
+        board.setMember(member);
         board.setBoardCategoryStatus(boardDto.getBoardCategoryStatus());
         return board;
     }

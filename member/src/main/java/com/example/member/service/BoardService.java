@@ -35,9 +35,7 @@ public class BoardService {
     public void saveBoard(BoardDto boardDto, String email){
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
-        boardDto.setWriter(member.getName());
-        boardDto.setMember_id(member.getId());
-        Board board = Board.toBoard(boardDto);
+        Board board = Board.toBoard(member, boardDto);
         boardRepository.save(board);
     }
 
@@ -50,7 +48,6 @@ public class BoardService {
         for (Board board : boardList){
             BoardDto boardDto= BoardDto.toBoardDto(board);
             boardDtoList.add(boardDto);
-
         }
         return boardDtoList;
 

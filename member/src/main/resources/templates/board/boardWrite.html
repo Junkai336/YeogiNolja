@@ -18,7 +18,7 @@
 <div layout:fragment="content">
 
     <form class="container" action="/board/boardCreate" method="post" th:object="${boardDto}">
-        <input type="hidden" th:field="*{writer}">
+        <input type="hidden" th:field="*{member.name}">
         <div class="mb-3 form-group">
             <select th:field="*{boardCategoryStatus}" class="custom-select">
                 <option value="NOTICE">공지사항</option>
@@ -42,11 +42,11 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
 
-        <a href="/board/boardList">게시글 목록</a>
+    <a href="/board/boardList">게시글 목록</a>
 
-    </div>
+</div>
 
-    <script>
-    </script>
+<script>
+</script>
 
 </div>

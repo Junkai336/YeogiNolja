@@ -14,14 +14,13 @@ import lombok.*;
 public class BoardDto{
 
     private Long id;
-    private String writer; // 작성자
     private String boardTitle;
 
     private String content;
 
     private BoardCategoryStatus boardCategoryStatus;
 
-    private Long member_id;
+    private Member member;
 //    // 조회수
 //    private Long views;
 //
@@ -31,10 +30,9 @@ public class BoardDto{
     public static BoardDto toBoardDto(Board board){
         BoardDto boardDto = new BoardDto();
         boardDto.setId(board.getId());
-        boardDto.setWriter(board.getWriter());
         boardDto.setContent(board.getContent());
         boardDto.setBoardCategoryStatus(board.getBoardCategoryStatus());
-        boardDto.setMember_id(board.getMember_id());
+        boardDto.setMember(board.getMember());
 
         return boardDto;
     }
