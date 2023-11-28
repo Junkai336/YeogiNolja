@@ -48,6 +48,7 @@ public class Board extends BaseEntity {
 //    private Long recommendations;
 
     public static Board toBoard(Member member, BoardDto boardDto){
+
         Board board = new Board();
         board.setBoardTitle(boardDto.getBoardTitle());
         board.setContent(boardDto.getContent());

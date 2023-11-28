@@ -7,6 +7,7 @@ import com.example.member.entity.Member;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +26,10 @@ public class BoardDto{
 
     private Member member;
 
+    private String createdBy;
+
+    private LocalDateTime regTime;
+
 //    // 조회수
 //    private Long views;
 //
@@ -34,9 +39,13 @@ public class BoardDto{
     public static BoardDto toBoardDto(Board board){
         BoardDto boardDto = new BoardDto();
         boardDto.setId(board.getId());
+        boardDto.setBoardTitle(board.getBoardTitle());
         boardDto.setContent(board.getContent());
         boardDto.setBoardCategoryStatus(board.getBoardCategoryStatus());
         boardDto.setMember(board.getMember());
+        boardDto.setCreatedBy(board.getCreatedBy());
+        boardDto.setRegTime(board.getRegTime());
+
 
         return boardDto;
     }

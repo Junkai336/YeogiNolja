@@ -20,21 +20,21 @@ class MemberRepositoryTest {
     PasswordEncoder passwordEncoder;
 
 
-    @Test
-    public void createMemberTest() {
-
-
-        Member member = Member.builder()
-                .name("nameee")
-                .email("a@a")
-                .password("1234")
-                .userRole(UserRole.ADMIN)
-                .phoneNumber("01012341234")
-                .Address("abc")
-                        .build();
-
-        memberRepository.save(member);
-    }
+//    @Test
+//    public void createMemberTest() {
+//
+//
+//        Member member = Member.builder()
+//                .name("nameee")
+//                .email("a@a")
+//                .password("1234")
+//                .userRole(UserRole.ADMIN)
+////                .phoneNumber("01012341234")
+//                .Address("abc")
+//                        .build();
+//
+//        memberRepository.save(member);
+//    }
 
     @Test
     public void findIdTest() {

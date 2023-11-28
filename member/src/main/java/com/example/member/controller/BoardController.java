@@ -37,11 +37,22 @@ public class BoardController {
         return "board/boardList";
     }
 
+//    @GetMapping(value = "/boardWrite")
+//    public String newBoard(Model model) {
+//
+//        BoardDto boardDto = new BoardDto();
+//        model.addAttribute("boardDto", boardDto);
+//        return "board/boardWrite";
+//
+//    }
+
     @GetMapping(value = "/boardWrite")
     public String newBoard(Model model) {
+
         BoardDto boardDto = new BoardDto();
         model.addAttribute("boardDto", boardDto);
         return "board/boardWrite";
+
     }
 
     @PostMapping(value = "/boardCreate")
