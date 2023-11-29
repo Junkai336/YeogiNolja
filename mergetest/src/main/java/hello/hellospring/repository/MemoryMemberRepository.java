@@ -5,8 +5,7 @@ import hello.hellospring.domain.Member;
 import java.util.*;
 import java.util.stream.Stream;
 
-publ
-        ic class MemoryMemberRepository implements MemberRepository{
+public class MemoryMemberRepository implements MemberRepository{
 
     private static Map<Long, Member> store = new HashMap<>();
 
