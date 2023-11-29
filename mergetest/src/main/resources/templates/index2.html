@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<pre>
+    스프링에서(정확히 웹브라우저 내장 기능이다) html은 index로 자동으로 연결되는듯
+    다른거로 하려면 templates/..html 만들어야 하는듯
+    그다음 컨트롤러로 설정
+
+    컨트롤러 기본 설정은 @Controller인데 선언하면 알아서 정해지는듯 (중복 선언 불가능함)
+
+    GetMapping(url) ??
+    웹 브라우저에서 http://localhost:8080/주소명  을 요청하면 (그냥 "들어가는" 것도 포함? "들어가져야만" 함?)
+    스프링 부트가 내장하고 있는 톰캣 서버가
+    스프링 컨테이너에 작성된 @GetMapping("주소명")를 찾아 메서드를 실행한다.
+    (url 시작 경로가 탬플릿인가봄)
+
+
+</pre>
+<a href="/question3">templates/question3</a>
+<a href="/question4">templates/question4</a>
+<input type="text" placeholder="아이디">
+<input type="text" placeholder="비번">
+<button>제출</button>
+</body>
+</html>
