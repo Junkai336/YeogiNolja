@@ -63,4 +63,6 @@ public class LodgingService {
             return lodgingDtoList;
     }
 
+    // master 브렌치에서 단 주석입니다.
+
 }
