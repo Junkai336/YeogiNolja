@@ -60,7 +60,7 @@ public class BoardController {
     try {
         boardService.saveBoard(boardDto, email);
     }catch (Exception e){
-      model.addAttribute(e.getMessage());
+      model.addAttribute(result.getFieldError());
     }
 
 

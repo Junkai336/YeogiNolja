@@ -17,13 +17,13 @@
 
 <div layout:fragment="content">
 
-    <div th:if="${boardErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">
-        <p th:text="${boardErrorMsg}">에러출력용</p>
-    </div>
+<!--    <div th:if="${boardErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">-->
+<!--        <p th:text="${boardErrorMsg}">에러출력용</p>-->
+<!--    </div>-->
 
-    <div th:if="${boardSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
-        <p th:text="${boardSuccessMsg}">성공출력용</p>
-    </div>
+<!--    <div th:if="${boardSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">-->
+<!--        <p th:text="${boardSuccessMsg}">성공출력용</p>-->
+<!--    </div>-->
 
     <div class="container mt-3">
         <button type="button" class="btn btn-success">전체글보기</button>
@@ -64,7 +64,8 @@
     </div>
     <!-- 글쓰기 버튼 -->
     <div class="container">
-        <a href="/board/boardWrite" class="btn btn-primary">새글쓰기</a>
+        <a href="/members/login" class="btn btn-primary" sec:authorize="isAnonymous()">새글쓰기</a>
+        <a href="/board/boardWrite" class="btn btn-primary" sec:authorize="isAuthenticated()">새글쓰기</a>
     </div>
 
     <!-- 검색 영역 -->
