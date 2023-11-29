@@ -116,5 +116,6 @@ public class LodgingController {
         return "/admin/lodgingContents";
     }
 
+    // Heojune 브렌치에서 단 주석입니다.
 
 }
