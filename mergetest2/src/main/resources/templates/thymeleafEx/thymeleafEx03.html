@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>상품 리스트 출력 예제</h1>
+    <table border="1">
+        <thead>
+        <tr>
+            <td>순번</td>
+            <td>상품명</td>
+            <td>상품설명</td>
+            <td>가격</td>
+            <td>상품등록일</td>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="itemDto, status : ${itemDtoList} ">
+                <td th:text ="${status.index}"></td>
+                <td th:text="${itemDto.itemNm}"></td>
+                <td th:text="${itemDto.itemDetail}"></td>
+                <td th:text="${itemDto.price}"></td>
+                <td th:text="${itemDto.regTime}"></td>
+            </tr>
+<!--        status 반복문 상태를 나타내는 객체-->
+<!--   index : 현재 반복되는 요소의 0부터 시작하는 인덱스     -->
+<!--            count: 현재까지의 반복 횟수입니다 (1부터 시작).-->
+<!--            size: 전체 리스트의 크기입니다.-->
+<!--            current: 현재 반복되는 요소입니다.-->
+<!--            even/odd: 현재 요소가 짝수 또는 홀수인지 여부를 나타냅니다. -->
+        </tbody>
+    </table>
+</body>
+</html>

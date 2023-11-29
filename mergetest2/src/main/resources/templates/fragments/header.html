@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <div th:fragment="header">
+        <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Shop</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                            <a class="nav-link"  href="/admin/item/new">상품 등록</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                            <a class="nav-link"  href="/admin/items">상품 관리</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link"  href="/cart">장바구니</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link"  href="/orders">구매이력</a>
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link"  href="/members/logout">로그아웃</a>
+                    </li>
+                        </li>
+                        <li class="nav-item" sec:authorize="isAnonymous()">
+                            <a class="nav-link"  href="/members/login">로그인</a>
+                        </li>
+
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <p>안녕하세요, <span th:text="${username}"></span>님! 환영합니다.</p>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search" th:action="@{/}" method="get">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchQuery">
+                        <button class="btn btn-success" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+<!--    sec:authorize="hasAnyAuthority('ROLE_ADMIN')" 관리자 계정으로 로그인한경우 상품등록및 관리-->
+<!--sec:authorize="isAuthenticated()" 로그인(인증)한 사용자 장바구니 구매이력-->
+<!--sec:authorize="isAnonymous()" 아직로그인하지 않은 사용자-->
+</html>
