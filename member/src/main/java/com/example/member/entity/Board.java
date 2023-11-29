@@ -19,11 +19,8 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="board_id")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String writer;
 
     @Column
     private String boardTitle;

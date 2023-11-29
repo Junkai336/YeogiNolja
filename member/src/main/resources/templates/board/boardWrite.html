@@ -32,10 +32,11 @@
         </div>
 
         <div class="mb-3 form-group">
-            <label th:for="content" class="form-label">내용</label>
-            <textarea class="form-control" id="content" th:field="*{content}" rows="3" name="content"></textarea>
-
+            <label th:for="summernote" class="form-label">내용</label>
+            <div th:insert="fragments/summernote"></div>
+            <textarea id="summernote" class="form-control" name="editordata" th:field="*{content}" rows="3"></textarea>
         </div>
+
 
         <button type="submit" class="btn btn-primary">작성하기</button>
         <!--        csrf를 입력하지 않은게 무지성 403 에러의 원인 -->

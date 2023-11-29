@@ -2,12 +2,17 @@ package com.example.member.dto;
 
 import com.example.member.constant.LodgingType;
 import com.example.member.entity.Room;
+import lombok.*;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class LodgingDto {
 
     private Long id;
@@ -34,5 +39,7 @@ public class LodgingDto {
     private LocalDateTime regTime;
 
     private LocalDateTime updateTime;
+
+
 
 }

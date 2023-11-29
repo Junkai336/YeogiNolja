@@ -17,37 +17,85 @@
 
 <div layout:fragment="content">
 
-    <form class="container" action="/board/boardCreate" method="post" th:object="${boardDto}">
-        <input type="hidden" th:field="*{member.name}">
-        <div class="mb-3 form-group">
-            <select th:field="*{boardCategoryStatus}" class="custom-select">
-                <option value="NOTICE">공지사항</option>
-                <option value="FREE">자유게시판</option>
-            </select>
-        </div>
+    <!--    <div th:if="${boardErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">-->
+    <!--        <p th:text="${boardErrorMsg}">에러출력용</p>-->
+    <!--    </div>-->
 
-        <div class="mb-3 form-group">
-            <label th:for="boardTitle" class="form-label">제목</label>
-            <input type="text" th:field="*{boardTitle}" id="boardTitle" class="form-control" name="boardTitle">
-        </div>
+    <!--    <div th:if="${boardSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">-->
+    <!--        <p th:text="${boardSuccessMsg}">성공출력용</p>-->
+    <!--    </div>-->
 
-        <div class="mb-3 form-group">
-            <label th:for="summernote" class="form-label">내용</label>
-            <div th:insert="fragments/summernote"></div>
-            <textarea id="summernote" class="form-control" name="editordata" th:field="*{content}" rows="3"></textarea>
-        </div>
+    <div class="container mt-3">
+        <button type="button" class="btn btn-success">전체글보기</button>
+        <button type="button" class="btn btn-success">공지사항</button>
+        <button type="button" class="btn btn-success">자유게시판</button>
+    </div>
 
+    <!-- 테이블 영역 -->
+    <div class="container mt-3">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>분류</th>
+                <th width="50%">글제목</th>
+                <th>글쓴이</th>
+                <th>작성일</th>
+                <th>조회수</th>
+                <th>추천수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="boardDto : ${boardDtoList}">
+                <td th:text="${boardDto.id}"></td>
+                <!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
+                <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
+                <td th:text="${boardDto.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+                <td>
+                    <a th:href="@{/board/{id}(id = ${boardDto.id})}">
+                        <span th:text="${boardDto.boardTitle}"></span>
+                    </a>
+                </td>
+                <!--                <td th:text="${boardList.createdBy}"></td>-->
+                <td th:text="${boardDto.member.name}"></td>
+                <td th:text="${boardDto.regTime}"></td>
+                <td>a</td>
+                <td>a</td>
+            </tr>
+            </tbody>
+        </table>
 
-        <button type="submit" class="btn btn-primary">작성하기</button>
-        <!--        csrf를 입력하지 않은게 무지성 403 에러의 원인 -->
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-    </form>
+    </div>
+    <!-- 글쓰기 버튼 -->
+    <div class="container">
+        <a href="/members/login" class="btn btn-primary" sec:authorize="isAnonymous()">새글쓰기</a>
+        <a href="/board/boardWrite" class="btn btn-primary" sec:authorize="isAuthenticated()">새글쓰기</a>
+    </div>
 
-    <a href="/board/boardList">게시글 목록</a>
+    <!-- 검색 영역 -->
+    <div class="container-fluid d-flex justify-content-center">
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="검색어를 입력해 주세요" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
 
-</div>
+    <!-- 페이지네이션 영역 -->
+    <div class="container-fluid d-flex justify-content-center mt-3">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">이전</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">다음</a></li>
+            </ul>
+        </nav>
+    </div>
 
-<script>
-</script>
+    <!-- https://7942yongdae.tistory.com/86 -->
+    <!-- https://cobook.tistory.com/26 -->
+    <!--    https://developer-rooney.tistory.com/181 -->
+    <!--    https://jddng.tistory.com/231 -->
 
 </div>

@@ -50,21 +50,7 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-//    public Board findId(Long id) {
-//        Board boardEntityId = boardRepository.findById(id).orElseThrow(EntityNotFoundException:: new);
-//
-//        return boardEntityId;
-//    }
 
-//    public Board deleteBoard(Board target) {
-//
-//        if(target != null) {
-//            boardRepository.delete(target);
-//        }
-//
-//        return target;
-//
-//    }
 
     public List<BoardDto> boardDtos(String email){
         Member member = memberRepository.findByEmail(email)
@@ -80,4 +66,20 @@ public class BoardService {
 
     }
 
+
+    public BoardDto findBoard(Long id) {
+        Board board = boardRepository.findById(id).orElse(null);
+
+        return BoardDto.toBoardDto(board);
+
+    }
+
+    public void boardUpdate(BoardDto boardDto) {
+        Board board = boardRepository.findById(boardDto.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        board.setBoardTitle(boardDto.getBoardTitle());
+        board.setContent(boardDto.getContent());
+
+
+    }
 }

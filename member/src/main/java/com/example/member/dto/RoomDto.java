@@ -1,9 +1,14 @@
 package com.example.member.dto;
 
 import com.example.member.constant.ReservationStatus;
+import lombok.*;
 
 import javax.persistence.*;
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class RoomDto {
 
     private Long id;

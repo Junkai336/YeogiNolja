@@ -32,21 +32,13 @@ public class BoardController {
     @GetMapping(value = "/boardList")
     public String toBoard(Model model) {
         List<BoardDto> boardDtoList = boardService.boardDtoList();
-        model.addAttribute("boardList", boardDtoList);
+        model.addAttribute("boardDtoList", boardDtoList);
 
         return "board/boardList";
     }
 
     @GetMapping(value = "/boardWrite")
-    public String newBoard(Model model, Principal principal) {
-
-//        if(principal != null) {
-//        } else {
-//            List<BoardDto> boardDtoList = boardService.boardDtoList();
-//            model.addAttribute("boardList", boardDtoList);
-//           model.addAttribute("boardErrorMsg", "로그인된 사용자만 게시글을 작성할 수 있습니다.");
-//           return "board/boardList";
-//        }
+    public String newBoard(Model model) {
 
         BoardDto boardDto = new BoardDto();
         model.addAttribute("boardDto", boardDto);
@@ -55,14 +47,14 @@ public class BoardController {
     }
 
     @PostMapping(value = "/boardCreate")
-    public String createBoard(@Valid BoardDto boardDto, BindingResult result, Principal principal, Model model, RedirectAttributes rttr) {
+    public String createBoard(@Valid BoardDto boardDto, BindingResult result, Principal principal, Model model) {
         String email= principal.getName();
-    try {
-        boardService.saveBoard(boardDto, email);
-        rttr.addFlashAttribute("boardSuccessMsg", "게시글 생성이 완료되었습니다.");
-    }catch (Exception e){
-      model.addAttribute(result.getFieldError());
-    }
+        try {
+            boardService.saveBoard(boardDto, email);
+        }catch (Exception e){
+            model.addAttribute(result.getFieldError());
+        }
+
 
 
         //redirect : 브라우저가 해당 URL로 재요청
@@ -72,7 +64,6 @@ public class BoardController {
     @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model) {
         Board boardEntity = boardRepository.findById(id).orElse(null);
-//        Board boardEntity = boardService.findId(id);
 
         model.addAttribute("boards", boardEntity);
 
@@ -88,30 +79,23 @@ public class BoardController {
 
     @GetMapping(value = "/{id}/boardEdit")
     public String edit(@PathVariable Long id, Model model) {
-        Board boardEntity = boardRepository.findById(id).orElse(null);
-//        Board boardEntity = boardService.findId(id);
+        BoardDto boardDto = boardService.findBoard(id);
+        model.addAttribute("boardDto", boardDto);
 
-        model.addAttribute("board",boardEntity);
         return "board/boardEdit";
     }
 
     @PostMapping(value = "/boardUpdate")
-    public String update(BoardDto boardDto, RedirectAttributes rttr) {
-        Board boardEntity = Board.builder()
-                .id(boardDto.getId())
-                .boardTitle(boardDto.getBoardTitle())
-                .content(boardDto.getContent())
-                .boardCategoryStatus(boardDto.getBoardCategoryStatus())
-                .member(boardDto.getMember())
-                .build();
+    public String update(@Valid BoardDto boardDto, BindingResult result, Model model) {
 
-        Board target = boardRepository.findById(boardEntity.getId()).orElse(null);
-
-        if(target != null) {
-            boardRepository.save(boardEntity);
-            rttr.addFlashAttribute("boardSuccessMsg", "게시글 생성이 완료되었습니다.");
+        try{
+            boardService.boardUpdate(boardDto);
+        }catch (Exception e){
+            model.addAttribute("errorMsg", result.getFieldError());
         }
-            return "redirect:/board/boardList";
+
+
+        return "redirect:/board/boardList";
     }
 
     @GetMapping(value = "/{id}/boardDelete")
@@ -123,13 +107,6 @@ public class BoardController {
             rttr.addFlashAttribute("boardSuccessMsg", "삭제가 완료되었습니다.");
         }
 
-//        Board target = boardService.findId(id);
-//
-//        Board result = boardService.deleteBoard(target);
-//
-//        if(result == null) {
-//            rttr.addFlashAttribute("boardSuccessMsg", "삭제가 완료되었습니다.");
-//        }
 
         return "redirect:/board/boardList";
     }
