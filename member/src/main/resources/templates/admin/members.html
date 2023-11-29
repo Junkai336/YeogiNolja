@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+
+
+<div layout:fragment="content">
+    <table>
+        <thead>
+        <tr>
+            <td>이름</td>
+            <td>이메일</td>
+            <td>주소</td>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="memberDto: ${memberDtoList}">
+
+            <td>
+                <a th:href="'/members/detail/' + ${memberDto.id}">
+                    <span th:text="${memberDto.email}"></span>
+                </a>
+            </td>
+            </a>
+
+            <td th:text="${memberDto.address}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+
+</html>
