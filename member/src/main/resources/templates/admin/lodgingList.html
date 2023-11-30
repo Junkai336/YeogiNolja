@@ -40,6 +40,14 @@
 
 <div layout:fragment="content">
 
+    <!--    <div th:if="${boardErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">-->
+    <!--        <p th:text="${boardErrorMsg}">에러출력용</p>-->
+    <!--    </div>-->
+
+        <div th:if="${lodgingSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
+            <p th:text="${lodgingSuccessMsg}">성공출력용</p>
+        </div>
+
 <!--    <form th:action="@{'/lodging/list/' + ${items.number}}" role="form" method="get" th:object="${items}">-->
         <form th:action="@{'/lodging/list/'}" role="form" method="get" th:object="${lodgingDtoList}">
         <table class="table">
@@ -58,9 +66,11 @@
                 <!--                아이템목록을 순환하면서 각 아이템에 대한 행을 생성합니다.-->
                 <td th:text="${lodgingDto.id}"></td>
                 <td>
-                    <a th:href="@{/lodging/list/{id}(id = ${lodgingDto.id})}" th:text="${lodgingDto.name}"></a>
+                    <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" th:text="${lodgingDto.name}"></a>
                 </td>
                 <!--               상품명을 클릭하면 상품 수정페이지로 이동 -->
+                <!--        th:switch case 사용을 염두에 둬야 한다.-->
+                <!--        https://solbel.tistory.com/1407 -->
                 <td th:text="${lodgingDto.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>
 
 <!--                <td th:text="${lodgingDto.createdBy}"></td>-->

@@ -8,7 +8,9 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 //        QuerydslPredicateExecutor<Lodging>, LodgingRepositoryCustom {
 
 import com.example.member.entity.Lodging;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface LodgingRepository extends JpaRepository<Lodging, Long> {
 
 }
