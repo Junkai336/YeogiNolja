@@ -1,6 +1,7 @@
 package com.example.member.entity;
 
 import com.example.member.constant.ReservationStatus;
+import com.example.member.dto.RoomDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,7 +39,17 @@ public class Room extends BaseEntity {
     @Column
     private String checkOutTime;
 
+    public static Room toRoom(RoomDto roomDto) {
+        Room room = new Room();
+        room.setId(roomDto.getId());
+        room.setName(roomDto.getName());
+        room.setDetail(roomDto.getDetail());
+        room.setPrice(roomDto.getPrice());
+        room.setCheckInTime(roomDto.getCheckInTime());
+        room.setCheckOutTime(roomDto.getCheckOutTime());
 
+        return room;
+    }
 
 
 }

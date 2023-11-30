@@ -26,18 +26,29 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="board : ${boards}">
-            <th th:text="${board.id}">a</th>
-            <td th:text="${board.boardTitle}">a</td>
-            <td th:utext="${board.content}"></td>
+        <tr th:each="lodging : ${lodgingEntity}">
+            <th th:text="${lodging.id}">a</th>
+            <td th:text="${lodging.name}">a</td>
+            <td th:utext="${lodging.detail}"></td>
         </tr>
         </tbody>
-
     </table>
-    <a th:href="@{/board/{id}/boardEdit(id = ${boards.id})}" class="btn btn-primary">수정</a>
-    <a th:href="@{/board/{id}/boardDelete(id = ${boards.id})}" class="btn btn-danger">삭제</a>
 
-    <a href="/board/boardList">게시글 목록</a>
+    <div class="container-fluid">
+    <div class="card d-flex justify-content-center" style="width: 24rem;">
+        <div class="card-body">
+            <h5 class="card-title">판매자 정보</h5>
+            <p class="card-text" th:text="'이름: '+${lodgingEntity.member.name}"></p>
+            <p class="card-text" th:text="'핸드폰 번호: '+${lodgingEntity.member.phoneN1}+'-'+${lodgingEntity.member.phoneN2}+'-'+${lodgingEntity.member.phoneN3}"></p>
+            <a href="#" class="card-link"></a>
+            <a href="#" class="card-link"></a>
+        </div>
+    </div>
+    </div>
+
+    <a th:href="@{/lodging/{id}/lodgingForm(id = ${lodgingEntity.id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/lodging/{id}/lodgingDelete(id = ${lodgingEntity.id})}" class="btn btn-danger">삭제</a>
+    <a href="/lodging/list">숙소 목록</a>
 
     <script>
     </script>
