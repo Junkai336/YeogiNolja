@@ -1,10 +1,12 @@
 package com.example.member.controller;
 
 import com.example.member.dto.BoardDto;
+import com.example.member.dto.CommentDto;
 import com.example.member.entity.Board;
 import com.example.member.repository.BoardRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.service.BoardService;
+import com.example.member.service.CommentService;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +24,12 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@Transactional
 @RequestMapping("/board")
 public class BoardController {
 
     private final BoardService boardService;
     private final BoardRepository boardRepository;
+    private final CommentService commentService;
 
     @GetMapping(value = "/boardList")
     public String toBoard(Model model) {
@@ -52,7 +54,7 @@ public class BoardController {
         try {
             boardService.saveBoard(boardDto, email);
         }catch (Exception e){
-            model.addAttribute(result.getFieldError());
+            model.addAttribute(e.getStackTrace());
         }
 
 
@@ -63,10 +65,12 @@ public class BoardController {
 
     @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model) {
-        Board boardEntity = boardRepository.findById(id).orElse(null);
+        BoardDto boardDto =  boardService.findBoard(id);
 
-        model.addAttribute("boards", boardEntity);
-
+        model.addAttribute("boardDto", boardDto);
+        List<CommentDto> commentDtoList = commentService.commentDtoList(id);
+        model.addAttribute("commentList", commentDtoList);
+        model.addAttribute("commentDto", new CommentDto());
         return "board/boardContents";
     }
 

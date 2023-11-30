@@ -17,27 +17,42 @@
 
 <div layout:fragment="content">
 
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Title</th>
-      <th scope="col">Content</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="board : ${boards}">
-      <th th:text="${board.id}">a</th>
-      <td th:text="${board.boardTitle}">a</td>
-      <td th:utext="${board.content}"></td>
-    </tr>
-    </tbody>
+  <div th:object="${boardDto}" class="container mt-3">
+    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/board/{id}/boardDelete(id = ${boardDto.id})}" class="btn btn-danger">삭제</a>
 
-  </table>
-  <a th:href="@{/board/{id}/boardEdit(id = ${boards.id})}" class="btn btn-primary">수정</a>
-  <a th:href="@{/board/{id}/boardDelete(id = ${boards.id})}" class="btn btn-danger">삭제</a>
+        <div class="container mt-3">
+          <div>
+            제목 :<p name="title" id="title" th:text="*{boardTitle}"></p>
+            작성자 : <p name="writer" id="memberName" th:text="*{member.name}"></p>
+            작성 시간: <p name="createdByTime" id="createdByTime" th:text="*{regTime}"></p>
+          </div>
+              <hr>
+          글 내용 : <div id="content" name="content" th:utext="*{content}"></div>
+        </div>
+        <hr>
+    <!--    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>-->
 
-  <a href="/board/boardList">게시글 목록</a>
+    <form name="commentForm" th:object="${commentDto}" role="form" th:action="@{/board/{board_id}/comment(board_id = ${boardDto.id})}">
+        <label for="comment">Comment : </label>
+        <input type="text" th:field="*{comment}" name="comment", id="comment"/>
+
+      <button type="submit">댓글 달기</button>
+    </form>
+
+    <hr>
+    <div>
+
+
+
+    </div>
+  </div>  <!-- //boardDto -->
+    <div th:each="commentDto : ${commentList}">
+        <p th:field="*{member}"></p> :
+        <p th:field="*{comment}"></p>
+    </div>
+
+    <a href="/board/boardList">게시글 목록</a>
 
   <script>
   </script>
