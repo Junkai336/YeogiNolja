@@ -57,5 +57,6 @@ public class Room extends BaseEntity {
         return room;
     }
 
+    // Entity 병합용
 
 }
