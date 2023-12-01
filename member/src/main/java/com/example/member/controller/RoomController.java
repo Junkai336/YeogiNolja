@@ -75,7 +75,8 @@ public class RoomController {
         roomRepository.save(room);
 
 
-        return "admin/lodgingList";
+//        return "redirect:/lodging/list";
+        return "redirect:/lodging/"+id;
 
     }
 
