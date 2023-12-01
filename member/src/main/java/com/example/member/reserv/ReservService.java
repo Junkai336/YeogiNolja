@@ -136,7 +136,7 @@ public class ReservService {
     public ReservDto reservPage(Long roomId, Principal principal) {
         // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
         ReservDto reservDto = new ReservDto();
-        lodgingRepository
+
 
 
 
