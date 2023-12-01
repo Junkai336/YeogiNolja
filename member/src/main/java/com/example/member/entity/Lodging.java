@@ -1,6 +1,7 @@
 package com.example.member.entity;
 
 import com.example.member.constant.LodgingType;
+import com.example.member.dto.CommentDto;
 import com.example.member.dto.LodgingDto;
 import lombok.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name="lodging")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+//@Builder
 @ToString
 @Getter
 @Setter
@@ -25,10 +26,13 @@ public class Lodging extends BaseEntity {
     @Column(name="lodging_id")
     private Long id;
 
-    @JoinColumn(name = "room_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Room room;
+//    @JoinColumn(name = "room_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Room room;
 //    private List<Room> room = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lodging", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Room> room = new ArrayList<>();
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -65,7 +69,5 @@ public class Lodging extends BaseEntity {
 //        lodging.setUpdateTime(lodgingDto.getUpdateTime());
         return lodging;
     }
-
-
 
 }

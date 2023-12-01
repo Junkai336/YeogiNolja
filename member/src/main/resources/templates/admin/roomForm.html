@@ -102,114 +102,59 @@ function roomRegistration() {
     <form role="form" method="post" enctype="multipart/form-data" th:object="${lodgingDto}">
         <!--enctype="multipart/form-data" 파일을 보낼경우는 무조건 추가-->
         <p class="h2">
-            숙소 등록
+            객실 등록
         </p>
 
         <input type="hidden" th:field="*{id}">
 
-        <div class="form-group">
-            <select th:field="*{LodgingType}" class="form-select" aria-label="Default select example">
-                <option value="PENSION">펜션</option>
-                <option value="POOLVILLA">풀빌라</option>
-            </select>
-        </div>
-
-        <!--       <div class="form-group">&ndash;&gt;-->
-        <!--            <select th:field="*{LodgingType}" class="custom-select">&ndash;&gt;-->
-        <!--                <option value="PENSION">펜션</option>-->
-        <!--                <option value="POOLVILLA">풀빌라</option>-->
-        <!--            </select>-->
-        <!--        </div>-->
-
         <div class="input-group mt-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">숙소명</span>
+                <span class="input-group-text">객실명</span>
             </div>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="숙소명을 입력해주세요">
+            <input type="text" th:field="*{room.name}" class="form-control" placeholder="숙소명을 입력해주세요">
         </div>
-        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
+        <p th:if="${#fields.hasErrors('room.name')}" th:errors="*{room.name}" class="fieldError">Incorrect data</p>
+
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">가격</span>
+                    </div>
+                                <input type="number" th:field="*{room.price}" class="form-control" placeholder="객실의 가격을 입력해주세요">
+                </div>
+                        <p th:if="${#fields.hasErrors('room.price')}" th:errors="*{room.price}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">숙소 위치</span>
+                <span class="input-group-text">객실 상세 내용</span>
             </div>
-            <input type="text" th:field="*{location}" class="form-control" placeholder="숙소의 위치를 입력해주세요">
+            <textarea class="form-control" aria-label="With textarea" th:field="*{room.detail}"></textarea>
         </div>
-        <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="fieldError">Incorrect data</p>
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">숙소 상세 내용</span>
-            </div>
-            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>
-        </div>
-        <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">체크인 시간</span>
+                    </div>
+                                <input type="number" th:field="*{room.checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">
+                </div>
+                        <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">체크아웃 시간</span>
+                    </div>
+                                <input type="number" th:field="*{room.checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">
+                </div>
+        <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>
 
 
 
         <!--객실 등록-->
 
-<!--        <p class="h3">-->
-<!--            객실 등록-->
-<!--        </p>-->
-
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">객실명</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="text" th:field="*{name}" class="form-control" placeholder="객실명을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="text" class="form-control" placeholder="객실명을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">가격</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">객실 상세 내용</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>&ndash;&gt;-->
-<!--            <textarea class="form-control" aria-label="With textarea"></textarea>-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">체크인 시간</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="number" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">체크아웃 시간</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="number" class="form-control" placeholder="체크아웃 시간을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-<!--        &lt;!&ndash;        onclick..&ndash;&gt;-->
-<!--        <div class="d-flex justify-content-center">-->
-<!--            <button type="button" class="btn btn-primary">객실 저장</button>-->
-<!--        </div>-->
-
-
-<!--        &lt;!&ndash;객실 목록&ndash;&gt;-->
-
-<!--        <p class="h4">-->
-<!--            객실 목록-->
-<!--        </p>-->
-
+        <!--        &lt;!&ndash;        onclick..&ndash;&gt;-->
+        <!--        <div class="d-flex justify-content-center">-->
+        <!--            <button type="button" class="btn btn-primary">객실 저장</button>-->
+        <!--        </div>-->
 
 
 
@@ -238,18 +183,10 @@ function roomRegistration() {
         <!--            </div>-->
         <!--        </div>-->
 
-
-
-
-        <div th:if="${#strings.isEmpty(lodgingDto.id)}" style="text-align: center">
-            <button th:formaction="@{/lodging/registration}" type="submit" class="btn btn-primary">숙소 저장</button>
+        <div>
+            <button th:formaction="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" type="submit" class="btn btn-primary">숙소 저장</button>
         </div>
-        <!--상품아이디가 없는 경우 (상품처음등록할때) 저장 로직을 호출하는 버튼-->
 
-        <div th:unless="${#strings.isEmpty(lodgingDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/lodging/{id}/update'(id=${lodgingDto.id})}" type="submit" class="btn btn-primary">숙소 수정</button>
-        </div>
-        <!--상품아이디가 있는 경우 수정 로직을 호출하는 버튼-->
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     </form>
