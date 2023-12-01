@@ -135,7 +135,7 @@ function roomRegistration() {
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크인 시간</span>
                     </div>
-                                <input type="number" th:field="*{room.checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">
+                                <input type="datetime-local" th:field="*{room.checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">
                 </div>
                         <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>
 
@@ -143,7 +143,7 @@ function roomRegistration() {
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크아웃 시간</span>
                     </div>
-                                <input type="number" th:field="*{room.checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">
+                                <input type="datetime-local" th:field="*{room.checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">
                 </div>
         <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>
 
