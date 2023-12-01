@@ -21,6 +21,10 @@ public class Room extends BaseEntity {
     @Column(name="room_id")
     private Long id;
 
+    @JoinColumn(name = "lodging_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Lodging lodging;
+
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
 
@@ -39,9 +43,11 @@ public class Room extends BaseEntity {
     @Column
     private String checkOutTime;
 
-    public static Room toRoom(RoomDto roomDto) {
+    public static Room toRoom(RoomDto roomDto, Lodging lodging) {
         Room room = new Room();
         room.setId(roomDto.getId());
+        room.setLodging(lodging);
+        room.setReservationStatus(roomDto.getReservationStatus());
         room.setName(roomDto.getName());
         room.setDetail(roomDto.getDetail());
         room.setPrice(roomDto.getPrice());

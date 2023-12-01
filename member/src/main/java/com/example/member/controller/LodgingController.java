@@ -32,14 +32,14 @@ public class LodgingController {
         LodgingDto lodgingDto = new LodgingDto();
         model.addAttribute("lodgingDto", lodgingDto);
 
-        return "/admin/lodgingForm";
+        return "admin/lodgingForm";
     }
 
 
     @PostMapping(value = "/registration")
     public String NewLodging(@Valid LodgingDto lodgingDto, BindingResult bindingResult, Model model, Principal principal, RedirectAttributes rttr) {
         if(bindingResult.hasErrors()){
-            return "/admin/lodgingForm";
+            return "admin/lodgingForm";
         }
 
         String email = principal.getName();
@@ -50,7 +50,7 @@ public class LodgingController {
 //            lodgingService.saveItem(lodgingDto, itemImgFileList);
         } catch (Exception e){
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            return "/admin/lodgingForm";
+            return "admin/lodgingForm";
         }
 
         return "redirect:/lodging/list";
