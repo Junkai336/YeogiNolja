@@ -20,70 +20,24 @@
     <table class="table">
         <thead>
         <tr>
-            <th scope="col">번호</th>
-            <th scope="col">숙소명</th>
-            <th scope="col">숙소상세내용</th>
-            <th scope="col">종류</th>
-            <th scope="col">위치</th>
-            <th scope="col">객실</th>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Content</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="lodging : ${lodgingEntity}">
-            <th th:text="${lodging.id}">a</th>
-            <td th:text="${lodging.name}">a</td>
-            <td th:utext="${lodging.detail}"></td>
-            <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
-            <td th:text="${lodging.location}">a</td>
-            <td>
-                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingEntity.id})}" class="btn btn-primary">객실 추가</a>
-            </td>
+        <tr th:each="board : ${boards}">
+            <th th:text="${board.id}">a</th>
+            <td th:text="${board.boardTitle}">a</td>
+            <td th:utext="${board.content}"></td>
         </tr>
         </tbody>
+
     </table>
+    <a th:href="@{/board/{id}/boardEdit(id = ${boards.id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/board/{id}/boardDelete(id = ${boards.id})}" class="btn btn-danger">삭제</a>
 
-    <div class="d-flex justify-content-center">
-    <a th:href="@{/lodging/{id}/lodgingForm(id = ${lodgingEntity.id})}" class="btn btn-primary w-10 mx-2">수정</a>
-    <a th:href="@{/lodging/{id}/lodgingDelete(id = ${lodgingEntity.id})}" class="btn btn-danger w-10 mx-2">삭제</a>
-    </div>
-
-    <a href="/lodging/list" class="d-flex justify-content-center">숙소 목록</a>
-
-    <p class="h4 text-center mt-3">
-        객실 목록
-    </p>
-
-<!--    <div class="container-fluid text-center" th:each="lodging : ${lodgingEntity}">-->
-
-<!--        <p th:if="${not #strings.isEmpty(lodging.room)}">객실 정보가 아직 등록되지 않았습니다.</p>-->
-<!--    <p th:if="${not #strings.listIsEmpty(lodging.room)}">객실 정보가 아직 등록되지 않았습니다.</p>-->
-<!--        <p th:if="${lodging.room != null}">객실 정보가 아직 등록되지 않았습니다.</p>-->
-
-<!--        <div class="container-fluid" th:unless="${not #strings.isEmpty(lodging.room)}">-->
-<!--            <div class="card d-flex justify-content-center text-center" style="width: 24rem;">-->
-<!--                <div class="card-body">-->
-<!--                    <h5 class="card-title">객실 정보 (아직 안만짐)</h5>-->
-<!--&lt;!&ndash;                    <p class="card-text" th:text="'이름: '+${lodgingEntity.member.name}"></p>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <p class="card-text" th:text="'핸드폰 번호: '+${lodgingEntity.member.phoneN1}+'-'+${lodgingEntity.member.phoneN2}+'-'+${lodgingEntity.member.phoneN3}"></p>&ndash;&gt;-->
-<!--                    <a href="#" class="card-link"></a>-->
-<!--                    <a href="#" class="card-link"></a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </div>-->
-
-    <div class="container-fluid d-flex justify-content-center">
-    <div class="card d-flex justify-content-center text-center" style="width: 24rem;">
-        <div class="card-body">
-            <h5 class="card-title">판매자 정보</h5>
-            <p class="card-text" th:text="'이름: '+${lodgingEntity.member.name}"></p>
-            <p class="card-text" th:text="'핸드폰 번호: '+${lodgingEntity.member.phoneN1}+'-'+${lodgingEntity.member.phoneN2}+'-'+${lodgingEntity.member.phoneN3}"></p>
-            <a href="#" class="card-link"></a>
-            <a href="#" class="card-link"></a>
-        </div>
-    </div>
-    </div>
+    <a href="/board/boardList">게시글 목록</a>
 
     <script>
     </script>

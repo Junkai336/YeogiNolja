@@ -43,7 +43,6 @@
                 <th>작성일</th>
                 <th>조회수</th>
                 <th>추천수</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -62,10 +61,6 @@
                 <td th:text="${boardDto.regTime}"></td>
                 <td>a</td>
                 <td>a</td>
-                <td>
-                    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>
-                    <a th:href="@{/board/{id}/boardDelete(id = ${boardDto.id})}" class="btn btn-danger">삭제</a>
-                </td>
             </tr>
             </tbody>
         </table>
