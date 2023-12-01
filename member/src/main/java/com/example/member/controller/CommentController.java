@@ -31,20 +31,36 @@ public class CommentController {
                              Principal principal
                              ,Model model){
         System.out.println(board_id);
-        String email = principal.getName();
+        String email = principal.getName().toString();
+        commentService.newComment(commentDto, email, board_id);
         try {
             BoardDto boardDto = boardService.findBoard(board_id);
+            model.addAttribute("boardDto", boardDto);
             // CommentList 가 추가된 board 를 모델에 담아 리턴
         }catch (Exception e){
             model.addAttribute("errorMessage", result.getFieldError());
 
         }
 
-
-
         return "redirect:/board/"+board_id;
 
     }
+
+    @GetMapping(value = "/board/{board_id}/commentDelete/{comment_id}")
+    public String commentDelete(@PathVariable("board_id") Long board_id, @PathVariable("comment_id") Long commentId, Principal principal, Model model){
+        String email =principal.getName();
+        // comment 의 id 와 접근자의 email을 받아 유효성 검사를 한다.
+        try {
+            commentService.validation(commentId, email);
+            commentService.deleteComment(commentId);
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/board/"+board_id;
+    }
+
+
 
 
 

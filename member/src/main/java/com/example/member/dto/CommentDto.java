@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +24,14 @@ public class CommentDto {
 
     private Member member;
 
-
+    private LocalDateTime createdByTime;
 
     public static CommentDto toCommentDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setMember(comment.getMember());
         commentDto.setComment(comment.getComment());
+        commentDto.setCreatedByTime(LocalDateTime.now());
         return commentDto;
     }
 
