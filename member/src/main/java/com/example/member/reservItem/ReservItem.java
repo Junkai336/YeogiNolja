@@ -1,7 +1,7 @@
 package com.example.member.reservItem;
 
 import com.example.member.entity.BaseEntity;
-import com.example.member.lodging.Lodging;
+import com.example.member.entity.Lodging;
 import com.example.member.reserv.Reserv;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,14 +1,12 @@
 package com.example.member.reserv;
 
+import com.example.member.constant.ReservationStatus;
 import com.example.member.entity.BaseEntity;
+import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
-import com.example.member.lodging.Lodging;
 import com.example.member.reservItem.ReservItem;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,9 +38,13 @@ public class Reserv extends BaseEntity {
     private String reservPhoneN1; // 예약자 전화번호
 
     @Enumerated(EnumType.STRING)
-    private ReservStatus reservStatus; // 예약 상태
+    private ReservationStatus reservationStatus; // 예약 상태
 
     private LocalDateTime reservDate; // 예약일
+
+    private String checkInTime;
+
+    private String checkOutTime;
 
     @OneToMany(mappedBy = "reserv", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<ReservItem> reservItems = new ArrayList<>();
@@ -63,14 +65,14 @@ public class Reserv extends BaseEntity {
         for(ReservItem reservItem : reservItemList){
             reserv.addReservItem(reservItem);
         }
-        reserv.setReservStatus(ReservStatus.RESERVED);
+        reserv.setReservationStatus(ReservationStatus.RESERVED);
         reserv.setReservDate(LocalDateTime.now());
         return reserv;
     }
 
     // 예약 취소
     public void cancelReserv() {
-        this.reservStatus = ReservStatus.AVAILABLE;
+        this.reservationStatus = ReservationStatus.AVAILABLE;
     }
 
 }
