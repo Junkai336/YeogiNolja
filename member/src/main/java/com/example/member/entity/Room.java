@@ -45,5 +45,6 @@ public class Room extends BaseEntity {
 
 
 
+    // Entity 병합용
 
 }

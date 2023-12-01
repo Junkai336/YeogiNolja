@@ -30,5 +30,6 @@ public class RoomService {
 
     }
 
+    // RoomService 병합용 주석
 
 }
