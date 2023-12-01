@@ -17,25 +17,44 @@
 
 <div layout:fragment="content">
 
-  <table class="table">
-    <thead>
-    <tr>
-      <th scope="col">ID</th>
-      <th scope="col">Title</th>
-      <th scope="col">Content</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="board : ${boards}">
-      <th th:text="${board.id}">a</th>
-      <td th:text="${board.boardTitle}">a</td>
-      <td th:utext="${board.content}"></td>
-    </tr>
-    </tbody>
+  <div th:object="${boardDto}" class="container mt-3">
+    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>
+    <a th:href="@{/board/{id}/boardDelete(id = ${boardDto.id})}" class="btn btn-danger">삭제</a>
 
-  </table>
-  <a th:href="@{/board/{id}/boardEdit(id = ${boards.id})}" class="btn btn-primary">수정</a>
-  <a th:href="@{/board/{id}/boardDelete(id = ${boards.id})}" class="btn btn-danger">삭제</a>
+    <div class="container mt-3">
+      <div>
+        <h2 name="title" id="title" th:text="*{boardTitle}"></h2>
+        작성자 : <span name="writer" id="memberName" th:text="*{member.name}" ></span> /
+        작성 시간: <span name="createdByTime" id="createdByTime" th:text="*{regTime}" class="fs-sm"></span>
+      </div>
+      <hr>
+      <div id="content" name="content" th:utext="*{content}"></div>
+    </div>
+    <hr>
+    <!--    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>-->
+
+    <form sec:authorize="isAuthenticated()" name="commentForm" th:object="${newCommentDto}" role="form" th:action="@{/board/{board_id}/comment(board_id = ${boardDto.id})}">
+      <label for="comment">Comment : </label>
+      <input type="text" th:field="*{comment}" name="comment", id="comment"/>
+
+
+      <button type="submit">댓글 달기</button>
+    </form>
+
+    <hr>
+    <div>
+
+
+
+    </div>
+  </div>  <!-- //boardDto -->
+  <div th:each="commentDto : ${commentList}" class="container">
+    <span th:text="${commentDto.member.name}"></span> : <span th:text="${commentDto.comment}"></span>
+    <span th:text="${commentDto.createdByTime}"></span>
+    <a th:href="@{/board/{board_id}/commentDelete/{comment_id}(board_id = ${boardDto.id}, comment_id=${commentDto.id})}" class="btn btn-danger">삭제</a>
+
+    <hr>
+  </div>
 
   <a href="/board/boardList">게시글 목록</a>
 

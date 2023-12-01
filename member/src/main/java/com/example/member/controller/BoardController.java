@@ -1,10 +1,12 @@
 package com.example.member.controller;
 
 import com.example.member.dto.BoardDto;
+import com.example.member.dto.CommentDto;
 import com.example.member.entity.Board;
 import com.example.member.repository.BoardRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.service.BoardService;
+import com.example.member.service.CommentService;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +24,12 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@Transactional
 @RequestMapping("/board")
 public class BoardController {
 
     private final BoardService boardService;
     private final BoardRepository boardRepository;
+    private final CommentService commentService;
 
     @GetMapping(value = "/boardList")
     public String toBoard(Model model) {
@@ -52,7 +54,7 @@ public class BoardController {
         try {
             boardService.saveBoard(boardDto, email);
         }catch (Exception e){
-            model.addAttribute(result.getFieldError());
+            model.addAttribute(e.getStackTrace());
         }
 
 
@@ -63,10 +65,14 @@ public class BoardController {
 
     @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model) {
-        Board boardEntity = boardRepository.findById(id).orElse(null);
-
-        model.addAttribute("boards", boardEntity);
-
+        BoardDto boardDto =  boardService.findBoard(id);
+        // model에 선택한 글의 id를 가지고 글의 내용을 들고 있는 Dto 객체를 추가
+        model.addAttribute("boardDto", boardDto);
+        // 글의 id값을 가지고 있는 comment를 List로 하여 model에 추가
+        List<CommentDto> commentDtoList = commentService.commentDtoList(id);
+        model.addAttribute("commentList", commentDtoList);
+        // 새로 입력받을 commentDto 객체를 넘겨준다.
+        model.addAttribute("newCommentDto", new CommentDto());
         return "board/boardContents";
     }
 

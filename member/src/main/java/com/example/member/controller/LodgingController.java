@@ -124,15 +124,15 @@ public class LodgingController {
     }
 
     @GetMapping(value = "/{id}/lodgingForm")
-        public String toUpdate(@PathVariable Long id, Model model) {
-            LodgingDto lodgingDto = lodgingService.findLodging(id);
-            model.addAttribute("lodgingDto", lodgingDto);
+    public String toUpdate(@PathVariable Long id, Model model) {
+        LodgingDto lodgingDto = lodgingService.findLodging(id);
+        model.addAttribute("lodgingDto", lodgingDto);
 
-            return "admin/lodgingForm";
-        }
+        return "admin/lodgingForm";
+    }
 
-        @PostMapping(value = "/{id}/update")
-        public String update(@Valid LodgingDto lodgingDto, BindingResult result, Model model, RedirectAttributes rttr) {
+    @PostMapping(value = "/{id}/update")
+    public String update(@Valid LodgingDto lodgingDto, BindingResult result, Model model, RedirectAttributes rttr) {
 
         try {
             lodgingService.lodgingUpdate(lodgingDto);
@@ -141,9 +141,9 @@ public class LodgingController {
             model.addAttribute("errorMsg", result.getFieldError());
         }
 
-            return "redirect:/lodging/list";
+        return "redirect:/lodging/list";
 
-        }
+    }
 
     @GetMapping(value = "/{id}/lodgingDelete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr) {
