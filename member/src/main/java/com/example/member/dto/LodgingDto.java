@@ -10,6 +10,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,7 +32,6 @@ public class LodgingDto {
 
     private String detail;
 
-    private String price;
 
     private String location;
 
@@ -46,13 +47,13 @@ public class LodgingDto {
 
     // Entity -> Dto
     public static LodgingDto toLodgingDto (Lodging lodging) {
+
         LodgingDto lodgingDto = new LodgingDto();
         lodgingDto.setId(lodging.getId());
 //        lodgingDto.setRoom(lodging.getRoom());
         lodgingDto.setMember(lodging.getMember());
         lodgingDto.setName(lodging.getName());
         lodgingDto.setDetail(lodging.getDetail());
-        lodgingDto.setPrice(lodging.getPrice());
         lodgingDto.setLocation(lodging.getLocation());
         lodgingDto.setLodgingType(lodging.getLodgingType());
         lodgingDto.setCreatedBy(lodging.getCreatedBy());
