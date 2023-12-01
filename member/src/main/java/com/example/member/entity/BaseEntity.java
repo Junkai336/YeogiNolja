@@ -23,3 +23,5 @@ public abstract class BaseEntity extends BaseTimeEntity{
     private String modifiedBy;
 }
 
+// https://velog.io/@seongwon97/Spring-Boot-Entity-Listener
+// https://velog.io/@minji104/CreatedBy-UpdatedBy-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84
