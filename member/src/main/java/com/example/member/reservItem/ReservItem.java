@@ -35,7 +35,7 @@ public class ReservItem extends BaseEntity {
     public static ReservItem createReservItem(Lodging lodging){
         ReservItem reservItem = new ReservItem();
         reservItem.setLodging(lodging);
-        reservItem.setReservPrice(lodging.getPrice());
+//        reservItem.setReservPrice(lodging.getPrice());
         return reservItem;
     }
 }
