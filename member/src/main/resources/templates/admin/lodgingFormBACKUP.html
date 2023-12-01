@@ -149,66 +149,66 @@ function roomRegistration() {
 
         <!--객실 등록-->
 
-<!--        <p class="h3">-->
-<!--            객실 등록-->
-<!--        </p>-->
+        <p class="h3">
+            객실 등록
+        </p>
 
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">객실명</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="text" th:field="*{name}" class="form-control" placeholder="객실명을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="text" class="form-control" placeholder="객실명을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">객실명</span>
+            </div>
+            <!--            <input type="text" th:field="*{name}" class="form-control" placeholder="객실명을 입력해주세요">-->
+            <input type="text" class="form-control" placeholder="객실명을 입력해주세요">
+        </div>
+        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>-->
 
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">가격</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">가격</span>
+            </div>
+            <!--            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
+            <input type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">
+        </div>
+        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>-->
 
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">객실 상세 내용</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>&ndash;&gt;-->
-<!--            <textarea class="form-control" aria-label="With textarea"></textarea>-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">객실 상세 내용</span>
+            </div>
+            <!--            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>-->
+            <textarea class="form-control" aria-label="With textarea"></textarea>
+        </div>
+        <!--        <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>-->
 
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">체크인 시간</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="number" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">체크인 시간</span>
+            </div>
+            <!--            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
+            <input type="number" class="form-control" placeholder="체크인 시간을 입력해주세요">
+        </div>
+        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkInTime}" class="fieldError">Incorrect data</p>-->
 
-<!--        <div class="input-group">-->
-<!--            <div class="input-group-prepend">-->
-<!--                <span class="input-group-text">체크아웃 시간</span>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
-<!--            <input type="number" class="form-control" placeholder="체크아웃 시간을 입력해주세요">-->
-<!--        </div>-->
-<!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">체크아웃 시간</span>
+            </div>
+            <!--            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
+            <input type="number" class="form-control" placeholder="체크아웃 시간을 입력해주세요">
+        </div>
+        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkOutTime}" class="fieldError">Incorrect data</p>-->
 
-<!--        &lt;!&ndash;        onclick..&ndash;&gt;-->
-<!--        <div class="d-flex justify-content-center">-->
-<!--            <button type="button" class="btn btn-primary">객실 저장</button>-->
-<!--        </div>-->
+        <!--        onclick..-->
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-primary">객실 저장</button>
+        </div>
 
 
-<!--        &lt;!&ndash;객실 목록&ndash;&gt;-->
+        <!--객실 목록-->
 
-<!--        <p class="h4">-->
-<!--            객실 목록-->
-<!--        </p>-->
+        <p class="h4">
+            객실 목록
+        </p>
 
 
 
