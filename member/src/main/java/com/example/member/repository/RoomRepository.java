@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RoomRepository  extends JpaRepository<Room, Long> {
 
-    @Query(nativeQuery = true, value = "select * from Room r where r.lodging_id= :lodging_id")
+    @Query(nativeQuery = true, value = "select * from Room r where r.lodging_id= :lodging_id order by reg_time desc")
     List<Room> findAllByLodgingId(@Param("lodging_id") Long lodging_id);
 
 }

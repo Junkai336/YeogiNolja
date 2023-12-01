@@ -7,6 +7,9 @@ import com.example.member.entity.Room;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -42,6 +45,18 @@ public class RoomDto {
         roomDto.setCheckOutTime(room.getCheckOutTime());
 
         return roomDto;
+    }
+
+    public static List<RoomDto> toRoomDtoList(List<Room> roomList) {
+        List<RoomDto> roomDtoList = new ArrayList<>();
+
+        for (Room room : roomList) {
+            RoomDto roomDto = toRoomDto(room);
+            roomDtoList.add(roomDto);
+        }
+
+        return roomDtoList;
+        
     }
 
 }

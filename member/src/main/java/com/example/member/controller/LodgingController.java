@@ -1,9 +1,11 @@
 package com.example.member.controller;
 
 import com.example.member.dto.LodgingDto;
+import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.service.LodgingService;
+import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ public class LodgingController {
 
     private final LodgingService lodgingService;
     private final LodgingRepository lodgingRepository;
+    private final RoomService roomService;
 
 
     @GetMapping(value = "/registration")
@@ -87,7 +90,7 @@ public class LodgingController {
         List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
         model.addAttribute("lodgingDtoList", lodgingDtoList);
 
-        return "/admin/lodgingList";
+        return "admin/lodgingList";
     }
 
 //    public String itemManage(ItemSearchDto itemSearchDto,
@@ -112,10 +115,12 @@ public class LodgingController {
     public String show (@PathVariable Long id, Model model) {
 //        Lodging lodgingEntity = lodgingRepository.findById(id).orElse(null);
         Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        List<RoomDto> roomDtoList = roomService.roomDtoList(id);
 
         model.addAttribute("lodgingEntity", lodgingEntity);
+        model.addAttribute("roomList", roomDtoList);
 
-        return "/admin/lodgingContents";
+        return "admin/lodgingContents";
     }
 
     @GetMapping(value = "/{id}/lodgingForm")
@@ -123,7 +128,7 @@ public class LodgingController {
             LodgingDto lodgingDto = lodgingService.findLodging(id);
             model.addAttribute("lodgingDto", lodgingDto);
 
-            return "/admin/lodgingForm";
+            return "admin/lodgingForm";
         }
 
         @PostMapping(value = "/{id}/update")
