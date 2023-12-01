@@ -1,13 +1,16 @@
 package com.example.member.dto;
 
 import com.example.member.constant.BoardCategoryStatus;
-import com.example.member.entity.BaseEntity;
 import com.example.member.entity.Board;
+import com.example.member.entity.Comment;
 import com.example.member.entity.Member;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.member.dto.CommentDto.toCommentDtoList;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +33,7 @@ public class BoardDto{
 
     private LocalDateTime regTime;
 
+    private List<CommentDto> commentDtoList = new ArrayList<>();
 //    // 조회수
 //    private Long views;
 //
@@ -42,12 +46,12 @@ public class BoardDto{
         boardDto.setBoardTitle(board.getBoardTitle());
         boardDto.setContent(board.getContent());
         boardDto.setBoardCategoryStatus(board.getBoardCategoryStatus());
+        boardDto.setCommentDtoList(toCommentDtoList(board.getCommentList()));
         boardDto.setMember(board.getMember());
         boardDto.setCreatedBy(board.getCreatedBy());
         boardDto.setRegTime(board.getRegTime());
-
-
         return boardDto;
     }
+
 
 }
