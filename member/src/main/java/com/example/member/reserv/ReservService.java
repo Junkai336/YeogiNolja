@@ -33,21 +33,22 @@ public class ReservService {
     private final LodgingImgRepository lodgingImgRepository;
     private final RoomRepository roomRepository;
 
-    public Long reserv(ReservDto reservDto, String email) {
-        Room room = roomRepository.findById(reservDto.getRoomId())
-                .orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findByEmail(email).orElse(null);
-        // 현재 로그인한 회원의 이메일 정보를 이용해서 회원 정보를 조회
 
-        List<ReservItem> reservItemList = new ArrayList<>();
-        ReservItem reservItem = ReservItem.createReservItem(room);
-        // 예약할 숙소 엔티티를 이용하여 예약 숙소 엔티티
-        reservItemList.add(reservItem);
-        Reserv reserv = Reserv.createReserv(member, reservItemList);
-        // 회원정보와 주문할 상품 리스트 정보를 이용하여 주문 엔티티 생성
-        reservRepository.save(reserv);
-        return reserv.getId();
+    public Reserv saveReserv(Reserv reserv) {
+
+        return reservRepository.save(reserv);
     }
+//    public Long reserv(ReservDto reservDto, String email) {
+//        Room room = roomRepository.findById(reservDto.getRoomId())
+//                .orElseThrow(EntityNotFoundException::new);
+//        Member member = memberRepository.findByEmail(email).orElse(null);
+//        // 현재 로그인한 회원의 이메일 정보를 이용해서 회원 정보를 조회
+//
+//        Reserv reserv = Reserv.createReserv(member, room);
+//        // 회원정보와 예약할 방 정보를 이용하여 예약 엔티티 생성
+//        reservRepository.save(reserv);
+//        return reserv.getId();
+//    }
 
     @Transactional(readOnly = true)
     // OrderService 클래스 자체에 @Transactional이 적용되어 있으므로
@@ -108,24 +109,6 @@ public class ReservService {
         reserv.cancelReserv();
     }
 
-    public Long reservs(List<ReservDto> reservDtoList, String email){
-        Member member = memberRepository.findByEmail(email).orElse(null);
-        List<ReservItem> reservItemList = new ArrayList<>();
-
-        for(ReservDto reservDto : reservDtoList){
-            // 예약할 숙소 리스트를 만들어 줌
-            Room room = roomRepository.findById(reservDto.getRoomId())
-                    .orElseThrow(EntityNotFoundException::new);
-
-            ReservItem reservItem = ReservItem.createReservItem(room);
-            reservItemList.add(reservItem);
-        }
-        Reserv reserv = Reserv.createReserv(member,reservItemList);
-        // 현재 로그인한 회원과 예약 숙소 목록을 이용하여 예약 엔티티를 만듬
-        reservRepository.save(reserv);
-        // 예약 데이터를 저장
-        return reserv.getId();
-    }
 
     public String findName(String email) {
         Member member = memberRepository.findByEmail(email)
@@ -135,12 +118,25 @@ public class ReservService {
 
     }
 
-    public ReservDto reservPage(Long roomId, Principal principal) {
         // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
-        ReservDto reservDto = new ReservDto();
-
-
-
-        return reservDto;
+    public Lodging reservLodging(Long roomId) {
+        // 숙소명 찾기
+        Lodging lodging = (Lodging) roomRepository.findAllByLodgingId(roomId);
+        return lodging;
     }
+    public Room reservRoom(Long roomId) {
+        // 방 이름, 디테일, 체크인아웃티임, 가격 찾기
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(EntityNotFoundException::new);
+        return room;
+    }
+    public Member reservMember(Principal principal) {
+        // 예약자의 이름, 전화번호 찾기
+        // String.valueOf() 해당 타입 파라미터의 값을 문자열로 변환해준다 NullPointerException 방지
+        Member member = memberRepository.findByEmail(String.valueOf(principal))
+                .orElseThrow(EntityNotFoundException::new);
+        return member;
+    }
+
+
 }

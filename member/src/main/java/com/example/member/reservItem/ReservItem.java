@@ -2,12 +2,14 @@ package com.example.member.reservItem;
 
 import com.example.member.entity.BaseEntity;
 import com.example.member.entity.Lodging;
+import com.example.member.entity.Member;
 import com.example.member.entity.Room;
 import com.example.member.reserv.Reserv;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.security.Principal;
 
 @Entity
 @Getter
@@ -29,6 +31,7 @@ public class ReservItem extends BaseEntity {
     private Reserv reserv;
     // 한 번의 주문에 여러개의 숙소를 예약할 수 있으므로
     // 예약 숙소 엔티티와 예약 엔티티를 다대일 단방향 매핑
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
