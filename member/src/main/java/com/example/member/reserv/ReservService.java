@@ -7,6 +7,7 @@ import com.example.member.entity.Room;
 import com.example.member.repository.LodgingImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
+import com.example.member.repository.RoomRepository;
 import com.example.member.reservItem.ReservItem;
 import com.example.member.reservItem.ReservItemDto;
 import lombok.RequiredArgsConstructor;
@@ -30,15 +31,16 @@ public class ReservService {
     private final MemberRepository memberRepository;
     private final ReservRepository reservRepository;
     private final LodgingImgRepository lodgingImgRepository;
+    private final RoomRepository roomRepository;
 
     public Long reserv(ReservDto reservDto, String email) {
-        Lodging lodging = lodgingRepository.findById(reservDto.getRoomId())
+        Room room = roomRepository.findById(reservDto.getRoomId())
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(email).orElse(null);
         // 현재 로그인한 회원의 이메일 정보를 이용해서 회원 정보를 조회
 
         List<ReservItem> reservItemList = new ArrayList<>();
-        ReservItem reservItem = ReservItem.createReservItem(lodging);
+        ReservItem reservItem = ReservItem.createReservItem(room);
         // 예약할 숙소 엔티티를 이용하여 예약 숙소 엔티티
         reservItemList.add(reservItem);
         Reserv reserv = Reserv.createReserv(member, reservItemList);
@@ -112,10 +114,10 @@ public class ReservService {
 
         for(ReservDto reservDto : reservDtoList){
             // 예약할 숙소 리스트를 만들어 줌
-            Lodging lodging = lodgingRepository.findById(reservDto.getRoomId())
+            Room room = roomRepository.findById(reservDto.getRoomId())
                     .orElseThrow(EntityNotFoundException::new);
 
-            ReservItem reservItem = ReservItem.createReservItem(lodging);
+            ReservItem reservItem = ReservItem.createReservItem(room);
             reservItemList.add(reservItem);
         }
         Reserv reserv = Reserv.createReserv(member,reservItemList);
@@ -136,7 +138,6 @@ public class ReservService {
     public ReservDto reservPage(Long roomId, Principal principal) {
         // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
         ReservDto reservDto = new ReservDto();
-//        lodgingRepository
 
 
 
