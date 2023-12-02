@@ -1,8 +1,11 @@
 package com.example.member.reserv;
 
+import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
@@ -10,19 +13,32 @@ import javax.validation.constraints.NotEmpty;
 public class ReservDto {
     private Long id; // 예약 id
 
-    private Long roomId; // 숙소 id
+    @Column
+    private Member member;
+
+    @Column
+    private Lodging lodging;
+
+    //private String lodgingName;
+
+    @Column
+    private Room room;
+
+    //private String roomName;
+
+    //private String roomDetail;
+
+    //private String roomCheckInTime;
+    //private String roomCheckOutTime;
+
+    //private String roomPrice;
 
     //예약자 정보
     @NotEmpty(message = "성명을 입력해주세요")
     private String reservName; // 예약자 이름
 
     @NotEmpty(message = "휴대폰번호를 입력해주세요")
-    private String reservPhone; // 예약자 전화번호
+    private String reservPN; // 예약자 전화번호
 
-
-    public String phoneN(Member member){
-        String number =member.getPhoneN1()+"-"+member.getPhoneN2()+"-"+member.getPhoneN3();
-        return number;
-    }
 
 }

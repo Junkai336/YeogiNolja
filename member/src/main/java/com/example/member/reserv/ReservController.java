@@ -1,6 +1,8 @@
 package com.example.member.reserv;
 
+import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,24 +29,42 @@ public class ReservController {
     private final MemberRepository memberRepository;
 
     // 예약하기 버튼을 눌렀을 때
-    @GetMapping("/reserv/{id}")
+    @GetMapping("/{id}/reserv") // roomId/reserv
     public String newReserv (@PathVariable Long roomId , Principal principal, Model model){
-        reservService.reservPage(roomId,principal);
+        // 숙소명 찾기
+        Lodging lodging = reservService.reservLodging(roomId);
+        String lodgingName = lodging.getName();
+        // 방 이름, 디테일, 체크인아웃티임, 가격 찾기
+        Room room = reservService.reservRoom(roomId);
+        String roomName = room.getName();
+        String roomDetail = room.getDetail();
+        String roomCheckInTime = room.getCheckInTime();
+        String roomCheckOutTime = room.getCheckOutTime();
+        String roomPrice = room.getPrice();
+        // 예약자의 이름, 전화번호 찾기
+        Member member = reservService.reservMember(principal);
+        String reservName = member.getName();
+        String reservPN = member.getPhoneN1()+"-"+member.getPhoneN2()+"-"+member.getPhoneN3();
+
+        model.addAttribute("lodgingName", lodgingName);
+        model.addAttribute("roomName", roomName);
+        model.addAttribute("roomDetail",roomDetail);
+        model.addAttribute("roomCheckInTime",roomCheckInTime);
+        model.addAttribute("roomCheckOutTime",roomCheckOutTime);
+        model.addAttribute("roomPrice",roomPrice);
+        model.addAttribute("reservName",reservName);
+        model.addAttribute("reservPN",reservPN);
         return "reserv/reserv";
     }
 
-//    @GetMapping("/reserv/{id}")
-//    public String reserv (@PathVariable Long room_id , Principal principal, Model model){
-//        ReservDto reservDto = new ReservDto();
-//        Member member = memberRepository.findByEmail(principal.getName()).orElse(null);
-//        String member_phone = reservDto.phoneN(member);
-//        reservDto.setReservPhone(member_phone);
-//        reservDto.setRoomId(room_id);
-//        String memberName = reservService.findName(principal.getName());
-//        reservDto.setReservName(memberName);
-//        model.addAttribute("Dto", reservDto);
-//        return "reserv/reserv";
-//    }
+    @PostMapping("/{id}/reserv")
+    public String saveReserv(@PathVariable Long roomId,@Valid ReservDto reservDto){
+        Reserv reserv = Reserv.createReserv(reservDto);
+        reservService.saveReserv(reserv);
+
+        return "redirect:/reserv/reservHist";
+    }
+
 
     // 예약 내역
     @GetMapping({"/reservs","/reservs/{page}"})
