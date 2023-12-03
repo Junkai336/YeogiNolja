@@ -38,13 +38,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="boardDto : ${boardList}">
-        <td th:text="${boardDto.id}"></td>
-        <!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
+      <tr th:each="articleDto : ${articleList}">
+        <td th:text="${articleDto.id}"></td>
+        <!--                <td th:text="${articleList.boardCategoryStatus}"></td>-->
         <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
-        <td th:text="${boardDto.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
-        <td><a th:href="@{/board/{id}(id = ${boardDto.id})}" th:utext="${boardDto.boardTitle}"></a></td>
-        <td th:text="${boardDto.member.name}"></td>
+        <td th:text="${articleDto.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+        <td><a th:href="@{/article/{id}(id = ${articleDto.id})}" th:utext="${articleDto.boardTitle}"></a></td>
+        <td th:text="${articleDto.member.name}"></td>
 <!--        <td th:text=""></td>-->
         <td>a</td>
         <td>a</td>

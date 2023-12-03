@@ -48,7 +48,7 @@
 
 <div layout:fragment="content">
 
-    <form class="container" action="/board/boardCreate" method="post" th:object="${boardDto}">
+    <form class="container" action="/article/boardCreate" method="post" th:object="${articleDto}">
         <input type="hidden" th:field="*{member.name}">
         <div class="mb-3 form-group">
             <select th:field="*{boardCategoryStatus}" class="custom-select">
@@ -101,7 +101,7 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
 
-    <a href="/board/boardList">게시글 목록</a>
+    <a href="/article/articleList">게시글 목록</a>
 
 </div>
 

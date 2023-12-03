@@ -47,24 +47,24 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="boardDto : ${boardDtoList}">
-                <td th:text="${boardDto.id}"></td>
+            <tr th:each="articleDto : ${articleDtoList}">
+                <td th:text="${articleDto.id}"></td>
                 <!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
                 <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
-                <td th:text="${boardDto.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+                <td th:text="${articleDto.articleCategoryStatus == T(com.example.member.constant.articleCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
                 <td>
-                    <a th:href="@{/board/{id}(id = ${boardDto.id})}">
-                        <span th:text="${boardDto.boardTitle}"></span>
+                    <a th:href="@{/article/{id}(id = ${articleDto.id})}">
+                        <span th:text="${articleDto.title}"></span>
                     </a>
                 </td>
                 <!--                <td th:text="${boardList.createdBy}"></td>-->
-                <td th:text="${boardDto.member.name}"></td>
-                <td th:text="${boardDto.regTime}"></td>
+                <td th:text="${articleDto.member.name}"></td>
+                <td th:text="${articleDto.regTime}"></td>
                 <td>a</td>
                 <td>a</td>
                 <td>
-                    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>
-                    <a th:href="@{/board/{id}/boardDelete(id = ${boardDto.id})}" class="btn btn-danger">삭제</a>
+                    <a th:href="@{/article/{id}/articleEdit(id = ${articleDto.id})}" class="btn btn-primary">수정</a>
+                    <a th:href="@{/article/{id}/articleDelete(id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
                 </td>
             </tr>
             </tbody>
@@ -74,7 +74,7 @@
     <!-- 글쓰기 버튼 -->
     <div class="container">
         <a href="/members/login" class="btn btn-primary" sec:authorize="isAnonymous()">새글쓰기</a>
-        <a href="/board/boardWrite" class="btn btn-primary" sec:authorize="isAuthenticated()">새글쓰기</a>
+        <a href="/article/new" class="btn btn-primary" sec:authorize="isAuthenticated()">새글쓰기</a>
     </div>
 
     <!-- 검색 영역 -->

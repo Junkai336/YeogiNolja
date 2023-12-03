@@ -1,11 +1,10 @@
 package com.example.member.service;
 
-import com.example.member.dto.BoardDto;
 import com.example.member.dto.CommentDto;
-import com.example.member.entity.Board;
+import com.example.member.entity.Article;
 import com.example.member.entity.Comment;
 import com.example.member.entity.Member;
-import com.example.member.repository.BoardRepository;
+import com.example.member.repository.ArticleRepository;
 import com.example.member.repository.CommentRepository;
 import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,15 +22,15 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
+    private final ArticleRepository articleRepository;
 
-    public void newComment(CommentDto commentDto, String email, Long boardId) {
+    public void newComment(CommentDto commentDto, String email, Long articleId) {
 
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
-        Board board = boardRepository.findById(boardId)
+        Article article = articleRepository.findById(articleId)
                 .orElseThrow(EntityNotFoundException::new);
-        Comment comment = Comment.toComment(commentDto, member, board);
+        Comment comment = Comment.toComment(commentDto, member, article);
         try{
             commentRepository.save(comment);
         }catch (Exception e){
@@ -41,8 +39,8 @@ public class CommentService {
 
     }
 
-    public List<CommentDto> commentDtoList(Long board_id){
-        List<Comment> commentList = commentRepository.findAllByBoardId(board_id);
+    public List<CommentDto> commentDtoList(Long article_id){
+        List<Comment> commentList = commentRepository.findAllByBoardId(article_id);
         List<CommentDto> commentDtoList = CommentDto.toCommentDtoList(commentList);
         for (CommentDto commentDto : commentDtoList){
             System.out.println(commentDto.toString());

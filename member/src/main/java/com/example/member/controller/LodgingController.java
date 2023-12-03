@@ -1,26 +1,19 @@
 package com.example.member.controller;
 
 import com.example.member.dto.LodgingDto;
-import com.example.member.dto.MemberFormDto;
-import com.example.member.entity.Board;
 import com.example.member.entity.Lodging;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.service.LodgingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @Transactional
