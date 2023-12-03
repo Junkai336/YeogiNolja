@@ -9,8 +9,11 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,6 +26,8 @@ public class LodgingDto {
 
     private Room room;
 
+    private List<Room> roomList = new ArrayList<>();
+
     private Member member;
 
 //    @Column
@@ -32,8 +37,13 @@ public class LodgingDto {
 
     private String detail;
 
+    private String postcode;   // 우편 번호
 
-    private String location;
+    private String address;     // 주소
+
+    private String detailAddress; // 상세주소
+
+    private String extraAddress; // 참고항목
 
     private LodgingType lodgingType;
 
@@ -45,16 +55,24 @@ public class LodgingDto {
 
     private LocalDateTime updateTime;
 
+    private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+    private List<Long> itemImgIds = new ArrayList<>();
+
+
     // Entity -> Dto
     public static LodgingDto toLodgingDto (Lodging lodging) {
 
         LodgingDto lodgingDto = new LodgingDto();
         lodgingDto.setId(lodging.getId());
-//        lodgingDto.setRoom(lodging.getRoom());
+        lodgingDto.setRoomList(lodging.getRoom());
         lodgingDto.setMember(lodging.getMember());
         lodgingDto.setName(lodging.getName());
         lodgingDto.setDetail(lodging.getDetail());
-        lodgingDto.setLocation(lodging.getLocation());
+        lodgingDto.setPostcode(lodging.getPostcode());
+        lodgingDto.setAddress(lodging.getAddress());
+        lodgingDto.setDetailAddress(lodging.getDetailAddress());
+        lodgingDto.setExtraAddress(lodging.getExtraAddress());
         lodgingDto.setLodgingType(lodging.getLodgingType());
         lodgingDto.setCreatedBy(lodging.getCreatedBy());
         lodgingDto.setModifiedBy(lodging.getModifiedBy());

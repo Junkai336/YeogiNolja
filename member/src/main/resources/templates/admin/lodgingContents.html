@@ -17,6 +17,14 @@
 
 <div layout:fragment="content">
 
+    <div th:if="${lodgingErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">
+        <p th:text="${lodgingErrorMsg}">에러출력용</p>
+    </div>
+
+    <div th:if="${lodgingSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
+        <p th:text="${roomSuccessMsg}">성공출력용</p>
+    </div>
+
     <table class="table">
         <thead>
         <tr>
@@ -34,7 +42,7 @@
             <td th:text="${lodging.name}">a</td>
             <td th:utext="${lodging.detail}"></td>
             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
-            <td th:text="${lodging.location}">a</td>
+            <td th:text="${lodging.address}">a</td>
             <td>
                 <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingEntity.id})}" class="btn btn-primary">객실 추가</a>
             </td>
@@ -60,6 +68,7 @@
         <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
         <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
         <div>
+            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}" class="btn btn-primary">수정</a>
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
         </div>
 

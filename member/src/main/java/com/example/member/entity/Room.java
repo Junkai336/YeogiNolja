@@ -17,13 +17,17 @@ import javax.persistence.*;
 public class Room extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="room_id")
     private Long id;
 
     @JoinColumn(name = "lodging_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lodging lodging;
+
+//    @JoinColumn(name = "member_id")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Member member;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;

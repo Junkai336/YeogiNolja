@@ -33,6 +33,10 @@ public class RoomDto {
 
     private String checkOutTime;
 
+    private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+    private List<Long> itemImgIds = new ArrayList<>();
+
     public static RoomDto toRoomDto (Room room) {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(room.getId());

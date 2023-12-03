@@ -40,9 +40,9 @@
 
 <div layout:fragment="content">
 
-    <!--    <div th:if="${boardErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">-->
-    <!--        <p th:text="${boardErrorMsg}">에러출력용</p>-->
-    <!--    </div>-->
+        <div th:if="${lodgingErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">
+            <p th:text="${lodgingErrorMsg}">에러출력용</p>
+        </div>
 
     <div th:if="${lodgingSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
         <p th:text="${lodgingSuccessMsg}">성공출력용</p>
