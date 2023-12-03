@@ -66,11 +66,13 @@ public class BoardController {
     @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model) {
         BoardDto boardDto =  boardService.findBoard(id);
-
+        // model에 선택한 글의 id를 가지고 글의 내용을 들고 있는 Dto 객체를 추가
         model.addAttribute("boardDto", boardDto);
+        // 글의 id값을 가지고 있는 comment를 List로 하여 model에 추가
         List<CommentDto> commentDtoList = commentService.commentDtoList(id);
         model.addAttribute("commentList", commentDtoList);
-        model.addAttribute("commentDto", new CommentDto());
+        // 새로 입력받을 commentDto 객체를 넘겨준다.
+        model.addAttribute("newCommentDto", new CommentDto());
         return "board/boardContents";
     }
 
