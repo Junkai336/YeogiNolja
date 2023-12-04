@@ -4,11 +4,13 @@ import com.example.member.constant.ReservationStatus;
 import com.example.member.entity.BaseEntity;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import com.example.member.reservItem.ReservItem;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +32,38 @@ public class Reserv extends BaseEntity {
     @JoinColumn(name = "lodging_id")
     @ManyToOne(fetch = FetchType.LAZY) // 숙소가 주
     private Lodging lodging; // 숙소 id
+    @Column
+    private String lodgingName;
 
-    private String lodgingPrice; // 방 가격
+    @JoinColumn(name = "room_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Room room;
 
+    @Column
+    private String roomName;
+
+    @Column
+    private String roomDetail;
+    @Column
+    private String roomCheckInTime;
+    @Column
+    private String roomCheckOutTime;
+    @Column
+    private String roomPrice;
+    @Column
+    private String checkInTime;
+    @Column
+    private String checkOutTime;
+    @Column
     private String reservName; // 예약자 이름
-
-    private String reservPhoneN1; // 예약자 전화번호
+    @Column
+    private String reservPN; // 예약자 전화번호
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus; // 예약 상태
-
+    @Column
     private LocalDateTime reservDate; // 예약일
 
-    private String checkInTime;
-
-    private String checkOutTime;
 
     @OneToMany(mappedBy = "reserv", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
     private List<ReservItem> reservItems = new ArrayList<>();
@@ -58,13 +77,19 @@ public class Reserv extends BaseEntity {
     }
 
     // 예약 생성
-    public static Reserv createReserv(Member member, List<ReservItem>reservItemList){
+    public static Reserv createReserv(ReservDto reservDto){
         Reserv reserv = new Reserv();
-        reserv.setMember(member);
+        reserv.setLodging(reservDto.getLodging());
+        reserv.setLodgingName(reservDto.getLodging().getName());
+        reserv.setRoom(reservDto.getRoom());
+        reserv.setRoomName(reservDto.getRoom().getName());
+        reserv.setRoomDetail(reservDto.getRoom().getDetail());
+        reserv.setRoomCheckInTime(reservDto.getRoom().getCheckInTime());
+        reserv.setRoomCheckOutTime(reservDto.getRoom().getCheckOutTime());
+        reserv.setRoomPrice(reservDto.getRoom().getPrice());
+        reserv.setReservName(reservDto.getReservName());
+        reserv.setReservPN(reservDto.getReservPN());
 
-        for(ReservItem reservItem : reservItemList){
-            reserv.addReservItem(reservItem);
-        }
         reserv.setReservationStatus(ReservationStatus.RESERVED);
         reserv.setReservDate(LocalDateTime.now());
         return reserv;
