@@ -10,6 +10,7 @@ import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.RoomRepository;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -154,7 +155,5 @@ public class RoomController {
             return "/admin/lodgingContents";
         }
     }
-
-
 
 }

@@ -50,7 +50,7 @@ public class MemberController {
         try {
             Member member = Member.toMember(memberFormDto, passwordEncoder);
             memberService.saveMember(member);
-        } catch (IllegalStateException e){
+        } catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
             return "member/join";
         }
