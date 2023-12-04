@@ -1,6 +1,6 @@
 package com.example.member.constant;
 
-public enum BoardCategoryStatus {
+public enum CategoryStatus {
 
     NOTICE, FREE
 

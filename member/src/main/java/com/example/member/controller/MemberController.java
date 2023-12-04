@@ -1,10 +1,8 @@
 package com.example.member.controller;
 
-import com.example.member.dto.ArticleDto;
 import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
-import com.example.member.service.ArticleService;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -31,7 +28,6 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ArticleService articleService;
 
     @GetMapping(value = "/join")
     public String toJoin(Model model) {
@@ -117,17 +113,5 @@ public class MemberController {
 
     }
 
-    @GetMapping(value = "/detail/{id}")
-    public String memberDetailBoard(@PathVariable Long id, Model model) {
-
-        try {
-            List<ArticleDto> boardList = articleService.articleDtoList(id);
-            model.addAttribute("boardList", boardList);
-        }catch (Exception e){
-            model.addAttribute("errorMessage", e.getMessage());
-        }
-
-        return "/article/articleByUser";
-    }
 
 }

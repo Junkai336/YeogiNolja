@@ -1,8 +1,6 @@
 package com.example.member.service;
 
-import com.example.member.dto.CommentDto;
 import com.example.member.dto.RoomDto;
-import com.example.member.entity.Comment;
 import com.example.member.entity.Room;
 import com.example.member.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
