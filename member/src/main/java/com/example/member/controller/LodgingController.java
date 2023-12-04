@@ -173,7 +173,6 @@ public class LodgingController {
 
     }
 
-    @Transactional
     @GetMapping(value = "/{id}/lodgingDelete")
     public String delete(@PathVariable Long id, RedirectAttributes rttr, Model model, Principal principal) {
         String email = principal.getName();

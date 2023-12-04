@@ -1,5 +1,7 @@
 package com.example.member.article;
 
+import com.example.member.article.comment.CommentDto;
+import com.example.member.article.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -20,7 +22,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
-
+    private final CommentService commentService;
 
     @GetMapping(value = "/articleForm")
     public String articleForm(Model model){
@@ -75,7 +77,10 @@ public class ArticleController {
 
         try{
             ArticleDto articleDto = articleService.articleDetail(article_id);
+            List<CommentDto> commentDtoList = commentService.commentDtoList(article_id);
             model.addAttribute("articleDto", articleDto);
+            model.addAttribute("commentDtoList", commentDtoList);
+//            model.addAttribute("commentForm", new CommentDto());
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
         }

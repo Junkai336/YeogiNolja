@@ -1,10 +1,8 @@
 package com.example.member.service;
 
 import com.example.member.constant.ReservationStatus;
-import com.example.member.dto.CommentDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
-import com.example.member.entity.Comment;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Room;
