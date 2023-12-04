@@ -129,6 +129,14 @@ function roomRegistration() {
         </div>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
 
+        <div class="input-group mt-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">인원수</span>
+            </div>
+            <input type="text" th:field="*{people}" class="form-control" placeholder="인원수를 입력해주세요">
+        </div>
+        <p th:if="${#fields.hasErrors('people')}" th:errors="*{people}" class="fieldError">Incorrect data</p>
+
 <!--        <div class="input-group">-->
 <!--            <div class="input-group-prepend">-->
 <!--                <span class="input-group-text">숙소 위치</span>-->

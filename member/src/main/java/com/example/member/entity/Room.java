@@ -5,6 +5,8 @@ import com.example.member.dto.RoomDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="room")
@@ -46,6 +48,10 @@ public class Room extends BaseEntity {
 
     @Column
     private String checkOutTime;
+
+//    @JoinColumn
+//    private List<ItemImg> itemImgList = new ArrayList<>();
+
 
     public static Room toRoom(RoomDto roomDto, Lodging lodging) {
         Room room = new Room();

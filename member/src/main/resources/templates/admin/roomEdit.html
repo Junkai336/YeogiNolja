@@ -41,7 +41,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">객실명</span>
             </div>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="숙소명을 입력해주세요">
+            <input type="text" th:field="*{name}" class="form-control" placeholder="객실명을 입력해주세요">
         </div>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
 

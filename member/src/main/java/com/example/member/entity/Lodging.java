@@ -22,7 +22,7 @@ import java.util.List;
 public class Lodging extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="lodging_id")
     private Long id;
 
@@ -48,6 +48,9 @@ public class Lodging extends BaseEntity {
     private String detail;
 
     @Column
+    private String people;
+
+    @Column
     private String postcode;   // 우편 번호
 
     @Column
@@ -71,6 +74,7 @@ public class Lodging extends BaseEntity {
         lodging.setMember(member);
         lodging.setName(lodgingDto.getName());
         lodging.setDetail(lodgingDto.getDetail());
+        lodging.setPeople(lodgingDto.getPeople());
         lodging.setPostcode(lodgingDto.getPostcode());
         lodging.setAddress(lodgingDto.getAddress());
         lodging.setDetailAddress(lodgingDto.getDetailAddress());

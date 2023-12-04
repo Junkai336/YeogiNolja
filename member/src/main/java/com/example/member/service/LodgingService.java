@@ -83,6 +83,7 @@ public class LodgingService {
 //        lodging.setMember(lodgingDto.getMember());
         lodging.setName(lodgingDto.getName());
         lodging.setDetail(lodgingDto.getDetail());
+        lodging.setPeople(lodgingDto.getPeople());
         lodging.setPostcode(lodgingDto.getPostcode());
         lodging.setAddress(lodgingDto.getAddress());
         lodging.setDetailAddress(lodgingDto.getDetailAddress());

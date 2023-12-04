@@ -203,11 +203,15 @@ public class LodgingController {
         } else {
             List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
 
+
             model.addAttribute("lodgingDtoList", lodgingDtoList);
             model.addAttribute("lodgingErrorMsg", "작성자가 일치하지 않습니다.");
 
             return "admin/lodgingList";
         }
     }
+
+
+
 
 }

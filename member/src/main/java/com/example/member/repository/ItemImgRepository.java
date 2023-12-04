@@ -1,6 +1,7 @@
 package com.example.member.repository;
 
 import com.example.member.entity.ItemImg;
+import com.example.member.entity.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,5 +25,8 @@ public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
         List<ItemImg> findByLodgingId(Long lodgingId);
 
         List<ItemImg> findByRoomId(Long lodgingId);
+
+//        @Query(nativeQuery = true, value = "select * from Room r where r.lodging_id= :lodging_id order by reg_time desc")
+//        List<Room> findAllByLodgingId(@Param("lodging_id") Long lodging_id);
 
 }

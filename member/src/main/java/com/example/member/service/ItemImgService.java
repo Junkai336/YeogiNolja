@@ -1,5 +1,6 @@
 package com.example.member.service;
 
+import com.example.member.dto.ItemImgDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.repository.ItemImgRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -77,5 +80,19 @@ public class ItemImgService {
             //savedItemImg - 영속상태 이므로 데이터를 변경하는것만으로 변경감지 동작
             // 트랜잭션이 끝날때 update 쿼리가 실행
         }
+    }
+
+    // List Entity -> List Dto
+    public List<ItemImgDto> toItemImgDtos() {
+        List<ItemImg> itemImgList = itemImgRepository.findAll();
+
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+        for (ItemImg itemImg : itemImgList) {
+            ItemImgDto itemImgDto = ItemImgDto.toItemImgDto(itemImg);
+            itemImgDtoList.add(itemImgDto);
+        }
+
+        return itemImgDtoList;
     }
 }

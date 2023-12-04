@@ -1,8 +1,13 @@
 package com.example.member.dto;
 
 import com.example.member.entity.ItemImg;
+import com.example.member.entity.Lodging;
+import com.example.member.entity.Room;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +21,10 @@ public class ItemImgDto {
     private String imgUrl;
 
     private String repImgYn;
+
+    private Room room;
+
+    private Lodging lodging;
 
 //    private static ModelMapper modelMapper = new ModelMapper();
 
@@ -43,5 +52,19 @@ public class ItemImgDto {
 //        this.imgUrl = itemImg.getImgUrl();
 //        this.repImgYn = itemImg.getRepImgYn();
 //    }
+
+    // Entity -> Dto
+    public static ItemImgDto toItemImgDto (ItemImg itemImg) {
+
+        ItemImgDto itemImgDto = new ItemImgDto();
+        itemImgDto.setImgUrl(itemImg.getImgUrl());
+        itemImgDto.setOriImgName(itemImg.getOriImgName());
+        itemImgDto.setImgName(itemImg.getImgName());
+        itemImgDto.setRepImgYn(itemImg.getRepimgYn());
+        itemImgDto.setLodging(itemImg.getLodging());
+        itemImgDto.setRoom(itemImg.getRoom());
+        return itemImgDto;
+    }
+
 }
 

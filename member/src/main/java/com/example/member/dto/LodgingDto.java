@@ -1,6 +1,7 @@
 package com.example.member.dto;
 
 import com.example.member.constant.LodgingType;
+import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
@@ -37,6 +38,8 @@ public class LodgingDto {
 
     private String detail;
 
+    private String people;
+
     private String postcode;   // 우편 번호
 
     private String address;     // 주소
@@ -55,6 +58,8 @@ public class LodgingDto {
 
     private LocalDateTime updateTime;
 
+    private String imgUrl;
+
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
 
     private List<Long> itemImgIds = new ArrayList<>();
@@ -69,6 +74,7 @@ public class LodgingDto {
         lodgingDto.setMember(lodging.getMember());
         lodgingDto.setName(lodging.getName());
         lodgingDto.setDetail(lodging.getDetail());
+        lodgingDto.setPeople(lodging.getPeople());
         lodgingDto.setPostcode(lodging.getPostcode());
         lodgingDto.setAddress(lodging.getAddress());
         lodgingDto.setDetailAddress(lodging.getDetailAddress());
