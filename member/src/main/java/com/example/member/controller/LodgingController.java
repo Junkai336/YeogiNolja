@@ -1,7 +1,10 @@
 package com.example.member.controller;
 
 import com.example.member.dto.LodgingDto;
+<<<<<<< HEAD
+=======
 import com.example.member.dto.RoomDto;
+>>>>>>> master
 import com.example.member.entity.Lodging;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.service.LodgingService;
@@ -12,7 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+<<<<<<< HEAD
+=======
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+>>>>>>> master
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;

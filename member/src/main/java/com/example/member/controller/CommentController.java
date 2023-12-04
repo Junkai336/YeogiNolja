@@ -1,10 +1,9 @@
 package com.example.member.controller;
 
-import com.example.member.dto.BoardDto;
+import com.example.member.dto.ArticleDto;
 import com.example.member.dto.CommentDto;
-import com.example.member.service.BoardService;
+import com.example.member.service.ArticleService;
 import com.example.member.service.CommentService;
-import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,32 +21,37 @@ import java.security.Principal;
 public class CommentController {
 
     private final CommentService commentService;
-    private final BoardService boardService;
+    private final ArticleService articleService;
 
 
-    @GetMapping("/board/{board_id}/comment")
-    public String newComment(@PathVariable Long board_id,
+    @GetMapping("/board/{article_id}/comment")
+    public String newComment(@PathVariable Long article_id,
                              @Valid CommentDto commentDto, BindingResult result,
                              Principal principal
+<<<<<<< HEAD
+                             ,Model model){
+        System.out.println(article_id);
+=======
             ,Model model){
         System.out.println(board_id);
+>>>>>>> master
         String email = principal.getName().toString();
-        commentService.newComment(commentDto, email, board_id);
+        commentService.newComment(commentDto, email, article_id);
         try {
-            BoardDto boardDto = boardService.findBoard(board_id);
-            model.addAttribute("boardDto", boardDto);
+            ArticleDto articleDto = articleService.findArticle(article_id);
+            model.addAttribute("boardDto", articleDto);
             // CommentList 가 추가된 board 를 모델에 담아 리턴
         }catch (Exception e){
             model.addAttribute("errorMessage", result.getFieldError());
 
         }
 
-        return "redirect:/board/"+board_id;
+        return "redirect:/board/"+article_id;
 
     }
 
-    @GetMapping(value = "/board/{board_id}/commentDelete/{comment_id}")
-    public String commentDelete(@PathVariable("board_id") Long board_id, @PathVariable("comment_id") Long commentId, Principal principal, Model model){
+    @GetMapping(value = "/board/{article_id}/commentDelete/{comment_id}")
+    public String commentDelete(@PathVariable("article_id") Long article_id, @PathVariable("comment_id") Long commentId, Principal principal, Model model){
         String email =principal.getName();
         // comment 의 id 와 접근자의 email을 받아 유효성 검사를 한다.
         try {
@@ -57,7 +61,7 @@ public class CommentController {
             model.addAttribute("error", e.getMessage());
         }
 
-        return "redirect:/board/"+board_id;
+        return "redirect:/board/"+article_id;
     }
 
 

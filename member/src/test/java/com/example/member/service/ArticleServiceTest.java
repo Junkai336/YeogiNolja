@@ -1,24 +1,22 @@
 package com.example.member.service;
 
-import com.example.member.dto.BoardDto;
-import com.example.member.entity.Board;
-import com.example.member.repository.BoardRepository;
+import com.example.member.dto.ArticleDto;
+import com.example.member.entity.Article;
+import com.example.member.repository.ArticleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional
-class BoardServiceTest {
+class ArticleServiceTest {
 
     @Autowired
-    private BoardRepository boardRepository;
+    private ArticleRepository articleRepository;
 
     @Autowired
-    private BoardService boardService;
+    private ArticleService articleService;
 
     @Test
     public void saveBoard() {
@@ -30,18 +28,18 @@ class BoardServiceTest {
 //
 //        boardRepository.save(board);
 
-        BoardDto boardDto = new BoardDto();
+        ArticleDto articleDto = new ArticleDto();
 
-        boardDto.setContent("content");
-        boardDto.setBoardTitle("title");
+        articleDto.setContent("content");
+        articleDto.setTitle("title");
 
-        Board board = Board.builder()
+        Article article = Article.builder()
 //                 .id(1L)
-                .content(boardDto.getContent())
-                .boardTitle(boardDto.getBoardTitle())
+                .content(articleDto.getContent())
+                .title(articleDto.getTitle())
                 .build();
 
-        boardRepository.save(board);
+        articleRepository.save(article);
 
 //        boardService.saveBoard(boardDto);
 

@@ -1,12 +1,10 @@
 package com.example.member.controller;
 
-import com.example.member.dto.BoardDto;
-import com.example.member.dto.MemberDto;
+import com.example.member.dto.ArticleDto;
 import com.example.member.dto.MemberFormDto;
-import com.example.member.entity.Board;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
-import com.example.member.service.BoardService;
+import com.example.member.service.ArticleService;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +31,7 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final BoardService boardService;
+    private final ArticleService articleService;
 
     @GetMapping(value = "/join")
     public String toJoin(Model model) {
@@ -122,18 +120,14 @@ public class MemberController {
     @GetMapping(value = "/detail/{id}")
     public String memberDetailBoard(@PathVariable Long id, Model model) {
 
-        Member target = memberRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+        try {
+            List<ArticleDto> boardList = articleService.articleDtoList(id);
+            model.addAttribute("boardList", boardList);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", e.getMessage());
+        }
 
-        String email = target.getEmail();
-
-//        System.out.println(email);
-
-        List<BoardDto> boardList = boardService.boardDtos(email);
-
-        model.addAttribute("boardList", boardList);
-
-        return "/board/boardListByUser";
+        return "/article/articleByUser";
     }
 
 }
