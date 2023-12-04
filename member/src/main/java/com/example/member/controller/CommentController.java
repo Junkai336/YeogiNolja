@@ -28,13 +28,7 @@ public class CommentController {
     public String newComment(@PathVariable Long article_id,
                              @Valid CommentDto commentDto, BindingResult result,
                              Principal principal
-<<<<<<< HEAD
                              ,Model model){
-        System.out.println(article_id);
-=======
-            ,Model model){
-        System.out.println(board_id);
->>>>>>> master
         String email = principal.getName().toString();
         commentService.newComment(commentDto, email, article_id);
         try {
