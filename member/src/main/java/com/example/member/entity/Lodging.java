@@ -19,7 +19,7 @@ import java.util.List;
 public class Lodging extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="lodging_id")
     private Long id;
 
@@ -44,9 +44,20 @@ public class Lodging extends BaseEntity {
     @Column
     private String detail;
 
+    @Column
+    private String people;
 
     @Column
-    private String location;
+    private String postcode;   // 우편 번호
+
+    @Column
+    private String address;     // 주소
+
+    @Column
+    private String detailAddress; // 상세주소
+
+    @Column
+    private String extraAddress; // 참고항목
 
     @Enumerated(EnumType.STRING)
     private LodgingType lodgingType;
@@ -56,14 +67,18 @@ public class Lodging extends BaseEntity {
         Lodging lodging = new Lodging();
 
         lodging.setId(lodgingDto.getId());
-//        lodging.setRoom(lodgingDto.getRoom());
+        lodging.setRoom(lodgingDto.getRoomList());
         lodging.setMember(member);
         lodging.setName(lodgingDto.getName());
         lodging.setDetail(lodgingDto.getDetail());
-        lodging.setLocation(lodgingDto.getLocation());
+        lodging.setPeople(lodgingDto.getPeople());
+        lodging.setPostcode(lodgingDto.getPostcode());
+        lodging.setAddress(lodgingDto.getAddress());
+        lodging.setDetailAddress(lodgingDto.getDetailAddress());
+        lodging.setExtraAddress(lodgingDto.getExtraAddress());
         lodging.setLodgingType(lodgingDto.getLodgingType());
-//        lodging.setRegTime(lodgingDto.getRegTime());
-//        lodging.setUpdateTime(lodgingDto.getUpdateTime());
+        lodging.setRegTime(lodgingDto.getRegTime());
+        lodging.setUpdateTime(lodgingDto.getUpdateTime());
         return lodging;
     }
 
