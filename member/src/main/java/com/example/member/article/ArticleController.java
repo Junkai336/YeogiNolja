@@ -1,6 +1,7 @@
 package com.example.member.article;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,14 +33,27 @@ public class ArticleController {
     @PostMapping(value = "/articleForm")
     public String newArticle(@Valid ArticleDto articleDto, BindingResult result
     , Model model, Principal principal){
-        try{
-            String email = principal.getName();
-            articleService.createArticle(email, articleDto);
-        }catch (Exception e){
-            model.addAttribute("errorMessage",result.getFieldError());
-        }
+        // 이미 작성되었던 글이었던 경우(수정 시)
+        if (articleDto.getId() != null){
+            Long article_id = articleDto.getId();
+            try{
+                ArticleDto savedArticleDto = articleService.editArticle(article_id, articleDto);
+                model.addAttribute("articleDto", savedArticleDto);
+            }catch (Exception e){
+                model.addAttribute("errorMessage", e.getMessage());
+            }
+            return "redirect:/article/"+article_id;
+        }else {
+            // 새로 작성되는 글일 경우
+            try {
+                String email = principal.getName();
+                articleService.createArticle(email, articleDto);
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", result.getFieldError());
+            }
 
-        return "redirect:/article/list";
+            return "redirect:/article/list";
+        }
     }
 
     // 게시판 -> 게시글 리스트
@@ -67,6 +81,21 @@ public class ArticleController {
         }
 
         return "article/detail";
+    }
+
+    // 게시글 수정 페이지
+    @GetMapping(value = "/{article_id}/Edit")
+    public String EditForm(@PathVariable Long article_id, Model model,
+                              Principal principal){
+        String email = principal.getName();
+        try{
+            ArticleDto articleDto = articleService.findArticle(article_id, email);
+            model.addAttribute("articleDto", articleDto);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", e.getMessage());
+        }
+
+        return "/article/articleForm";
     }
 
 

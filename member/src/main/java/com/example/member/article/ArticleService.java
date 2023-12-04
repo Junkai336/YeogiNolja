@@ -63,4 +63,27 @@ public class ArticleService {
         articleRepository.delete(article);
 
     }
+
+
+    public ArticleDto findArticle(Long articleId, String email) throws Exception{
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityExistsException::new);
+        if (article.getMember().getEmail() != member.getEmail()){
+            throw new RuntimeException("작성자가 아니므로 권한이 없습니다.");
+        }
+        return ArticleDto.toArticleDto(article);
+    }
+
+    public ArticleDto editArticle(Long articleId, ArticleDto articleDto) throws Exception{
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(EntityNotFoundException::new);
+        article.setTitle(articleDto.getTitle());
+        article.setContent(articleDto.getContent());
+        article.setCategoryStatus(articleDto.getCategoryStatus());
+        ArticleDto editArticleDto = ArticleDto.toArticleDto(article);
+        return editArticleDto;
+
+    }
 }

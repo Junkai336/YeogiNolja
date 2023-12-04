@@ -49,6 +49,7 @@
 <div layout:fragment="content">
 
     <form class="container" action="/article/articleForm" method="post" th:object="${articleDto}">
+        <input type="hidden" th:field="*{id}">
         <input type="hidden" th:field="*{member.id}">
         <div class="mb-3 form-group">
             <select th:field="*{categoryStatus}" class="custom-select">

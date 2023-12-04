@@ -1,13 +1,17 @@
 package com.example.member.article;
 
+import com.example.member.article.comment.Comment;
 import com.example.member.constant.CategoryStatus;
 import com.example.member.entity.BaseEntity;
 import com.example.member.entity.Member;
+import groovy.util.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,7 +40,7 @@ public class Article extends BaseEntity {
     @Column
     private Long recommendations; // 추천 수
 
-
+    private List<Comment> commentList = new ArrayList<>();
 
     public static Article createArticle(ArticleDto articleDto, Member member) {
         Article article = new Article();

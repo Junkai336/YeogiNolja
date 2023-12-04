@@ -1,5 +1,6 @@
 package com.example.member.article;
 
+import com.example.member.article.comment.CommentDto;
 import com.example.member.constant.CategoryStatus;
 import com.example.member.entity.Member;
 import lombok.Getter;
@@ -7,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -29,6 +32,8 @@ public class ArticleDto {
     private Long recommendations; // 추천 수
 
     private LocalDateTime regTime; // 생성일자
+
+    private List<CommentDto> commentDtoList = new ArrayList<>();
 
     public static ArticleDto toArticleDto(Article article) {
         ArticleDto articleDto = new ArticleDto();
