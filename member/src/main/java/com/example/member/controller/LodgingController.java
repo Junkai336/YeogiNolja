@@ -1,57 +1,73 @@
 package com.example.member.controller;
 
 import com.example.member.dto.LodgingDto;
+<<<<<<< HEAD
+=======
+import com.example.member.dto.RoomDto;
+>>>>>>> master
 import com.example.member.entity.Lodging;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.service.LodgingService;
+import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+<<<<<<< HEAD
+=======
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+>>>>>>> master
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
-@Transactional
+//@Transactional
 @RequestMapping("/lodging")
 @RequiredArgsConstructor
 public class LodgingController {
 
     private final LodgingService lodgingService;
     private final LodgingRepository lodgingRepository;
+    private final RoomService roomService;
+
 
     @GetMapping(value = "/registration")
     public String toRegistration(Model model) {
         LodgingDto lodgingDto = new LodgingDto();
         model.addAttribute("lodgingDto", lodgingDto);
 
-        return "/admin/lodgingForm";
+        return "admin/lodgingForm";
     }
 
+
     @PostMapping(value = "/registration")
-    public String NewLodging(@Valid LodgingDto lodgingDto, BindingResult bindingResult, Model model, Principal principal) {
+    public String NewLodging(@Valid LodgingDto lodgingDto, BindingResult bindingResult, Model model, Principal principal, RedirectAttributes rttr) {
         if(bindingResult.hasErrors()){
-            return "/admin/lodgingForm";
+            return "admin/lodgingForm";
         }
 
         String email = principal.getName();
 
         try {
             lodgingService.saveItem(lodgingDto, email);
+            rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 등록이 완료되었습니다.");
 //            lodgingService.saveItem(lodgingDto, itemImgFileList);
         } catch (Exception e){
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            return "/admin/lodgingForm";
+            return "admin/lodgingForm";
         }
 
-        return "redirect:/";
+        return "redirect:/lodging/list";
 
     }
 
+
+    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 //
 //    @PostMapping(value = "/registration")
 //    public String NewLodging(@Valid LodgingDto lodgingDto, BindingResult bindingResult,
@@ -73,13 +89,14 @@ public class LodgingController {
 //        return "redirect:/";
 //    }
 //
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
     @GetMapping(value = {"/list","/list/{page}"})
     public String LodgingManage(Model model) {
         List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
         model.addAttribute("lodgingDtoList", lodgingDtoList);
 
-        return "/admin/lodgingList";
+        return "admin/lodgingList";
     }
 
 //    public String itemManage(ItemSearchDto itemSearchDto,
@@ -100,14 +117,51 @@ public class LodgingController {
 //        return "item/itemMng";
 //    }
 
-    @GetMapping(value = "/list/{id}")
+    @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model) {
-        Lodging lodgingEntity = lodgingRepository.findById(id).orElse(null);
+//        Lodging lodgingEntity = lodgingRepository.findById(id).orElse(null);
+        Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        List<RoomDto> roomDtoList = roomService.roomDtoList(id);
 
-        model.addAttribute("lodgings", lodgingEntity);
+        model.addAttribute("lodgingEntity", lodgingEntity);
+        model.addAttribute("roomList", roomDtoList);
 
-        return "/admin/lodgingContents";
+        return "admin/lodgingContents";
     }
 
+    @GetMapping(value = "/{id}/lodgingForm")
+    public String toUpdate(@PathVariable Long id, Model model) {
+        LodgingDto lodgingDto = lodgingService.findLodging(id);
+        model.addAttribute("lodgingDto", lodgingDto);
+
+        return "admin/lodgingForm";
+    }
+
+    @PostMapping(value = "/{id}/update")
+    public String update(@Valid LodgingDto lodgingDto, BindingResult result, Model model, RedirectAttributes rttr) {
+
+        try {
+            lodgingService.lodgingUpdate(lodgingDto);
+            rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 수정이 완료되었습니다.");
+        } catch (Exception e) {
+            model.addAttribute("errorMsg", result.getFieldError());
+        }
+
+        return "redirect:/lodging/list";
+
+    }
+
+    @GetMapping(value = "/{id}/lodgingDelete")
+    public String delete(@PathVariable Long id, RedirectAttributes rttr) {
+        Lodging target = lodgingRepository.findById(id).orElse(null);
+
+        if(target != null) {
+            lodgingRepository.delete(target);
+            rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 삭제가 완료되었습니다.");
+        }
+
+
+        return "redirect:/lodging/list";
+    }
 
 }

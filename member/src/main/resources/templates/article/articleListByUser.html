@@ -42,10 +42,17 @@
         <td th:text="${articleDto.id}"></td>
         <!--                <td th:text="${articleList.boardCategoryStatus}"></td>-->
         <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
+<<<<<<< HEAD:member/src/main/resources/templates/article/articleListByUser.html
         <td th:text="${articleDto.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
         <td><a th:href="@{/article/{id}(id = ${articleDto.id})}" th:utext="${articleDto.boardTitle}"></a></td>
         <td th:text="${articleDto.member.name}"></td>
 <!--        <td th:text=""></td>-->
+=======
+        <td th:text="${boardDto.boardCategoryStatus == T(com.example.member.constant.BoardCategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+        <td><a th:href="@{/board/{id}(id = ${boardDto.id})}" th:utext="${boardDto.boardTitle}"></a></td>
+        <td th:text="${boardDto.member.name}"></td>
+        <!--        <td th:text=""></td>-->
+>>>>>>> master:member/src/main/resources/templates/board/boardListByUser.html
         <td>a</td>
         <td>a</td>
         <td>a</td>
@@ -53,25 +60,25 @@
       </tbody>
     </table>
 
-  <!-- 검색 영역 -->
-  <div class="container-fluid d-flex justify-content-center">
-    <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="검색어를 입력해 주세요" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-  </div>
+    <!-- 검색 영역 -->
+    <div class="container-fluid d-flex justify-content-center">
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="검색어를 입력해 주세요" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
 
-  <!-- 페이지네이션 영역 -->
-  <div class="container-fluid d-flex justify-content-center mt-3">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">이전</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">다음</a></li>
-      </ul>
-    </nav>
-  </div>
+    <!-- 페이지네이션 영역 -->
+    <div class="container-fluid d-flex justify-content-center mt-3">
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          <li class="page-item"><a class="page-link" href="#">이전</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">다음</a></li>
+        </ul>
+      </nav>
+    </div>
 
-</div>
+  </div>
