@@ -40,7 +40,6 @@ public class Article extends BaseEntity {
     @Column
     private Long recommendations; // 추천 수
 
-    private List<Comment> commentList = new ArrayList<>();
 
     public static Article createArticle(ArticleDto articleDto, Member member) {
         Article article = new Article();

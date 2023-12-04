@@ -11,21 +11,25 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Getter
+@Table(name = "comment_table")
 public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "member_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private String commentWriter;
 
-    @JoinColumn(name = "article_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Article article;
-
-    @Column
     private String comment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id")
+    private Article article;
+
+    public static Comment crateComment(CommentDto commentDto, Article article) {
+        Comment comment = new Comment();
+        comment.setComment(commentDto.getComment());
+        comment.setArticle(article);
+        return comment;
+    }
 }

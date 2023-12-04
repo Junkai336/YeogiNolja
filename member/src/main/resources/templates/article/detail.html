@@ -17,10 +17,11 @@
 
 <div layout:fragment="content">
 
-    <a th:href="@{/article/{id}/Edit(id = ${articleDto.id})}" class="btn btn-primary">수정</a>
-    <a th:href="@{/article/{id}/Delete(id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
 
     <div class="container mt-3" th:object="${articleDto}">
+        <a th:href="@{/article/{article_id}/Edit(article_id = ${articleDto.id})}" class="btn btn-primary">수정</a>
+        <a th:href="@{/article/{article_id}/Delete(article_id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
+
         <div>
             <h2 name="title" id="article_title" th:text="*{title}"></h2>
             작성자 : <span name="writer" id="writer" th:text="*{member.name}" ></span> /
@@ -28,23 +29,30 @@
         </div>
         <hr>
         <div id="article_content" name="content" th:utext="*{content}"></div>
-
-        <div class="container">
-            <form th:action="/comment/{article_id}/new(article_id=${articleDto.id})" method="post" role="form">
-            <input type="text" id="comment" th:field="comment" class="form-control" placeholder="댓글을 입력해주세요."/>
-            <button type="submit" class="btn btn-primary">submit</button>
-            </form>
-        </div>
     </div>
-    <hr>
-    <h3>comments</h3>
-<!--    <div th:each="commentDto : ${commentDtoList}">-->
-<!--        <div>-->
-<!--            <input type="hidden" th:field="*{article.id}">-->
-<!--            <span th:text="*{member.name}"></span> : <span th:text="*{comment}"></span>-->
+
+    // 댓글 작성 폼
+<!--        <div class="container">-->
+<!--            <form th:action="/comment/{article_id}/new(article_id=${articleDto.id})" method="post" role="form">-->
+<!--                <div th:object="${commentForm}">-->
+
+<!--                    <input type="text" id="comment" th:field="*{comment}" class="form-control" placeholder="댓글을 입력해주세요."/>-->
+<!--                </div>-->
+<!--            <button type="submit" class="btn btn-primary">submit</button>-->
+<!--            </form>-->
 <!--        </div>-->
-<!--        -->
-<!--    </div>-->
+
+    <hr>
+<!--    댓글 리스트-->
+    <h3>comments</h3>
+    <div th:each="commentDto : ${commentDtoList}">
+        <div>
+            <input type="hidden" th:field="*{article_id}">
+            <span th:utext="*{commentWriter}"></span> : <span th:utext="*{comment}"></span>
+        </div>
+        <div>작성 시간 : <span th:text="*{regTime}"></span></div>
+
+    </div>
         <a href="/article/list">게시글 목록</a>
 
 </div>
