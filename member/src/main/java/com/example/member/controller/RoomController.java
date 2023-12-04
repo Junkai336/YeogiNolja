@@ -10,6 +10,7 @@ import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.RoomRepository;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,7 +80,5 @@ public class RoomController {
         return "redirect:/lodging/"+id;
 
     }
-
-
 
 }
