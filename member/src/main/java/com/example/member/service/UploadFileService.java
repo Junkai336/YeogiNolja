@@ -2,10 +2,11 @@ package com.example.member.service;
 
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.UploadFileRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,17 +14,14 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
-@Transactional
-//@RequiredArgsConstructor
 public class UploadFileService {
 
 
     @Autowired
-    UploadFileRepository uploadFileRepository;
+    private UploadFileRepository uploadFileRepository;
 
     private final Path rootLocation; // d:/image/
 

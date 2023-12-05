@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -28,7 +29,4 @@ public class UploadFile extends BaseEntity {
     private String contentType;             // image/jpeg
 
     private long size;                      // 4476873 (byte)
-
-
-
 }

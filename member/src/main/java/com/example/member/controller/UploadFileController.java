@@ -23,12 +23,11 @@ public class UploadFileController {
 
     private final ResourceLoader resourceLoader;
 
-    @PostMapping("/images")
-//    @PostMapping("D:/shop/item")
+    @PostMapping("/image")
     public ResponseEntity<?> imageUpload(@RequestParam("file") MultipartFile file) {
         try {
             UploadFile uploadFile = uploadFileService.store(file);
-            return ResponseEntity.ok().body("/images/" + uploadFile.getId());
+            return ResponseEntity.ok().body("/image/" + uploadFile.getId());
 //            return ResponseEntity.ok().body("/D:/shop/item/" + uploadFile.getId());
         } catch(Exception e) {
             e.printStackTrace();
@@ -36,7 +35,7 @@ public class UploadFileController {
         }
     }
 
-    @GetMapping("/images/{fileId}")
+    @GetMapping("/image/{fileId}")
 //    @GetMapping("/D:/shop/item/{fileId}")
     public ResponseEntity<?> serveFile(@PathVariable Long fileId){
         try {
