@@ -41,7 +41,7 @@ public class ReservDto {
 
         return reservDto;
     }
-    public String phoneNumber(Member member){
+    public static String phoneNumber(Member member){
         String number=
                 member.getPhoneN1()+"-"+
                         member.getPhoneN2()+"-"+
