@@ -49,16 +49,69 @@
         </div>
     </div>  <!-- //boardDto -->
     <div th:each="commentDto : ${commentDtoList}" class="container">
-        <div id="commentOne">
-
-
-        <span th:text="*{commentDto.member.name}"></span> : <span th:utext="*{commentDto.comment}"></span>
+        <input type="hidden" value="*{commentDto.id}">
+        <span th:text="*{commentDto.member.name}"></span> : <span id="commentContent-{commentDto.id}" th:utext="*{commentDto.comment}"></span>
         <span th:text="*{commentDto.createdByTime}"></span>
+        <button class="TestBtn" onclick="btnClick()" value="*{comment.id}">아이디 출력</button>
+<!--        <button id="editBtn-{commentDto.id}" class="btn btn-warning">수정하기</button>-->
+    <script>
+        function btnClick(e){
+            const comment_id = [[*{commentDto.id}]];
 
-        </div>
-        <button id="editBtn" class="btn btn-warning">수정하기</button>
+            console.log(comment_id);
+            let target = e.target;
+            console.log("target.value ="+target.value());
+        }
+    </script>
+        <form id="commentEditForm-{commentDto.id}" style="display: none">
+            <input type="text" id="editedComment-{commentDto.id}" name="editedComment" value="*{commentDto.comment}"/>
+            <button type="submit">수정완료</button>
+        </form>
+        <script>
+            editBtn-{commentDto.id}.addEventListener("click", (e) => {
+                const commentContentElement = document.getElementById("commentContent-{commentDto.id}");
+                const commentEditFormElement = document.getElementById("commentEditForm-{commentDto.id}");
+
+                // Hide the comment content and show the edit form
+                commentContentElement.style.display = "none";
+                commentEditFormElement.style.display = "block";
+            });
+
+            commentEditForm-{commentDto.id}.addEventListener("submit", (e) => {
+                e.preventDefault(); // Prevent form submission to the default action
+
+                const editedComment = document.getElementById("editedComment-{commentDto.id}").value;
+
+                // Send an AJAX request to update the comment with the edited content
+                fetch("/article/{article_id}/commentUpdate/{comment_id}", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        article_id: {articleDto.id},
+                        comment_id: {commentDto.id},
+                        editedComment: editedComment
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the comment content with the edited content
+                        commentContentElement.textContent = editedComment;
+
+                        // Hide the edit form and show the comment content
+                        commentEditFormElement.style.display = "none";
+                        commentContentElement.style.display = "block";
+                    } else {
+                        console.error("Failed to update comment:", data.error);
+                    }
+                });
+            });
+        </script>
+
+        <!--                    data-bs-comment-id="*{commentDto.id}"-->
         <a th:href="@{/article/{article_id}/commentDelete/{comment_id}(article_id = ${articleDto.id}, comment_id=${commentDto.id})}" class="btn btn-danger">삭제</a>
-
         <hr>
     </div>
 

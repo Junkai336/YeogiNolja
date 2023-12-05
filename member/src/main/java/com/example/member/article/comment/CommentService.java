@@ -1,11 +1,7 @@
-package com.example.member.service;
+package com.example.member.article.comment;
 
 import com.example.member.article.Article;
 import com.example.member.article.ArticleRepository;
-import com.example.member.article.ArticleService;
-import com.example.member.article.comment.Comment;
-import com.example.member.article.comment.CommentDto;
-import com.example.member.article.comment.CommentRepository;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +38,8 @@ public class CommentService {
     public List<CommentDto> commentDtoList(Long article_id){
         List<Comment> commentList = commentRepository.findAllByArticleId(article_id);
         List<CommentDto> commentDtoList = CommentDto.toCommentDtoList(commentList);
-        for (CommentDto commentDto : commentDtoList){
-            System.out.println(commentDto.toString());
+        for (Comment comment : commentList){
+            CommentDto commentDto = CommentDto.toCommentDto(comment);
         }
         return commentDtoList;
 
