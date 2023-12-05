@@ -5,47 +5,60 @@
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-  <style>
-  </style>
+    <style>
+    </style>
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-  <script th:inline="javascript">
-  </script>
+    <script th:inline="javascript">
+    </script>
 </th:block>
 
 <div layout:fragment="content">
 
-    <a th:href="@{/article/{id}/Edit(id = ${articleDto.id})}" class="btn btn-primary">수정</a>
-    <a th:href="@{/article/{id}/Delete(id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
+    <div th:object="${articleDto}" class="container mt-3">
+        <a th:href="@{/article/{id}/Edit(id = ${articleDto.id})}" class="btn btn-primary">수정</a>
+        <a th:href="@{/article/{id}/Delete(id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
 
-    <div class="container mt-3" th:object="${articleDto}">
-        <div>
-            <h2 name="title" id="article_title" th:text="*{title}"></h2>
-            작성자 : <span name="writer" id="writer" th:text="*{member.name}" ></span> /
-            작성 시간: <span name="regTime" id="regTime" th:text="*{regTime}" class="fs-sm"></span>
+        <div class="container mt-3">
+            <div>
+                <h2 name="title" id="title" th:text="*{title}"></h2>
+                작성자 : <span name="writer" id="memberName" th:text="*{member.name}" ></span> /
+                작성 시간: <span name="createdByTime" id="createdByTime" th:text="*{regTime}" class="fs-sm"></span>
+            </div>
+            <hr>
+            <div id="content" name="content" th:utext="*{content}"></div>
         </div>
         <hr>
-        <div id="article_content" name="content" th:utext="*{content}"></div>
+        <!--    <a th:href="@{/board/{id}/boardEdit(id = ${boardDto.id})}" class="btn btn-primary">수정</a>-->
 
-        <div class="container">
-            <form th:action="/comment/{article_id}/new(article_id=${articleDto.id})" method="post" role="form">
-            <input type="text" id="comment" th:field="comment" class="form-control" placeholder="댓글을 입력해주세요."/>
-            <button type="submit" class="btn btn-primary">submit</button>
-            </form>
+        <form sec:authorize="isAuthenticated()" name="commentForm" th:object="${newCommentDto}" role="form" th:action="@{/article/{article_id}/comment(article_id = ${articleDto.id})}">
+            <label for="comment">Comment : </label>
+            <input type="text" th:field="*{comment}" name="comment", id="comment"/>
+
+
+            <button type="submit">댓글 달기</button>
+        </form>
+
+        <hr>
+        <div>
+
+
+
         </div>
+    </div>  <!-- //boardDto -->
+    <div th:each="commentDto : ${commentDtoList}" class="container">
+        <span th:text="*{commentDto.member.name}"></span> : <span th:utext="*{commentDto.comment}"></span>
+        <span th:text="*{commentDto.createdByTime}"></span>
+        <a th:href="@{/article/{article_id}/commentDelete/{comment_id}(article_id = ${articleDto.id}, comment_id=${commentDto.id})}" class="btn btn-danger">삭제</a>
+
+        <hr>
     </div>
-    <hr>
-    <h3>comments</h3>
-<!--    <div th:each="commentDto : ${commentDtoList}">-->
-<!--        <div>-->
-<!--            <input type="hidden" th:field="*{article.id}">-->
-<!--            <span th:text="*{member.name}"></span> : <span th:text="*{comment}"></span>-->
-<!--        </div>-->
-<!--        -->
-<!--    </div>-->
-        <a href="/article/list">게시글 목록</a>
+
+    <a href="/article/list">게시글 목록</a>
+
+    <script>
+    </script>
 
 </div>
-</html>
