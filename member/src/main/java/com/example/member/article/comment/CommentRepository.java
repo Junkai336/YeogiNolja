@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query(value = "select * from comment where comment.article_id = :article_id", nativeQuery = true)
+    @Query(value = "select * from comment c where c.article_id = :article_id", nativeQuery = true)
     List<Comment> findAllByArticleId(@Param("article_id") Long article_id);
+
+
 }

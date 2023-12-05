@@ -3,87 +3,89 @@ package com.example.member.article;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class ArticleService {
-    private final MemberRepository memberRepository;
+
     private final ArticleRepository articleRepository;
+    private final MemberRepository memberRepository;
 
-    public void createArticle(String email, ArticleDto articleDto) throws Exception{
-        // 작성자의 정보를 가져온다.
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(EntityExistsException::new);
-        Article article = Article.createArticle(articleDto, member);
-        articleRepository.save(article);
+//    public Board create(BoardDto boardDto) {
+//        Board board = boardDto.toEntity();
+//        if(board.getId() != null){
+//            return null;
+//        } //기존데이터 수정 방지
+//        return boardRepository.save(board);
+//    }
 
-    }
-
-    public List<ArticleDto> showList() {
+    public List<ArticleDto> articleDtoList () {
         List<Article> articleList = articleRepository.findAll();
-        List<ArticleDto> articleDtoList = new ArrayList<>();
+        List<ArticleDto> articleDtoList =new ArrayList<>();
 
-        for (Article article: articleList){
+        for (Article article : articleList) {
             ArticleDto articleDto = ArticleDto.toArticleDto(article);
             articleDtoList.add(articleDto);
         }
 
         return articleDtoList;
-
     }
 
-    public ArticleDto articleDetail(Long articleId) throws Exception{
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(EntityNotFoundException::new);
-        ArticleDto articleDto =ArticleDto.toArticleDto(article);
-        return articleDto;
-
-    }
-
-    public void deleteArticle(Long articleId, String email) throws RuntimeException{
-        // 삭제할 글의 찾는다.
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(EntityNotFoundException::new);
-        // 삭제요청하는 멤버를 찾는다.
+    public void saveArticle(ArticleDto articleDto, String email){
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
-        // 삭제요청하는 멤버의 이메일과 글을 게시한 멤버의 이메일이 다르면
-        if (article.getMember().getEmail() != member.getEmail()){
-            throw new RuntimeException("작성자가 아니므로 권한이 없습니다.");
+        Article article = Article.toArticle(member, articleDto);
+        articleRepository.save(article);
+    }
+
+
+
+    public List<ArticleDto> articleDtoList(String email){
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+        Long member_id = member.getId();
+        List<Article> articleList = articleRepository.findAllByMemberId(member_id);
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+        for (Article article : articleList){
+            ArticleDto articleDto= ArticleDto.toArticleDto(article);
+            articleDtoList.add(articleDto);
         }
-        // 위의 조건에 충족되지 않는다면 게시글을 삭제한다.
-        articleRepository.delete(article);
+        return articleDtoList;
 
     }
 
 
-    public ArticleDto findArticle(Long articleId, String email) throws Exception{
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(EntityExistsException::new);
-        if (article.getMember().getEmail() != member.getEmail()){
-            throw new RuntimeException("작성자가 아니므로 권한이 없습니다.");
-        }
+    public ArticleDto findArticle(Long id) {
+        Article article = articleRepository.findById(id).orElse(null);
+
         return ArticleDto.toArticleDto(article);
+
     }
 
-    public ArticleDto editArticle(Long articleId, ArticleDto articleDto) throws Exception{
-        Article article = articleRepository.findById(articleId)
+
+
+    public void articleUpdate(ArticleDto articleDto) {
+        Article article = articleRepository.findById(articleDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
         article.setTitle(articleDto.getTitle());
         article.setContent(articleDto.getContent());
-        article.setCategoryStatus(articleDto.getCategoryStatus());
-        ArticleDto editArticleDto = ArticleDto.toArticleDto(article);
-        return editArticleDto;
 
     }
+    public void articleDelete(Long article_id)throws Exception{
+        Article article = articleRepository.findById(article_id)
+                .orElseThrow(EntityNotFoundException::new);
+        articleRepository.delete(article);
+    }
+
+
+
 }
