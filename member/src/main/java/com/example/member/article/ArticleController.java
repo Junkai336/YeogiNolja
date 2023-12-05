@@ -1,14 +1,13 @@
 package com.example.member.article;
 
 import com.example.member.article.comment.CommentDto;
-import com.example.member.service.CommentService;
+import com.example.member.article.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -21,7 +20,6 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final ArticleRepository articleRepository;
     private final CommentService commentService;
 
     @GetMapping(value = "/list")
