@@ -1,10 +1,13 @@
 package com.example.member.entity;
 
 import com.example.member.constant.LodgingType;
+import com.example.member.dto.CommentDto;
 import com.example.member.dto.LodgingDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +22,7 @@ import java.util.List;
 public class Lodging extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="lodging_id")
     private Long id;
 
@@ -44,20 +47,9 @@ public class Lodging extends BaseEntity {
     @Column
     private String detail;
 
-    @Column
-    private String people;
 
     @Column
-    private String postcode;   // 우편 번호
-
-    @Column
-    private String address;     // 주소
-
-    @Column
-    private String detailAddress; // 상세주소
-
-    @Column
-    private String extraAddress; // 참고항목
+    private String location;
 
     @Enumerated(EnumType.STRING)
     private LodgingType lodgingType;
@@ -67,18 +59,14 @@ public class Lodging extends BaseEntity {
         Lodging lodging = new Lodging();
 
         lodging.setId(lodgingDto.getId());
-        lodging.setRoom(lodgingDto.getRoomList());
+//        lodging.setRoom(lodgingDto.getRoom());
         lodging.setMember(member);
         lodging.setName(lodgingDto.getName());
         lodging.setDetail(lodgingDto.getDetail());
-        lodging.setPeople(lodgingDto.getPeople());
-        lodging.setPostcode(lodgingDto.getPostcode());
-        lodging.setAddress(lodgingDto.getAddress());
-        lodging.setDetailAddress(lodgingDto.getDetailAddress());
-        lodging.setExtraAddress(lodgingDto.getExtraAddress());
+        lodging.setLocation(lodgingDto.getLocation());
         lodging.setLodgingType(lodgingDto.getLodgingType());
-        lodging.setRegTime(lodgingDto.getRegTime());
-        lodging.setUpdateTime(lodgingDto.getUpdateTime());
+//        lodging.setRegTime(lodgingDto.getRegTime());
+//        lodging.setUpdateTime(lodgingDto.getUpdateTime());
         return lodging;
     }
 

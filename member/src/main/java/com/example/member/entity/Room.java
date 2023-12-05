@@ -5,8 +5,6 @@ import com.example.member.dto.RoomDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="room")
@@ -19,17 +17,13 @@ import java.util.List;
 public class Room extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="room_id")
     private Long id;
 
     @JoinColumn(name = "lodging_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lodging lodging;
-
-//    @JoinColumn(name = "member_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Member member;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
@@ -48,10 +42,6 @@ public class Room extends BaseEntity {
 
     @Column
     private String checkOutTime;
-
-//    @JoinColumn
-//    private List<ItemImg> itemImgList = new ArrayList<>();
-
 
     public static Room toRoom(RoomDto roomDto, Lodging lodging) {
         Room room = new Room();
