@@ -1,5 +1,6 @@
 package com.example.member.service;
 
+import com.example.member.constant.RoomExist;
 import com.example.member.dto.LodgingDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
@@ -41,6 +42,9 @@ public class LodgingService {
                 .orElseThrow(EntityNotFoundException::new);
 
         Lodging lodging = Lodging.toLodging(member, lodgingDto);
+
+        lodging.setRoomExist(RoomExist.N);
+
         lodgingRepository.save(lodging);
 
 //        이미지등록
@@ -83,7 +87,6 @@ public class LodgingService {
 //        lodging.setMember(lodgingDto.getMember());
         lodging.setName(lodgingDto.getName());
         lodging.setDetail(lodgingDto.getDetail());
-        lodging.setPeople(lodgingDto.getPeople());
         lodging.setPostcode(lodgingDto.getPostcode());
         lodging.setAddress(lodgingDto.getAddress());
         lodging.setDetailAddress(lodgingDto.getDetailAddress());

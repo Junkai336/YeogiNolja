@@ -37,12 +37,6 @@
         </tr>
         </thead>
         <tbody>
-<<<<<<< HEAD
-        <tr th:each="article : ${boards}">
-            <th th:text="${article.id}">a</th>
-            <td th:text="${article.boardTitle}">a</td>
-            <td th:utext="${article.content}"></td>
-=======
         <tr th:each="lodging : ${lodgingEntity}">
             <th th:text="${lodging.id}">a</th>
             <td th:text="${lodging.name}">a</td>
@@ -52,16 +46,9 @@
             <td>
                 <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingEntity.id})}" class="btn btn-primary">객실 추가</a>
             </td>
->>>>>>> master
         </tr>
         </tbody>
     </table>
-<<<<<<< HEAD
-    <a th:href="@{/article/{id}/boardEdit(id = ${boards.id})}" class="btn btn-primary">수정</a>
-    <a th:href="@{/article/{id}/boardDelete(id = ${boards.id})}" class="btn btn-danger">삭제</a>
-
-    <a href="/article/articleList">게시글 목록</a>
-=======
 
     <div class="d-flex justify-content-center">
         <a th:href="@{/lodging/{id}/lodgingForm(id = ${lodgingEntity.id})}" class="btn btn-primary w-10 mx-2">수정</a>
@@ -119,7 +106,6 @@
             </div>
         </div>
     </div>
->>>>>>> master
 
     <script>
     </script>

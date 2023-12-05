@@ -12,6 +12,7 @@ import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -194,8 +195,8 @@ public class LodgingController {
                 itemImgRepository.deleteAll(targetRoomItemImgList);
             }
 
-                lodgingRepository.delete(target);
-                rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 삭제가 완료되었습니다.");
+            lodgingRepository.delete(target);
+            rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 삭제가 완료되었습니다.");
 
             return "redirect:/lodging/list";
         } else {

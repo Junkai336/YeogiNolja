@@ -1,6 +1,7 @@
 package com.example.member.controller;
 
 import com.example.member.constant.ReservationStatus;
+import com.example.member.constant.RoomExist;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
@@ -76,6 +77,7 @@ public class RoomController {
         try {
             roomService.validation(lodgingId, email);
             roomService.saveRoom(lodgingDto, lodgingId, itemImgFileList);
+
         } catch (Exception e) {
             model.addAttribute(e.getStackTrace());
         }
@@ -140,7 +142,7 @@ public class RoomController {
 
             try {
                 roomService.validation(lodgingId, email);
-                roomService.deleteRoom(roomId);
+                roomService.deleteRoom(lodgingId, roomId);
             } catch (IllegalArgumentException e){
                 model.addAttribute("error", e.getMessage());
             }
@@ -155,5 +157,7 @@ public class RoomController {
             return "/admin/lodgingContents";
         }
     }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.member.service;
 
 import com.example.member.constant.ReservationStatus;
+import com.example.member.constant.RoomExist;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.ItemImg;
@@ -60,12 +61,20 @@ public class RoomService {
         roomDto.setName(lodgingDto.getRoom().getName());
         roomDto.setPrice(lodgingDto.getRoom().getPrice());
         roomDto.setDetail(lodgingDto.getRoom().getDetail());
+        roomDto.setAdult(lodgingDto.getRoom().getAdult());
+        roomDto.setChildren(lodgingDto.getRoom().getChildren());
         roomDto.setCheckInTime(lodgingDto.getRoom().getCheckInTime());
         roomDto.setCheckOutTime(lodgingDto.getRoom().getCheckOutTime());
         roomDto.setReservationStatus(ReservationStatus.AVAILABLE);
 //        roomDto.setLodging(Lodging.toLodging(lodgingDto.getMember(),lodgingDto));
 
         Room room = Room.toRoom(roomDto, lodgingEntity);
+
+        // ***
+        lodgingEntity.getRoom().add(room);
+
+        // 이건 되는데 위에꺼가 안됨
+        lodgingEntity.setRoomExist(RoomExist.Y);
 
         roomRepository.save(room);
 
@@ -91,6 +100,8 @@ public class RoomService {
         room.setName(roomDto.getName());
         room.setPrice(roomDto.getPrice());
         room.setDetail(roomDto.getDetail());
+        room.setAdult(roomDto.getAdult());
+        room.setChildren(roomDto.getChildren());
         room.setCheckInTime(roomDto.getCheckInTime());
         room.setCheckOutTime(roomDto.getCheckOutTime());
 
@@ -98,13 +109,29 @@ public class RoomService {
         roomRepository.save(room);
     }
 
-    public void deleteRoom(Long roomId) {
+    public void deleteRoom(Long lodgingId, Long roomId) {
+
+
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException::new);
+
+        Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
         List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomId);
         itemImgRepository.deleteAll(targetRoomItemImgList);
 
         roomRepository.delete(room);
+
+        List<Room> roomExistList = roomRepository.findAll();
+
+        for(int i = 0; i < roomExistList.size(); i++) {
+            boolean ok = roomExistList.get(i).getLodging().getId().equals(lodgingEntity.getId());
+            if(ok == true) {
+                return;
+            }
+        }
+        // 목적 : 객실 쪽에서 숙소의 아이디를 가진 객실이 있으면 상태를 변환하지 않는다.
+        // 이유 : 숙소가 객실을 가져오지 못하니깐.
+
     }
 }
