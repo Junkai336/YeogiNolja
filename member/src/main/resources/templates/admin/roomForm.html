@@ -124,6 +124,31 @@ function roomRegistration() {
         </div>
         <p th:if="${#fields.hasErrors('room.price')}" th:errors="*{room.price}" class="fieldError">Incorrect data</p>
 
+        <div class="input-group mt-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">인원수</span>
+            </div>
+
+            <span>성인</span>
+            <select th:field="*{room.adult}" class="form-select" aria-label="Default select example">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+
+            <span>아동</span>
+            <select th:field="*{room.children}" class="form-select" aria-label="Default select example">
+                <option value="1">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">객실 상세 내용</span>

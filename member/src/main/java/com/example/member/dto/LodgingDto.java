@@ -1,6 +1,7 @@
 package com.example.member.dto;
 
 import com.example.member.constant.LodgingType;
+import com.example.member.constant.RoomExist;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
@@ -38,8 +39,6 @@ public class LodgingDto {
 
     private String detail;
 
-    private String people;
-
     private String postcode;   // 우편 번호
 
     private String address;     // 주소
@@ -49,6 +48,8 @@ public class LodgingDto {
     private String extraAddress; // 참고항목
 
     private LodgingType lodgingType;
+
+    private RoomExist roomExist;
 
     private String createdBy;
 
@@ -74,9 +75,9 @@ public class LodgingDto {
         lodgingDto.setMember(lodging.getMember());
         lodgingDto.setName(lodging.getName());
         lodgingDto.setDetail(lodging.getDetail());
-        lodgingDto.setPeople(lodging.getPeople());
         lodgingDto.setPostcode(lodging.getPostcode());
         lodgingDto.setAddress(lodging.getAddress());
+        lodgingDto.setRoomExist(lodging.getRoomExist());
         lodgingDto.setDetailAddress(lodging.getDetailAddress());
         lodgingDto.setExtraAddress(lodging.getExtraAddress());
         lodgingDto.setLodgingType(lodging.getLodgingType());

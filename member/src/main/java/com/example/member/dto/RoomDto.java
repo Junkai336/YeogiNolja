@@ -27,6 +27,10 @@ public class RoomDto {
 
     private String detail;
 
+    private String adult;
+
+    private String children;
+
     private String price;
 
     private String checkInTime;
@@ -47,6 +51,8 @@ public class RoomDto {
         roomDto.setReservationStatus(room.getReservationStatus());
         roomDto.setName(room.getName());
         roomDto.setPrice(room.getPrice());
+        roomDto.setAdult(room.getAdult());
+        roomDto.setChildren(room.getChildren());
         roomDto.setDetail(room.getDetail());
         roomDto.setCheckInTime(room.getCheckInTime());
         roomDto.setCheckOutTime(room.getCheckOutTime());
