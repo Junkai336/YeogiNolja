@@ -129,13 +129,13 @@ function roomRegistration() {
         </div>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">숙소 위치</span>
-            </div>
-            <input type="text" th:field="*{location}" class="form-control" placeholder="숙소의 위치를 입력해주세요">
-        </div>
-        <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="fieldError">Incorrect data</p>
+        <!--        <div class="input-group">-->
+        <!--            <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text">숙소 위치</span>-->
+        <!--            </div>-->
+        <!--            <input type="text" th:field="*{location}" class="form-control" placeholder="숙소의 위치를 입력해주세요">-->
+        <!--        </div>-->
+        <!--        <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="fieldError">Incorrect data</p>-->
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -146,69 +146,132 @@ function roomRegistration() {
         <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>
 
 
+        <div class="form-group row">
+            <div class="col-md-6 mb-3">
+                <label for="adrBtn">숙소 위치</label>
+                <input type="text" class="form-control" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">
+                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" id="adrBtn"><br>
+                <input type="text" class="form-control" th:field="*{address}" id="address" placeholder="주소" value=""><br>
+                <input type="text" class="form-control" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">
+                <input type="text" class="form-control" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">
+
+                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                <script>
+                    function execDaumPostcode() {
+                        new daum.Postcode({
+                            oncomplete: function(data) {
+                                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                                var addr = ''; // 주소 변수
+                                var extraAddr = ''; // 참고항목 변수
+
+                                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                                    addr = data.roadAddress;
+                                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                                    addr = data.jibunAddress;
+                                }
+
+                                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                                if(data.userSelectedType === 'R'){
+                                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                                        extraAddr += data.bname;
+                                    }
+                                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                                    }
+                                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                                    if(extraAddr !== ''){
+                                        extraAddr = ' (' + extraAddr + ')';
+                                    }
+                                    // 조합된 참고항목을 해당 필드에 넣는다.
+                                    document.getElementById("extraAddress").value = extraAddr;
+
+                                } else {
+                                    document.getElementById("extraAddress").value = '';
+                                }
+
+                                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                                document.getElementById('postcode').value = data.zonecode;
+                                document.getElementById("address").value = addr;
+                                // 커서를 상세주소 필드로 이동한다.
+                                document.getElementById("detailAddress").focus();
+                            }
+                        }).open();
+                    }
+                </script>
+            </div>
+        </div>
+
+
 
         <!--객실 등록-->
 
-        <p class="h3">
-            객실 등록
-        </p>
+        <!--        <p class="h3">-->
+        <!--            객실 등록-->
+        <!--        </p>-->
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">객실명</span>
-            </div>
-            <!--            <input type="text" th:field="*{name}" class="form-control" placeholder="객실명을 입력해주세요">-->
-            <input type="text" class="form-control" placeholder="객실명을 입력해주세요">
-        </div>
-        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>-->
+        <!--        <div class="input-group">-->
+        <!--            <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text">객실명</span>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;            <input type="text" th:field="*{name}" class="form-control" placeholder="객실명을 입력해주세요">&ndash;&gt;-->
+        <!--            <input type="text" class="form-control" placeholder="객실명을 입력해주세요">-->
+        <!--        </div>-->
+        <!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">가격</span>
-            </div>
-            <!--            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-            <input type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">
-        </div>
-        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>-->
+        <!--        <div class="input-group">-->
+        <!--            <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text">가격</span>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
+        <!--            <input type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
+        <!--        </div>-->
+        <!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">객실 상세 내용</span>
-            </div>
-            <!--            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>-->
-            <textarea class="form-control" aria-label="With textarea"></textarea>
-        </div>
-        <!--        <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>-->
+        <!--        <div class="input-group">-->
+        <!--            <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text">객실 상세 내용</span>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>&ndash;&gt;-->
+        <!--            <textarea class="form-control" aria-label="With textarea"></textarea>-->
+        <!--        </div>-->
+        <!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">체크인 시간</span>
-            </div>
-            <!--            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-            <input type="number" class="form-control" placeholder="체크인 시간을 입력해주세요">
-        </div>
-        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkInTime}" class="fieldError">Incorrect data</p>-->
+        <!--        <div class="input-group">-->
+        <!--            <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text">체크인 시간</span>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
+        <!--            <input type="number" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
+        <!--        </div>-->
+        <!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">체크아웃 시간</span>
-            </div>
-            <!--            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-            <input type="number" class="form-control" placeholder="체크아웃 시간을 입력해주세요">
-        </div>
-        <!--        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkOutTime}" class="fieldError">Incorrect data</p>-->
+        <!--        <div class="input-group">-->
+        <!--            <div class="input-group-prepend">-->
+        <!--                <span class="input-group-text">체크아웃 시간</span>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash;            <input type="number" th:field="*{price}" class="form-control" placeholder="객실의 가격을 입력해주세요">&ndash;&gt;-->
+        <!--            <input type="number" class="form-control" placeholder="체크아웃 시간을 입력해주세요">-->
+        <!--        </div>-->
+        <!--        &lt;!&ndash;        <p th:if="${#fields.hasErrors('name')}" th:errors="*{checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-        <!--        onclick..-->
-        <div class="d-flex justify-content-center">
-            <button type="button" class="btn btn-primary">객실 저장</button>
-        </div>
+        <!--        &lt;!&ndash;        onclick..&ndash;&gt;-->
+        <!--        <div class="d-flex justify-content-center">-->
+        <!--            <button type="button" class="btn btn-primary">객실 저장</button>-->
+        <!--        </div>-->
 
 
-        <!--객실 목록-->
+        <!--        &lt;!&ndash;객실 목록&ndash;&gt;-->
 
-        <p class="h4">
-            객실 목록
-        </p>
+        <!--        <p class="h4">-->
+        <!--            객실 목록-->
+        <!--        </p>-->
 
 
 

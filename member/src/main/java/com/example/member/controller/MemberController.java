@@ -1,12 +1,8 @@
 package com.example.member.controller;
 
-import com.example.member.dto.BoardDto;
-import com.example.member.dto.MemberDto;
 import com.example.member.dto.MemberFormDto;
-import com.example.member.entity.Board;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
-import com.example.member.service.BoardService;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
@@ -33,7 +28,6 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final BoardService boardService;
 
     @GetMapping(value = "/join")
     public String toJoin(Model model) {
@@ -119,21 +113,5 @@ public class MemberController {
 
     }
 
-    @GetMapping(value = "/detail/{id}")
-    public String memberDetailBoard(@PathVariable Long id, Model model) {
-
-        Member target = memberRepository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-
-        String email = target.getEmail();
-
-//        System.out.println(email);
-
-        List<BoardDto> boardList = boardService.boardDtos(email);
-
-        model.addAttribute("boardList", boardList);
-
-        return "/board/boardListByUser";
-    }
 
 }
