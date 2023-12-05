@@ -18,8 +18,8 @@
 <div layout:fragment="content">
 
     <div th:object="${articleDto}" class="container mt-3">
-        <a th:href="@{/article/{id}/Edit(id = ${articleDto.id})}" class="btn btn-primary">수정</a>
-        <a th:href="@{/article/{id}/Delete(id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
+        <a th:href="@{/article/{id}/edit(id = ${articleDto.id})}" class="btn btn-primary">수정</a>
+        <a th:href="@{/article/{id}/delete(id = ${articleDto.id})}" class="btn btn-danger">삭제</a>
 
         <div class="container mt-3">
             <div>
@@ -49,16 +49,21 @@
         </div>
     </div>  <!-- //boardDto -->
     <div th:each="commentDto : ${commentDtoList}" class="container">
+        <div id="commentOne">
+
+
         <span th:text="*{commentDto.member.name}"></span> : <span th:utext="*{commentDto.comment}"></span>
         <span th:text="*{commentDto.createdByTime}"></span>
+
+        </div>
+        <button id="editBtn" class="btn btn-warning">수정하기</button>
         <a th:href="@{/article/{article_id}/commentDelete/{comment_id}(article_id = ${articleDto.id}, comment_id=${commentDto.id})}" class="btn btn-danger">삭제</a>
 
         <hr>
     </div>
 
+
     <a href="/article/list">게시글 목록</a>
 
-    <script>
-    </script>
 
 </div>
