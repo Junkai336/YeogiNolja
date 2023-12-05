@@ -46,7 +46,7 @@
         </tbody>
     </table>
 
-    <a href="/lodging/list" class="d-flex justify-content-center">숙소 목록</a>
+    <a href="/reserv/lodgingReservList" class="d-flex justify-content-center">숙소 목록</a>
 
     <p class="h4 text-center mt-3">
         객실 목록
@@ -61,9 +61,9 @@
         <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
         <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
         <div>
-        <a th:href="@{/reserv/lodgingReservContents/{lodging_id}/roomReservation/{room_id}(lodging_id = ${roomDto.lodging.id}, room_id = ${roomDto.id})}" class="btn btn-primary my-2">예약하기</a>
-<!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
-<!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
+            <a th:href="@{/reserv/lodgingReservContents/{lodging_id}/roomReservation/{room_id}(lodging_id = ${roomDto.lodging.id}, room_id = ${roomDto.id})}" class="btn btn-primary my-2">예약하기</a>
+            <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
+            <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
         </div>
         <hr>
     </div>

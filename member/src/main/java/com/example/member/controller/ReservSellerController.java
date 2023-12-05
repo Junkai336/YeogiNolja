@@ -5,8 +5,10 @@ import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
+import com.example.member.entity.Member;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
+import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ public class ReservSellerController {
     private final ItemImgRepository itemImgRepository;
     private final ItemImgService itemImgService;
     private final ReservSellerService reservSellerService;
+    private final MemberRepository memberRepository;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
@@ -79,9 +83,14 @@ public class ReservSellerController {
     @GetMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
     public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model) {
 
-        Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityExistsException::new);
+        Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
+
+        Member member = lodging.getMember();
+
+        lodgingDto.setMember(member);
+
 
 
         // ------------------------------------------------------------
@@ -119,6 +128,7 @@ public class ReservSellerController {
 
             model.addAttribute("lodgingDto", lodgingDto);
             model.addAttribute("roomDtoList", roomDtoList);
+
 
         }
 

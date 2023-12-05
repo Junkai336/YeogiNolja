@@ -41,6 +41,12 @@ public class Room extends BaseEntity {
     private String detail;
 
     @Column
+    private String adult;
+
+    @Column
+    private String children;
+
+    @Column
     private String price;
 
     @Column
@@ -60,6 +66,8 @@ public class Room extends BaseEntity {
         room.setReservationStatus(roomDto.getReservationStatus());
         room.setName(roomDto.getName());
         room.setDetail(roomDto.getDetail());
+        room.setAdult(roomDto.getAdult());
+        room.setChildren(roomDto.getChildren());
         room.setPrice(roomDto.getPrice());
         room.setCheckInTime(roomDto.getCheckInTime());
         room.setCheckOutTime(roomDto.getCheckOutTime());

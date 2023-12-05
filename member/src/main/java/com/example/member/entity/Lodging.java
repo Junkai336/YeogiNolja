@@ -1,6 +1,7 @@
 package com.example.member.entity;
 
 import com.example.member.constant.LodgingType;
+import com.example.member.constant.RoomExist;
 import com.example.member.dto.LodgingDto;
 import lombok.*;
 
@@ -45,9 +46,6 @@ public class Lodging extends BaseEntity {
     private String detail;
 
     @Column
-    private String people;
-
-    @Column
     private String postcode;   // 우편 번호
 
     @Column
@@ -62,6 +60,9 @@ public class Lodging extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LodgingType lodgingType;
 
+    @Enumerated(EnumType.STRING)
+    private RoomExist roomExist;
+
     // 매개변수 Room 추가 고려
     public static Lodging toLodging(Member member, LodgingDto lodgingDto) {
         Lodging lodging = new Lodging();
@@ -69,9 +70,9 @@ public class Lodging extends BaseEntity {
         lodging.setId(lodgingDto.getId());
         lodging.setRoom(lodgingDto.getRoomList());
         lodging.setMember(member);
+        lodging.setRoomExist(lodgingDto.getRoomExist());
         lodging.setName(lodgingDto.getName());
         lodging.setDetail(lodgingDto.getDetail());
-        lodging.setPeople(lodgingDto.getPeople());
         lodging.setPostcode(lodgingDto.getPostcode());
         lodging.setAddress(lodgingDto.getAddress());
         lodging.setDetailAddress(lodgingDto.getDetailAddress());
