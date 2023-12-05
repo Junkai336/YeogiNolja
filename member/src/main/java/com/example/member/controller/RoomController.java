@@ -12,148 +12,73 @@ import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class RoomController {
 
     private final LodgingService lodgingService;
     private final LodgingRepository lodgingRepository;
+
     private final RoomService roomService;
     private final RoomRepository roomRepository;
 
+    // 숙소 세부정보로 들어간 다음 객실 관리하기 버튼 (리스트)
     @GetMapping(value = "lodging/{id}/roomRegistration")
-    public String fromLodgingDetailToRoomCreation(@PathVariable Long id, Model model, Principal principal) {
-        String email = principal.getName();
-
-        System.out.println(principal.getName());
-
+    public String fromLodgingDetailToRoomCreation(@PathVariable Long id, Model model) {
         Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        if(email.equals(lodgingEntity.getCreatedBy())) {
-            LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
+        LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
 
-            model.addAttribute("lodgingDto", lodgingDto);
-        } else {
-            List<RoomDto> roomDtoList = roomService.roomDtoList(id);
-            model.addAttribute("lodgingEntity", lodgingEntity);
-            model.addAttribute("roomList", roomDtoList);
-            model.addAttribute("lodgingErrorMsg", "작성자가 일치하지 않습니다.");
-            return "/admin/lodgingContents";
-        }
+        model.addAttribute("lodgingDto", lodgingDto);
 
+        // 애초에 숙소 엔티티에 저장된 객실은 숙소 엔티티에 리스트로 저장되어 있기 때문에
+        // lodgingDto만 불러와도 무방하다고 본다. (엔티티 -> DTO 변환도 했고.)
+
+        // !! : get, set Room 을 안했는데 나중에 생각
+//        List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
+//        model.addAttribute("lodgingDtoList", lodgingDtoList);
 
         return "/admin/roomForm";
     }
 
-    @PostMapping(value = "lodging/{lodging_id}/roomRegistration")
-    public String newRoom(@PathVariable("lodging_id") Long lodgingId, @Valid LodgingDto lodgingDto, BindingResult bindingResult, Model model, Principal principal, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList) {
+    @PostMapping(value = "lodging/{id}/roomRegistration")
+    public String newRoom(@PathVariable Long id, @Valid LodgingDto lodgingDto, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()) {
-            return "lodging/"+lodgingId;
-        }
+        // lodgingDto 엔티티에 있는 room을 쪼개서 room entity에 저장한다.?
 
-        if(itemImgFileList.get(0).isEmpty() && lodgingDto.getId() == null){
-            model.addAttribute("lodgingErrorMsg", "첫번째 상품 이미지는 필수 입력 값 입니다.");
-            return "item/lodgingForm";
-        }
+        // 일단 엔티티에 저장해야 하니까 가져옴
+        Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        // 엔티티에 담기 전 RoomDto를 가져온다.
+        RoomDto roomDto = new RoomDto();
+        // roomDto에 lodgingDto 정보를 넣는다.
+        roomDto.setName(lodgingDto.getRoom().getName());
+        roomDto.setPrice(lodgingDto.getRoom().getPrice());
+        roomDto.setDetail(lodgingDto.getRoom().getDetail());
+        roomDto.setCheckInTime(lodgingDto.getRoom().getCheckInTime());
+        roomDto.setCheckOutTime(lodgingDto.getRoom().getCheckOutTime());
+        roomDto.setReservationStatus(ReservationStatus.AVAILABLE);
+//        roomDto.setLodging(Lodging.toLodging(lodgingDto.getMember(),lodgingDto));
 
-        String email = principal.getName();
+        Room room = Room.toRoom(roomDto, lodgingEntity);
 
-        try {
-            roomService.validation(lodgingId, email);
-            roomService.saveRoom(lodgingDto, lodgingId, itemImgFileList);
-        } catch (Exception e) {
-            model.addAttribute(e.getStackTrace());
-        }
+        roomRepository.save(room);
 
-        return "redirect:/lodging/"+lodgingId;
 
-    }
+//        return "redirect:/lodging/list";
+        return "redirect:/lodging/"+id;
 
-    @GetMapping(value = "lodging/{lodging_id}/roomUpdate/{room_id}")
-    public String fromLodgingDetailToRoomUpdate(@PathVariable("lodging_id") Long lodgingId, @PathVariable("room_id") Long roomId, Model model, Principal principal) {
-        String email = principal.getName();
-
-        Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
-        Room room = roomRepository.findById(roomId).orElseThrow(EntityNotFoundException::new);
-
-        if(email.equals(lodgingEntity.getCreatedBy())) {
-            LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
-            RoomDto roomDto = RoomDto.toRoomDto(room);
-            lodgingDto.setRoom(room);
-
-            model.addAttribute("lodgingDto", lodgingDto);
-            model.addAttribute("roomDto", roomDto);
-
-            return "/admin/roomEdit";
-        } else {
-            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
-            model.addAttribute("lodgingEntity", lodgingEntity);
-            model.addAttribute("roomList", roomDtoList);
-            model.addAttribute("lodgingErrorMsg", "작성자가 일치하지 않습니다.");
-            return "/admin/lodgingContents";
-        }
-
-    }
-
-    @PostMapping(value = "lodging/{lodging_id}/roomUpdate/{room_id}")
-    public String updateRoom(@PathVariable("lodging_id") Long lodgingId, @PathVariable("room_id") Long roomId, Model model, @Valid RoomDto roomDto,
-                             BindingResult bindingResult, Principal principal) {
-        String email = principal.getName();
-
-        if(bindingResult.hasErrors()) {
-            return "lodging/"+lodgingId;
-        }
-
-        try {
-            roomService.validation(lodgingId, email);
-            roomService.updateRoom(roomDto, roomId);
-        } catch (Exception e) {
-            model.addAttribute(e.getStackTrace());
-        }
-
-        return "redirect:/lodging/"+lodgingId;
-
-    }
-
-    @GetMapping(value = "lodging/{lodging_id}/roomDelete/{room_id}")
-    public String deleteRoom(@PathVariable("lodging_id") Long lodgingId, @PathVariable("room_id") Long roomId, Model model, Principal principal) {
-        String email = principal.getName();
-
-        Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
-
-        if(email.equals(lodgingEntity.getCreatedBy())) {
-
-            try {
-                roomService.validation(lodgingId, email);
-                roomService.deleteRoom(roomId);
-            } catch (IllegalArgumentException e){
-                model.addAttribute("error", e.getMessage());
-            }
-
-            return "redirect:/lodging/"+lodgingId;
-
-        } else {
-            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
-            model.addAttribute("lodgingEntity", lodgingEntity);
-            model.addAttribute("roomList", roomDtoList);
-            model.addAttribute("lodgingErrorMsg", "작성자가 일치하지 않습니다.");
-            return "/admin/lodgingContents";
-        }
     }
 
 }

@@ -1,6 +1,5 @@
 package com.example.member.entity;
 
-import com.example.member.dto.ItemImgDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,18 +40,4 @@ public class ItemImg {
     //원본이미지파일명,업데이트할 이미지파일명 , 이미지경로를 파라미터로
     //입력받아
     //이미지 정보를 업데이트 하는 메소드
-
-    // Entity -> Dto
-    public static ItemImg toItemImg (ItemImgDto itemImgDto) {
-
-        ItemImg itemImg = new ItemImg();
-        itemImg.setImgUrl(itemImgDto.getImgUrl());
-        itemImg.setOriImgName(itemImgDto.getOriImgName());
-        itemImg.setImgName(itemImgDto.getImgName());
-        itemImg.setRepimgYn(itemImgDto.getRepImgYn());
-        itemImg.setLodging(itemImgDto.getLodging());
-        itemImg.setRoom(itemImgDto.getRoom());
-
-        return itemImg;
-    }
 }
