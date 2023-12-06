@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @Service
@@ -51,29 +52,60 @@ public class ArticleService {
         Article article = Article.toArticle(member, articleDto);
         articleRepository.save(article);
 
-        String imgNumber[] = article.getContent().split("<img src=\"/image/");
-        String imgNumbertoString = Arrays.toString(imgNumber);
-//        System.out.println(Arrays.toString(imgNumber));
-        String imgNumber2[] = imgNumbertoString.split("\" style=\"");
-//        System.out.println("확인메시지" + Arrays.toString(imgNumber2));
+        System.out.println("article id 확인");
+        System.out.println(article.getId());
 
-        // 과연?
-//        Integer[] IntegerNumber = new Integer[]
+        List<Long> longList = new ArrayList<>();
+        String[] imgNumber = article.getContent().split("\"|\\\"");
 
-//        Integer[] newArr = Stream.of(imgNumber2).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
-//        System.out.println("인티저확인메시지" + Arrays.toString(newArr));
+//        System.out.println("imgNumber1 결과");
+        for(int i = 0; i < imgNumber.length; i++) {
+//            System.out.println(imgNumber[i]);
 
+            if(imgNumber[i].contains("/image/")) {
+//                System.out.println("다시 확인");
+//                System.out.println(imgNumber[i]);
+                String helloNumber = imgNumber[i].replaceAll("/image/", "");
 
-//        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
-//
+//                System.out.println("다다시 확인");
+//                System.out.println(helloNumber);
+
+                Long helloLong = Long.parseLong(helloNumber);
+
+                longList.add(helloLong);
+
+            }
+
+        }
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
 //        for(UploadFile uploadFile : uploadFileList) {
-//
-//            if(article.getContent().("/image/" + 22).equals(uploadFile.getId())) {
-//
-//            }
-//
+//            System.out.println(uploadFile.toString());
 //        }
 
+        for(Long Long : longList) {
+            System.out.println("longlist 확인");
+            System.out.println(Long);
+        }
+
+        for(int i=0; i<uploadFileList.size(); i++) {
+
+            for(int l=0; l<longList.size(); l++) {
+
+            if(uploadFileList.get(i).getId().equals(longList.get(l))) {
+                uploadFileList.get(i).setArticle(article);
+                System.out.println("메시지메시지메시지");
+            }
+
+            }
+
+        }
+
+        // uploadfile : id가 타겟이다.
+        // longlist : uploadfile의 아이디가 같아야 한다.
+        // uploadfile.id = longlist.값
+        // -
 
     }
 
