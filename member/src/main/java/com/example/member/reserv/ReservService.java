@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,58 +73,7 @@ public class ReservService {
         List<ReservDto> reservDtoList = new ArrayList<>();
 
         for(Reserv savedReserv : reservList){
-// ===========================================================================
-////            System.out.println("savedReserv CheckIn:"+ savedReserv.getRoom().getCheckInTime());
-//            String checkIn = savedReserv.getRoom().getCheckInTime();
-//            String[] checkTime =checkIn.split("T");
-//            System.out.println("checkTime[0]:"+checkTime[0]);
-//            System.out.println("checkTime[1]:"+checkTime[1]);
-//            String[] strsplit = checkTime[0].split("-");
-//            System.out.println(strsplit);
-//            int strsplit11 = Integer.parseInt(strsplit[0]);
-//            int strsplit22 = Integer.parseInt(strsplit[1]);
-//            int strsplit33 = Integer.parseInt(strsplit[2]);
-//            LocalDate localDate = LocalDate.of(strsplit11, strsplit22, strsplit33);
-//            System.out.println(localDate.toString());
-//            DayOfWeek dayOfWeek = localDate.getDayOfWeek();
-//
-//            int dayOfWeekNumber = dayOfWeek.getValue();
-//
-//            System.out.println(dayOfWeekNumber);
-//            String day ="";
-//            switch (dayOfWeekNumber){
-//                case 1:
-//                    day= "월";
-//                    break;
-//                case 2:
-//                    day= "화";
-//                    break;
-//                case 3:
-//                    day= "수";
-//                    break;
-//                case 4:
-//                    day= "목";
-//                    break;
-//                case 5:
-//                    day= "금";
-//                    break;
-//                case 6:
-//                    day= "토";
-//                    break;
-//                case 7:
-//                    day= "일";
-//                    break;
-//            }
-//            String totalDate = checkTime[0]+"("+day+")"+" "+checkTime[1];
-//            System.out.println("totalDate = "+totalDate);
-//
-//         String totalDate = Room.timeFormat(savedReserv.getRoom().getCheckInTime());
-//         String totalDate2 = Room.timeFormat(savedReserv.getRoom().getCheckOutTime());
-//            System.out.println(totalDate2);
-// ===========================================================================
             ReservDto reservDto = ReservDto.toReservDto(savedReserv);
-//            reservDto.getRoom().setCheckInTime(totalDate);
-//            reservDto.getRoom().setCheckOutTime(totalDate2);
             reservDtoList.add(reservDto);
         }
         System.out.println("reservDtoLsit : "+ reservDtoList);

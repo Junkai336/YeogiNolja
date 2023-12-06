@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -75,6 +77,89 @@ public class RoomService {
 
         // 이건 되는데 위에꺼가 안됨
         lodgingEntity.setRoomExist(RoomExist.Y);
+
+// =====================================================================================================================
+////            System.out.println("savedReserv CheckIn:"+ savedReserv.getRoom().getCheckInTime());
+        // checkIn
+        String checkIn = room.getCheckInTime();
+        String[] checkInSplit =checkIn.split("T");
+
+//            int strsplit11 = Integer.parseInt(strsplit[0]);
+//            int strsplit22 = Integer.parseInt(strsplit[1]);
+//            int strsplit33 = Integer.parseInt(strsplit[2]);
+//            LocalDate localDate = LocalDate.of(strsplit11, strsplit22, strsplit33); // of는 int
+
+        LocalDate localDate1 = LocalDate.parse(checkInSplit[0]); // parse는 string
+        DayOfWeek dayOfWeek1 = localDate1.getDayOfWeek();
+
+        int dayOfWeekNumber1 = dayOfWeek1.getValue();
+        String day1 ="";
+        switch (dayOfWeekNumber1){
+            case 1:
+                day1= "월";
+                break;
+            case 2:
+                day1= "화";
+                break;
+            case 3:
+                day1= "수";
+                break;
+            case 4:
+                day1= "목";
+                break;
+            case 5:
+                day1= "금";
+                break;
+            case 6:
+                day1= "토";
+                break;
+            case 7:
+                day1= "일";
+                break;
+        }
+        String checkInTime = checkInSplit[0].replaceAll("-","\\.");
+        String totalDateIn = checkInTime+"("+day1+")"+" "+checkInSplit[1];
+
+        room.setCheckInTime(totalDateIn);
+
+        // checkOut
+        String checkOut = room.getCheckOutTime();
+        String[] checkOutSplit =checkOut.split("T");
+
+        LocalDate localDate2 = LocalDate.parse(checkOutSplit[0]); // parse는 string
+        DayOfWeek dayOfWeek2 = localDate2.getDayOfWeek();
+
+        int dayOfWeekNumber2 = dayOfWeek2.getValue();
+        String day2 ="";
+        switch (dayOfWeekNumber2){
+            case 1:
+                day2= "월";
+                break;
+            case 2:
+                day2= "화";
+                break;
+            case 3:
+                day2= "수";
+                break;
+            case 4:
+                day2= "목";
+                break;
+            case 5:
+                day2= "금";
+                break;
+            case 6:
+                day2= "토";
+                break;
+            case 7:
+                day2= "일";
+                break;
+        }
+        String checkOutTime = checkOutSplit[0].replaceAll("-","\\.");
+        String totalDateOut = checkOutTime+"("+day2+")"+" "+checkOutSplit[1];
+
+        room.setCheckOutTime(totalDateOut);
+// =====================================================================================================================
+
 
         roomRepository.save(room);
 

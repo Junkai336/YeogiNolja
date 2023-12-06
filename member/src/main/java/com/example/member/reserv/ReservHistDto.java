@@ -20,8 +20,6 @@ public class ReservHistDto {
     private Reserv reserv;
     // 예약 내역 리스트
 
-    private String CheckIn;
-    private String CheckOut;
 
 
 // 주문 내역 조회 시 필요한 데이터
