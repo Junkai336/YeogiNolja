@@ -44,12 +44,12 @@ public class ArticleController {
     @PostMapping(value = "/articleForm")
     public String createBoard(@Valid ArticleDto articleDto, BindingResult result, Principal principal, Model model) {
         String email= principal.getName();
-        try {
-            articleService.saveArticle(articleDto, email);
-        }catch (Exception e){
-            model.addAttribute(e.getStackTrace());
-        }
 
+            try {
+                articleService.saveArticle(articleDto, email);
+            } catch (Exception e) {
+                model.addAttribute(e.getStackTrace());
+            }
 
 
         //redirect : 브라우저가 해당 URL로 재요청
@@ -81,7 +81,7 @@ public class ArticleController {
         ArticleDto articleDto = articleService.findArticle(id);
         model.addAttribute("articleDto", articleDto);
 
-        return "article/Edit";
+        return "article/articleForm";
     }
 
     @PostMapping(value = "/articleUpdate")

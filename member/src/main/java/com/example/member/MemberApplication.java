@@ -13,7 +13,6 @@ public class MemberApplication {
 
 	@Bean(name = "uploadPath")
 	public String uploadPath() {
-//		return "d:/image/";
 		return "D:/shop/item";
 	}
 

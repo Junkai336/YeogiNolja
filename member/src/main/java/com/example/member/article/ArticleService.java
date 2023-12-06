@@ -1,7 +1,9 @@
 package com.example.member.article;
 
 import com.example.member.entity.Member;
+import com.example.member.entity.UploadFile;
 import com.example.member.repository.MemberRepository;
+import com.example.member.repository.UploadFileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -9,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -19,6 +23,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
+    private final UploadFileRepository uploadFileRepository;
 
 //    public Board create(BoardDto boardDto) {
 //        Board board = boardDto.toEntity();
@@ -45,6 +50,31 @@ public class ArticleService {
                 .orElseThrow(EntityNotFoundException::new);
         Article article = Article.toArticle(member, articleDto);
         articleRepository.save(article);
+
+        String imgNumber[] = article.getContent().split("<img src=\"/image/");
+        String imgNumbertoString = Arrays.toString(imgNumber);
+//        System.out.println(Arrays.toString(imgNumber));
+        String imgNumber2[] = imgNumbertoString.split("\" style=\"");
+//        System.out.println("확인메시지" + Arrays.toString(imgNumber2));
+
+        // 과연?
+//        Integer[] IntegerNumber = new Integer[]
+
+//        Integer[] newArr = Stream.of(imgNumber2).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
+//        System.out.println("인티저확인메시지" + Arrays.toString(newArr));
+
+
+//        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+//
+//        for(UploadFile uploadFile : uploadFileList) {
+//
+//            if(article.getContent().("/image/" + 22).equals(uploadFile.getId())) {
+//
+//            }
+//
+//        }
+
+
     }
 
 
@@ -84,8 +114,9 @@ public class ArticleService {
         Article article = articleRepository.findById(article_id)
                 .orElseThrow(EntityNotFoundException::new);
         articleRepository.delete(article);
-    }
 
+        List<UploadFile> uploadFile = uploadFileRepository.findAllByArticleId(article_id);
+    }
 
 
 }

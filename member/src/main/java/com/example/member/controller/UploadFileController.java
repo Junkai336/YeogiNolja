@@ -1,7 +1,9 @@
 package com.example.member.controller;
 
+import com.example.member.dto.ItemImgDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.UploadFile;
+import com.example.member.repository.UploadFileRepository;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,19 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadFileController {
 
     private final UploadFileService uploadFileService;
+    private final UploadFileRepository uploadFileRepository;
 
     private final ResourceLoader resourceLoader;
+
+//    	@Bean(name = "uploadPath")
+//	public String uploadPath() {
+////		return "d:/image/";
+//		return "D:/shop/item";
+//	}
+
+//      @Value("${itemImgLocation}")
+//    private String itemImgLocation;
+//    // D:/shop/item
 
     @PostMapping("/image")
     public ResponseEntity<?> imageUpload(@RequestParam("file") MultipartFile file) {
@@ -40,7 +53,10 @@ public class UploadFileController {
     public ResponseEntity<?> serveFile(@PathVariable Long fileId){
         try {
             UploadFile uploadFile = uploadFileService.load(fileId);
+//            uploadFile.setImgNumber(fileId);
+
             Resource resource = resourceLoader.getResource("file:" + uploadFile.getFilePath());
+
             return ResponseEntity.ok().body(resource);
         } catch(Exception e) {
             e.printStackTrace();

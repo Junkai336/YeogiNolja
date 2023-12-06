@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,8 @@ public class UploadFileService {
 
     @Autowired
     private UploadFileRepository uploadFileRepository;
+
+
 
     private final Path rootLocation; // d:/image/
 
@@ -50,6 +53,7 @@ public class UploadFileService {
             saveFile.setSize(file.getResource().contentLength());
             saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') +'/' + saveFileName);
             uploadFileRepository.save(saveFile);
+            System.out.println("이미지가 DB에 저장됩니다.");
             return saveFile;
 
         } catch(IOException e) {
@@ -57,8 +61,37 @@ public class UploadFileService {
         }
     }
 
+//    public UploadFile store(MultipartFile file) throws Exception {
+//        //		 fileName : 예류2.jpg
+//        //		 filePath : d:/images/uuid-예류2.jpg
+//        //		 saveFileName : uuid-예류2.png
+//        //		 contentType : image/jpeg
+//        //		 size : 4994942
+//        //		 registerDate : 2020-02-06 22:29:57.748
+//        try {
+//            if(file.isEmpty()) {
+//                throw new Exception("Failed to store empty file " + file.getOriginalFilename());
+//            }
+//
+//            String saveFileName = fileSave(rootLocation.toString(), file);
+//            UploadFile saveFile = new UploadFile();
+//            saveFile.setFileName(file.getOriginalFilename());
+//            saveFile.setSaveFileName(saveFileName);
+//            saveFile.setContentType(file.getContentType());
+//            saveFile.setSize(file.getResource().contentLength());
+//            saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') +'/' + saveFileName);
+//            uploadFileRepository.save(saveFile);
+//            return saveFile;
+//
+//        } catch(IOException e) {
+//            throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
+//        }
+//    }
+
     public UploadFile load(Long fileId) {
-        return uploadFileRepository.findById(fileId).get();
+
+        UploadFile uploadFile = uploadFileRepository.findById(fileId).get();
+        return uploadFileRepository.saveAndFlush(uploadFile);
     }
 
     public String fileSave(String rootLocation, MultipartFile file) throws IOException {
