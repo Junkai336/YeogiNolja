@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name="article")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
 @Getter
 @Setter
