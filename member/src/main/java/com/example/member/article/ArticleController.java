@@ -22,14 +22,17 @@ public class ArticleController {
     private final ArticleService articleService;
     private final CommentService commentService;
 
+    // 게시판 -> 게시글 리스트
     @GetMapping(value = "/list")
-    public String toBoard(Model model) {
-        List<ArticleDto> articleDtoList = articleService.articleDtoList();
-        model.addAttribute("articleDtoList", articleDtoList);
-
+    public String list(Model model) {
+        try {
+            List<ArticleDto> articleDtoList = articleService.articleDtoList();
+            model.addAttribute("articleDtoList", articleDtoList);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
         return "article/list";
     }
-
     @GetMapping(value = "/new")
     public String newBoard(Model model) {
 
@@ -39,23 +42,37 @@ public class ArticleController {
 
     }
 
+    // 게시글 등록 후 리스트로 돌아간다.
     @PostMapping(value = "/articleForm")
-    public String createBoard(@Valid ArticleDto articleDto, BindingResult result, Principal principal, Model model) {
-        String email= principal.getName();
-        try {
-            articleService.saveArticle(articleDto, email);
-        }catch (Exception e){
-            model.addAttribute(e.getStackTrace());
+    public String newArticle(@Valid ArticleDto articleDto, BindingResult result
+            , Model model, Principal principal) {
+        // 이미 작성되었던 글이었던 경우(수정 시)
+        if (articleDto.getId() != null) {
+            Long article_id = articleDto.getId();
+            try {
+                articleService.articleUpdate(articleDto);
+
+                model.addAttribute("articleDto", articleDto);
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", e.getMessage());
+            }
+            return "redirect:/article/" + article_id;
+        } else {
+            // 새로 작성되는 글일 경우
+            try {
+                String email = principal.getName();
+                articleService.saveArticle(articleDto, email);
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", result.getFieldError());
+            }
+
+            return "redirect:/article/list";
         }
-
-
-
-        //redirect : 브라우저가 해당 URL로 재요청
-        return "redirect:/article/list";
     }
-
     @GetMapping(value = "/{id}")
-    public String show (@PathVariable Long id, Model model) {
+    public String show (@PathVariable Long id, Model model, Principal principal) {
+        String email = principal.getName();
+        model.addAttribute("userEmail", email);
         ArticleDto articleDto =  articleService.findArticle(id);
         // model에 선택한 글의 id를 가지고 글의 내용을 들고 있는 Dto 객체를 추가
         model.addAttribute("articleDto", articleDto);
@@ -67,19 +84,12 @@ public class ArticleController {
         return "article/detail";
     }
 
-//    @GetMapping(value = "/{id}/boardEdit")
-//    public String edit(@PathVariable Long id, Model model) {
-//        Board boardEntity = boardRepository.findById(id).orElse(null);
-//        model.addAttribute("board",boardEntity);
-//        return "board/boardEdit";
-//    }
-
     @GetMapping(value = "/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
         ArticleDto articleDto = articleService.findArticle(id);
         model.addAttribute("articleDto", articleDto);
 
-        return "article/Edit";
+        return "article/articleForm";
     }
 
     @PostMapping(value = "/articleUpdate")
