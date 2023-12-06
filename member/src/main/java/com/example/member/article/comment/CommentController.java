@@ -3,14 +3,19 @@ package com.example.member.article.comment;
 import com.example.member.article.ArticleDto;
 import com.example.member.article.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.security.Principal;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -57,6 +62,14 @@ public class CommentController {
     }
 
 
+    @PutMapping("/article/{article_id}/commentUpdate/{comment_id}")
+    public ResponseEntity<CommentDto> commentUpdate(@PathVariable("article_id") Long article_id,
+                                                    @PathVariable("comment_id")Long comment_id,
+                                                    @RequestBody CommentDto commentDto){
+        CommentDto commentDto1 = commentService.update(article_id, comment_id, commentDto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(commentDto1);
+    }
 
 
 }
