@@ -26,13 +26,6 @@ public class LodgingService {
     private final LodgingRepository lodgingRepository;
     private final MemberRepository memberRepository;
     private final ItemImgService itemImgService;
-    private final ItemImgRepository itemImgRepository;
-
-//    private final ItemImgService itemImgService;
-//
-//    private final ItemImgRepository itemImgRepository;
-
-//    public Long saveItem(LodgingDto lodgingDto, List<MultipartFile> itemImgFileList) throws Exception{
 
 
 

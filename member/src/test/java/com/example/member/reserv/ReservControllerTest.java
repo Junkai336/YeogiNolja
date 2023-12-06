@@ -37,7 +37,7 @@ class ReservControllerTest {
         System.out.println("방의 이름 "+ room.getName());
         System.out.println("방의 가격"+ room.getPrice());
         System.out.println("숙소의 아이디 " +room.getLodging().getId());
-        System.out.println("숙소의 위치" + room.getLodging().getLocation());
+//        System.out.println("숙소의 위치" + room.getLodging().getLocation());
         System.out.println("숙소의 판매자 이름" + room.getLodging().getMember().getName());
         System.out.println("판매자 이메일"+ room.getLodging().getMember().getEmail());
     }
@@ -62,7 +62,7 @@ class ReservControllerTest {
         lodging.setId(lodging_id);
         lodging.setName("좋은 숙소");
         lodging.setDetail("숙소 상세 정보");
-        lodging.setLocation("가평 어딘가");
+//        lodging.setLocation("가평 어딘가");
         lodging.setLodgingType(LodgingType.POOLVILLA);
         return lodging;
     }

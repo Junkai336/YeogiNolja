@@ -125,9 +125,11 @@ public class RoomService {
         List<Room> roomExistList = roomRepository.findAll();
 
         for(int i = 0; i < roomExistList.size(); i++) {
-            boolean ok = roomExistList.get(i).getLodging().getId().equals(lodgingEntity.getId());
-            if(ok == true) {
-                return;
+            boolean ExistAtLeastOne = roomExistList.get(i).getLodging().getId().equals(lodgingEntity.getId());
+            if(ExistAtLeastOne == true) {
+                lodgingEntity.setRoomExist(RoomExist.Y);
+            } else if (ExistAtLeastOne == false) {
+                lodgingEntity.setRoomExist(RoomExist.N);
             }
         }
         // 목적 : 객실 쪽에서 숙소의 아이디를 가진 객실이 있으면 상태를 변환하지 않는다.
