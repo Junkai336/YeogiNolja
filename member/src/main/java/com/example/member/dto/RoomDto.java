@@ -7,6 +7,9 @@ import com.example.member.entity.Room;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,5 +74,7 @@ public class RoomDto {
         return roomDtoList;
 
     }
+
+
 
 }

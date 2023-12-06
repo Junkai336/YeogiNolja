@@ -25,8 +25,6 @@ import java.util.Optional;
 public class ReservController {
     private final ReservService reservService;
 
-    private final MemberRepository memberRepository;
-
     // 예약하기 버튼을 눌렀을 때 예약 결제창
     @GetMapping("/roomReservation/{room_id}") // roomId/reserv
     public String newReserv (@PathVariable("room_id") Long roomId , Principal principal, Model model){
@@ -57,22 +55,22 @@ public class ReservController {
             return "reserv/reservPage";
         }
 
-        return "redirect:/reserv/reservPage";
+        return "redirect:/reserv/reservs";
     }
 
 
     // 예약 내역
-//    @GetMapping({"/reservs","/reservs/{page}"})
-//    public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
-////        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
-//        List<ReservDto> reservDtoList = reservService.reservDtoList();
-//        // principal.getName() 현재 로그인된  사용자의 이메일
-//
-//
-//        model.addAttribute("reservs", reservDtoList);
-//
-//        return "reserv/reservHist";
-//    }
+    @GetMapping({"/reservs","/reservs/{page}"})
+    public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Reserv reserv, Model model){
+//        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
+        List<ReservDto> reservDtoList = reservService.reservDtoList(reserv,principal);
+        // principal.getName() 현재 로그인된  사용자의 이메일
+
+
+        model.addAttribute("reservDtoList", reservDtoList);
+
+        return "reserv/reservHist";
+    }
 
     // 예약 취소
 //    @PostMapping("/reserv/{reservId}/cancel")

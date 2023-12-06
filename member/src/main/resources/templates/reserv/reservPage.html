@@ -30,6 +30,9 @@
     <div class="container mt-3" th:object="${reservDto}">
     <form action="/reserv/roomReservation/*{room.id}" role="form" method="post">
         <div class="form-group">
+            <input type="hidden" th:field="*{room.id}" name="room" id="room">
+            <input type="hidden" th:field="*{room.lodging.id}" name="lodging" id="lodging">
+            <input type="hidden" th:field="*{member.id}" name="member" id="member">
             <p th:text="*{room.lodging.name}">숙소명</p>
 
             <p th:text="*{room.name}">방이름</p>
@@ -55,7 +58,7 @@
         </div>
 
         <div style="text-align: center">
-            <button th:type="submit" class="btn btn-primary">예약하기</button>
+            <button th:type="submit" class="btn btn-primary">결제하기</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>

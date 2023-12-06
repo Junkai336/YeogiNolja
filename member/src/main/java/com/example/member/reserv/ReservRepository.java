@@ -17,7 +17,7 @@ public interface ReservRepository extends JpaRepository<Reserv,Long> {
     @Query(value = "select r from Reserv r "+
             "where r.member.email = :email "+
             "order by r.regTime desc")
-    List<Reserv> findReservs(@Param("email") String email, Pageable pageable);
+    List<Reserv> findReservs(@Param("email") String email); //, Pageable pageable
     // 현재 로그인한 사용자의 주문 데이터를 페이징 조건에 맞추어 조회함
     // count(r) : 조건식을 만족하는 Reserv r 의 수를 리턴한다.
     @Query(value = "select count(r) from Reserv r where r.member.email = :email")

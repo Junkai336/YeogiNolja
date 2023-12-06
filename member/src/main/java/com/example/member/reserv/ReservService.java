@@ -1,18 +1,19 @@
 package com.example.member.reserv;
 
-import com.example.member.constant.ReservationStatus;
+import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
+import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +24,24 @@ public class ReservService {
     private final MemberRepository memberRepository;
     private final ReservRepository reservRepository;
     private final RoomRepository roomRepository;
+    private final LodgingRepository lodgingRepository;
 
     public void saveReserv(ReservDto reservDto){
-        Reserv reserv = Reserv.createReserv(reservDto);
-        System.out.println("memberID"+reserv.getMember());
-        System.out.println("roomId :" + reserv.getRoom());
+        Room room = reservDto.getRoom();
+        Lodging lodging = room.getLodging();
+        Reserv reserv = Reserv.createReserv(reservDto, lodging);
+        validateDuplicateMember(reserv);
         reservRepository.save(reserv);
+    }
 
+    // 예약하려는 방의 상태를 가져와 예약 가능인지 검증
+    private void validateDuplicateMember(Reserv reserv){
+        Room reservRoom = roomRepository.findById(reserv.getRoom().getId())
+                .orElseThrow(EntityNotFoundException::new);
 
+        if(reservRoom.getReservationStatus().equals("RESERV")){
+            throw new IllegalStateException("이미 예약된 숙소입니다");
+        }
     }
 
     public ReservDto newReserv(Long roomId, Principal principal) throws Exception{
@@ -45,41 +56,91 @@ public class ReservService {
         reservDto.setMember(member); // member email
         return reservDto;
     }
-//
-//    public List<ReservDto> saveReserv(ReservDto reservDto, String email){
-//
-//        Reserv reserv = Reserv.createReserv(reservDto);
-////        validateDuplicateMember(reserv);
-//        reservRepository.save(reserv);
-//        reservDto.toString();
-//        return reservDtoList(reserv);
-//    }
-//    // 객실네임, 방네임, 방디테일, 체크인아웃, 가격
-//
-//    public List<ReservDto> reservDtoList(Reserv reserv){
+
+
+    // 예약 리스트 만들기
+    public List<ReservDto> reservDtoList(Reserv reserv, Principal principal){
+//        List<Reserv> member = reservRepository.findReservs(principal.getName());
+        // principal 사용해서 래파지토리에서 findReservs 쓰기
 //        Member member = reserv.getMember();
 //        Long member_id = member.getId();
 //        List<Reserv> reservList = reservRepository.findAllByMemberId(member_id);
 //        List<ReservDto> reservDtoList = new ArrayList<>();
-//        for(Reserv savedReserv : reservList){
-//            ReservDto reservDto = ReservDto.toReservDto(savedReserv);
+
+        String email = principal.getName();
+        List<Reserv> reservList = reservRepository.findReservs(email);
+        List<ReservDto> reservDtoList = new ArrayList<>();
+
+        for(Reserv savedReserv : reservList){
+// ===========================================================================
+////            System.out.println("savedReserv CheckIn:"+ savedReserv.getRoom().getCheckInTime());
+//            String checkIn = savedReserv.getRoom().getCheckInTime();
+//            String[] checkTime =checkIn.split("T");
+//            System.out.println("checkTime[0]:"+checkTime[0]);
+//            System.out.println("checkTime[1]:"+checkTime[1]);
+//            String[] strsplit = checkTime[0].split("-");
+//            System.out.println(strsplit);
+//            int strsplit11 = Integer.parseInt(strsplit[0]);
+//            int strsplit22 = Integer.parseInt(strsplit[1]);
+//            int strsplit33 = Integer.parseInt(strsplit[2]);
+//            LocalDate localDate = LocalDate.of(strsplit11, strsplit22, strsplit33);
+//            System.out.println(localDate.toString());
+//            DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+//
+//            int dayOfWeekNumber = dayOfWeek.getValue();
+//
+//            System.out.println(dayOfWeekNumber);
+//            String day ="";
+//            switch (dayOfWeekNumber){
+//                case 1:
+//                    day= "월";
+//                    break;
+//                case 2:
+//                    day= "화";
+//                    break;
+//                case 3:
+//                    day= "수";
+//                    break;
+//                case 4:
+//                    day= "목";
+//                    break;
+//                case 5:
+//                    day= "금";
+//                    break;
+//                case 6:
+//                    day= "토";
+//                    break;
+//                case 7:
+//                    day= "일";
+//                    break;
+//            }
+//            String totalDate = checkTime[0]+"("+day+")"+" "+checkTime[1];
+//            System.out.println("totalDate = "+totalDate);
+//
+//         String totalDate = Room.timeFormat(savedReserv.getRoom().getCheckInTime());
+//         String totalDate2 = Room.timeFormat(savedReserv.getRoom().getCheckOutTime());
+//            System.out.println(totalDate2);
+// ===========================================================================
+            ReservDto reservDto = ReservDto.toReservDto(savedReserv);
+//            reservDto.getRoom().setCheckInTime(totalDate);
+//            reservDto.getRoom().setCheckOutTime(totalDate2);
+            reservDtoList.add(reservDto);
+        }
+        System.out.println("reservDtoLsit : "+ reservDtoList);
+        return reservDtoList;
+    }
+//    public List<ReservDto> reservDtoList(){
+//        List<Reserv> reservList = reservRepository.findAll();
+//        List<ReservDto> reservDtoList = new ArrayList<>();
+//
+//        for(Reserv reserv : reservList){
+//            ReservDto reservDto = ReservDto.toReservDto(reserv);
 //            reservDtoList.add(reservDto);
 //        }
 //        return reservDtoList;
-//
 //    }
 //
-//    // 예약하려는 방의 상태를 가져와 예약 가능인지 검증
-////    private void validateDuplicateMember(Reserv reserv){
-////        Room reservRoom = roomRepository.findById(reserv.getRoom().getId())
-////                .orElseThrow(EntityNotFoundException::new);
-////
-////        if(reservRoom.getReservationStatus().equals("RESERV")){
-////            throw new IllegalStateException("이미 예약된 숙소입니다");
-////        }
-////    }
 //
-//    // 예약 리스트 만들기
 //
 //
 //    // Controller로 부터 ReservId를 넘겨받아
@@ -108,16 +169,6 @@ public class ReservService {
 //    // member
 //    // memberId
 //
-//    public List<ReservDto> reservDtoList(){
-//        List<Reserv> reservList = reservRepository.findAll();
-//        List<ReservDto> reservDtoList = new ArrayList<>();
-//
-//        for(Reserv reserv : reservList){
-//            ReservDto reservDto = ReservDto.toReservDto(reserv);
-//            reservDtoList.add(reservDto);
-//        }
-//        return reservDtoList;
-//    }
 //
 ////    public boolean validateCancelReserv(Long reservId, String email) {
 ////        Member member = memberRepository.findByEmail(email).orElse(null);

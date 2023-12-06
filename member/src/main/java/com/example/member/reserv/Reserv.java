@@ -47,9 +47,9 @@ public class Reserv extends BaseEntity {
 
 
     // 예약 생성
-    public static Reserv createReserv(ReservDto reservDto){
+    public static Reserv createReserv(ReservDto reservDto, Lodging lodging){
         Reserv reserv = new Reserv();
-        Lodging lodging = reserv.getLodging();
+
         reserv.setRoom(reservDto.getRoom());
         reserv.setMember(reservDto.getMember());
         reserv.setLodging(lodging);
