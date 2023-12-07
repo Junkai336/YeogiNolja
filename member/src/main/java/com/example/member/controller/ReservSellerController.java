@@ -17,19 +17,21 @@ import com.example.member.service.LodgingService;
 import com.example.member.service.ReservSellerService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class ReservSellerController {
 
     private final LodgingService lodgingService;
@@ -131,7 +133,7 @@ public class ReservSellerController {
 
             model.addAttribute("lodgingDto", lodgingDto);
             model.addAttribute("roomDtoList", roomDtoList);
-
+            model.addAttribute("checkForm", new ReservDto());
 
         }
 
@@ -139,16 +141,35 @@ public class ReservSellerController {
 
     }
 
+//    @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
+//    public String newCheckDate(Model model){
+//        RoomDto checkForm = new RoomDto();
+//        model.addAttribute("checkForm", checkForm);
+//        ReservDto reservDto = new ReservDto();
+////        ReservService.newCheckTime(roomForm,reservDto);
+//        reservDto.setCheckIn(checkForm.getCheckInTime());
+//        reservDto.setCheckOut(checkForm.getCheckOutTime());
+//
+//        System.out.println("reservDto.getCheckInTime = "+ reservDto.getCheckIn());
+//        System.out.println("reservDto.getCheckOutTime = "+ reservDto.getCheckOut());
+//        return "reserv/reservPage";
+//    }
     @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-    public String newCheckDate(Model model){
-        RoomDto roomForm = new RoomDto();
-        model.addAttribute("roomForm", roomForm);
-        ReservDto reservDto = new ReservDto();
-//        ReservService.newCheckTime(roomForm,reservDto);
-        reservDto.setCheckIn(roomForm.getCheckInTime());
-        reservDto.setCheckOut(roomForm.getCheckOutTime());
+    public String newCheckDate(ReservDto reservDto){
 
-        System.out.println("reservDto = "+ reservDto);
+        ReservDto checkForm = new ReservDto();
+        System.out.println("reservDto.getCheckInTime = "+ checkForm.getCheckIn());
+        System.out.println("reservDto.getCheckOutTime = "+ checkForm.getCheckOut());
+//        LocalDate localDate1 = LocalDate.parse(checkForm.getCheckInTime());
+//        LocalDate localDate2 = LocalDate.parse(checkForm.getCheckOutTime());
+//        System.out.println(localDate1);
+//        System.out.println(localDate2);
+//        ReservService.newCheckTime(roomForm,reservDto);
+        checkForm.setCheckIn(checkForm.getCheckIn());
+        checkForm.setCheckOut(checkForm.getCheckOut());
+
+        System.out.println("reservDto.getCheckInTime = "+ checkForm.getCheckIn());
+        System.out.println("reservDto.getCheckOutTime = "+ checkForm.getCheckOut());
         return "";
     }
 
