@@ -61,7 +61,16 @@
         <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
         <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
         <div>
-            <a th:href="@{/reserv/lodgingReservContents/{lodging_id}/roomReservation/{room_id}(lodging_id = ${roomDto.lodging.id}, room_id = ${roomDto.id})}" class="btn btn-primary my-2">예약하기</a>
+            <form th:action="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" th:object="${roomForm}">
+                <input type="hidden" th:field="${roomDto.id}" >
+                <label for="checkIn${roomDto.id}">체크인</label>
+                <input type="date" id="checkIn${roomDto.id}" th:field="${roomForm.checkInTime}">
+                <label for="checkOut${roomDto.id}">체크아웃</label>
+                <input type="date" id="checkOut${roomDto.id}" th:field="${roomForm.checkOutTime}">
+                <button type="submit">예약하기</button>
+            </form>
+
+<!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" class="btn btn-primary my-2">예약하기</a>-->
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
         </div>

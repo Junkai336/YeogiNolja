@@ -35,7 +35,7 @@
                         cache   : false,
                         success  : function(result, status){
                             alert("주문이 취소 되었습니다.");
-                            location.href='/reservs/' + [[${page}]];
+                            location.href='/reserv/reservs';         //[[${page}]];
                             // 서버에서 전달받은 page라는 변수를 클라이언트 측으로 전달하여
                             // 현재 페이지 번호를 사용
                         },
@@ -91,36 +91,36 @@
     <h2 class="mb-4">
         예약 내역
     </h2>
-    <div th:each="reserv : ${reservDtoList.getContent()}">
-        <div class="d-flex mb-3 align-self-center">
-            <h4 th:text="${reserv.reservDate} + ' 예약'"></h4>
-            <div class="ml-3">
-                <th:block th:if="${reserv.reservStatus == T(com.example.member.reserv.ReservStatus).RESERVED}">
-                    <button type="button" class="btn btn-outline-secondary" th:value="${reserv.reservId}" onclick="cancelReserv(this.value)">예약취소</button>
-                </th:block>
-                <th:block th:unless="${reserv.reservStatus == T(com.example.member.reserv.ReservStatus).RESERVED}">
-                    <h4>(취소 완료)</h4>
-                </th:block>
-            </div>
-        </div>
-        <div class="card d-flex">
-            <div th:each="reserv : ${reservDtoList}" class="d-flex mb-3">
+<!--    <div th:each="reserv : ${reservDtoList.getContent()}">-->
+<!--        <div class="d-flex mb-3 align-self-center">-->
+<!--            <h4 th:text="${reserv.reservDate} + ' 예약'"></h4>-->
+<!--            <div class="ml-3">-->
+<!--                <th:block th:if="${reserv.reservStatus == T(com.example.member.reserv.ReservStatus).RESERVED}">-->
+<!--                    <button type="button" class="btn btn-outline-secondary" th:value="${reserv.reservId}" onclick="cancelReserv(this.value)">예약취소</button>-->
+<!--                </th:block>-->
+<!--                <th:block th:unless="${reserv.reservStatus == T(com.example.member.reserv.ReservStatus).RESERVED}">-->
+<!--                    <h4>(취소 완료)</h4>-->
+<!--                </th:block>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="card d-flex">-->
+<!--            <div th:each="reserv : ${reservDtoList}" class="d-flex mb-3">-->
 <!--                <div class="repImgDiv">-->
 <!--                    <img th:src="${reservItem.imgUrl}" class="rounded repImg" th:alt="${reservItem.lodgingNm}"> &lt;!&ndash; 다시 확인&ndash;&gt;-->
 <!--                </div>-->
-                <div class="align-self-center w-75">
-                    <span th:text="${reserv.room.reservationStatus}">방 상태</span>
-                    <span th:text="${reserv.room.lodging.name}" class="fs24 font-weight-bold">숙소이름</span>
-                    <span th:text="${reserv.room.name}">방 이름</span>
-                    <span th:text="${reserv.room.detail}">방 디테일</span>
-                    <span th:text="${reserv.room.checkInTime}">방 체크인</span>
-                    <span th:text="${reserv.room.checkOutTime}">방 체크아웃</span>
-<!--                    <span th:text="${reserv.room.}">방 인원</span>-->
+<!--                <div class="align-self-center w-75">-->
+<!--                    <span th:text="${reserv.room.reservationStatus}">방 상태</span>-->
+<!--                    <span th:text="${reserv.room.lodging.name}" class="fs24 font-weight-bold">숙소이름</span>-->
+<!--                    <span th:text="${reserv.room.name}">방 이름</span>-->
+<!--                    <span th:text="${reserv.room.detail}">방 디테일</span>-->
+<!--                    <span th:text="${reserv.room.checkInTime}">방 체크인</span>-->
+<!--                    <span th:text="${reserv.room.checkOutTime}">방 체크아웃</span>-->
+<!--&lt;!&ndash;                    <span th:text="${reserv.room.}">방 인원</span>&ndash;&gt;-->
 
-                </div>
-            </div>
-        </div>
-    </div>
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
 <!--    <div th:with="start=${(reservs.number/maxPage)*maxPage + 1}, end=(${(reservs.totalPages == 0) ? 1 : (start + (maxPage - 1) < reservs.totalPages ? start + (maxPage - 1) : reservs.totalPages)})" >-->
 <!--        <ul class="pagination justify-content-center">-->
 
@@ -141,6 +141,38 @@
 <!--            </li>-->
 <!--        </ul>-->
 <!--    </div>-->
+
+<!--    테스트-->
+    <div class="card d-flex">
+        <div th:each="reserv : ${reservDtoList}" class="d-flex mb-3">
+<!--            <div class="repImgDiv">-->
+<!--                <img th:src="${reserv.room.lodging.imgUrl}"-->
+<!--                     class="rounded repImg"-->
+<!--                     th:alt="${reserv.lodging.name}">-->
+<!--            </div>-->
+            <div class="align-self-center w-75">
+                <p th:text="${reserv.reservationStatus}">방 상태</p>
+                <p th:text="${reserv.room.lodging.name}" class="fs24 font-weight-bold">숙소이름</p>
+                <p th:text="${reserv.room.name}">방 이름</p>
+                <p th:text="${reserv.room.detail}">방 디테일</p>
+                <p th:text="${reserv.room.checkInTime}">방 체크인</p>
+                <p th:text="${reserv.room.checkOutTime}">방 체크아웃</p>
+                <!--                    <span th:text="${reserv.room.}">방 인원</span>-->
+                <div class="ml-3">
+                    <th:block th:if="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">
+                        <button type="button" class="btn btn-outline-secondary" th:value="${reserv.id}" onclick="cancelReserv(this.value)">예약취소</button>
+                    </th:block>
+                    <th:block th:unless="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">
+                        <h4>(취소 완료)</h4>
+                    </th:block>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 
 </html>
