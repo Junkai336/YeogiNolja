@@ -1,6 +1,7 @@
 package com.example.member.dto;
 
 import com.example.member.article.Article;
+import com.example.member.constant.EditingExceptionConsideration;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.UploadFile;
 import lombok.Getter;
@@ -26,6 +27,8 @@ public class UploadFileDto {
 
     private long size;                      // 4476873 (byte)
 
+    private EditingExceptionConsideration editingExceptionConsideration;
+
     private Article article;
 
 
@@ -39,6 +42,7 @@ public class UploadFileDto {
         uploadFileDto.setFilePath(uploadFile.getFilePath());
         uploadFileDto.setContentType(uploadFile.getContentType());
         uploadFileDto.setSize(uploadFile.getSize());
+        uploadFileDto.setEditingExceptionConsideration(uploadFile.getEditingExceptionConsideration());
         uploadFileDto.setArticle(article);
 
         return uploadFileDto;

@@ -2,6 +2,9 @@ package com.example.member.article;
 
 import com.example.member.article.comment.CommentDto;
 import com.example.member.article.comment.CommentService;
+import com.example.member.entity.UploadFile;
+import com.example.member.repository.UploadFileRepository;
+import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,11 +24,16 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final CommentService commentService;
+    private final UploadFileService uploadFileService;
 
     // 게시판 -> 게시글 리스트
     @GetMapping(value = "/list")
     public String list(Model model) {
         try {
+            System.out.println("업데이트1");
+            uploadFileService.emptyUploadFileCheck();
+            uploadFileService.backwardUploadFileCheck();
+
             List<ArticleDto> articleDtoList = articleService.articleDtoList();
             model.addAttribute("articleDtoList", articleDtoList);
         } catch (Exception e) {
@@ -71,6 +79,7 @@ public class ArticleController {
     }
     @GetMapping(value = "/{id}")
     public String show (@PathVariable Long id, Model model, Principal principal) {
+        uploadFileService.backwardUploadFileCheck(id);
         String email = principal.getName();
         model.addAttribute("userEmail", email);
         ArticleDto articleDto =  articleService.findArticle(id);
@@ -86,6 +95,7 @@ public class ArticleController {
 
     @GetMapping(value = "/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
+        uploadFileService.refreshUploadFileCheck(id);
         ArticleDto articleDto = articleService.findArticle(id);
         model.addAttribute("articleDto", articleDto);
 
@@ -96,6 +106,9 @@ public class ArticleController {
     public String update(@Valid ArticleDto articleDto, BindingResult result, Model model) {
 
         try{
+            System.out.println("업데이트2");
+            uploadFileService.havingIdArticleDelete(articleDto);
+
             articleService.articleUpdate(articleDto);
         }catch (Exception e){
             model.addAttribute("errorMsg", result.getFieldError());

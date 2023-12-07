@@ -4,6 +4,7 @@ import com.example.member.entity.Member;
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.UploadFileRepository;
+import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final UploadFileRepository uploadFileRepository;
+    private final UploadFileService uploadFileService;
 
 //    public Board create(BoardDto boardDto) {
 //        Board board = boardDto.toEntity();
@@ -52,61 +54,7 @@ public class ArticleService {
         Article article = Article.toArticle(member, articleDto);
         articleRepository.save(article);
 
-        System.out.println("article id 확인");
-        System.out.println(article.getId());
-
-        List<Long> longList = new ArrayList<>();
-        String[] imgNumber = article.getContent().split("\"|\\\"");
-
-//        System.out.println("imgNumber1 결과");
-        for(int i = 0; i < imgNumber.length; i++) {
-//            System.out.println(imgNumber[i]);
-
-            if(imgNumber[i].contains("/image/")) {
-//                System.out.println("다시 확인");
-//                System.out.println(imgNumber[i]);
-                String helloNumber = imgNumber[i].replaceAll("/image/", "");
-
-//                System.out.println("다다시 확인");
-//                System.out.println(helloNumber);
-
-                Long helloLong = Long.parseLong(helloNumber);
-
-                longList.add(helloLong);
-
-            }
-
-        }
-
-        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
-
-//        for(UploadFile uploadFile : uploadFileList) {
-//            System.out.println(uploadFile.toString());
-//        }
-
-        for(Long Long : longList) {
-            System.out.println("longlist 확인");
-            System.out.println(Long);
-        }
-
-        for(int i=0; i<uploadFileList.size(); i++) {
-
-            for(int l=0; l<longList.size(); l++) {
-
-            if(uploadFileList.get(i).getId().equals(longList.get(l))) {
-                uploadFileList.get(i).setArticle(article);
-                System.out.println("메시지메시지메시지");
-            }
-
-            }
-
-        }
-
-        // uploadfile : id가 타겟이다.
-        // longlist : uploadfile의 아이디가 같아야 한다.
-        // uploadfile.id = longlist.값
-        // -
-
+        uploadFileService.uploadFileGrantedArticleId(article);
     }
 
 
@@ -141,13 +89,25 @@ public class ArticleService {
         article.setTitle(articleDto.getTitle());
         article.setContent(articleDto.getContent());
 
+        uploadFileService.uploadFileGrantedArticleId(article);
+
     }
     public void articleDelete(Long article_id)throws Exception{
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
         Article article = articleRepository.findById(article_id)
                 .orElseThrow(EntityNotFoundException::new);
+
+        for(UploadFile uploadFile : uploadFileList) {
+            if (uploadFile.getArticle().getId().equals(article.getId())) {
+                uploadFileRepository.delete(uploadFile);
+                uploadFileService.fileDelete(uploadFile);
+            }
+        }
+
         articleRepository.delete(article);
 
-        List<UploadFile> uploadFile = uploadFileRepository.findAllByArticleId(article_id);
     }
 
 
