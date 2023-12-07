@@ -10,6 +10,8 @@ import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
+import com.example.member.reserv.ReservDto;
+import com.example.member.reserv.ReservService;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.ReservSellerService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
@@ -127,7 +130,6 @@ public class ReservSellerController {
             // -----------------------------------------------------------
 
             model.addAttribute("lodgingDto", lodgingDto);
-            model.addAttribute("roomForm", new RoomDto());
             model.addAttribute("roomDtoList", roomDtoList);
 
 
@@ -135,6 +137,19 @@ public class ReservSellerController {
 
         return "reserv/lodgingReservContent";
 
+    }
+
+    @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
+    public String newCheckDate(Model model){
+        RoomDto roomForm = new RoomDto();
+        model.addAttribute("roomForm", roomForm);
+        ReservDto reservDto = new ReservDto();
+//        ReservService.newCheckTime(roomForm,reservDto);
+        reservDto.setCheckIn(roomForm.getCheckInTime());
+        reservDto.setCheckOut(roomForm.getCheckOutTime());
+
+        System.out.println("reservDto = "+ reservDto);
+        return "";
     }
 
 

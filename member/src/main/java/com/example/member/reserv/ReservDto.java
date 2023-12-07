@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class ReservDto {
     private Long id; // 예약 id
 
@@ -31,6 +32,9 @@ public class ReservDto {
     private LocalDateTime reservDate; // 예약일
 
     private ReservationStatus reservationStatus;
+
+    private String checkIn;
+    private String checkOut;
 
     public static ReservDto toReservDto(Reserv reserv){
         Member member = reserv.getMember();

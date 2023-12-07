@@ -48,6 +48,26 @@
 
     <a href="/reserv/lodgingReservList" class="d-flex justify-content-center">숙소 목록</a>
 
+<!------------------------------------------------------------------------------------------------------->
+    <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}" th:object="${roomForm}" role="form" method="post">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">체크인 시간</span>
+        </div>
+        <input type="date" th:field="*{checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">
+    </div>
+<!--    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>-->
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">체크아웃 시간</span>
+        </div>
+        <input type="date" th:field="*{checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">
+    </div>
+<!--    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>-->
+    </form>>
+<!----------------------------------------------------------------------------------------------------->
+
     <p class="h4 text-center mt-3">
         객실 목록
     </p>
