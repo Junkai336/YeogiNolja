@@ -22,30 +22,30 @@
 <th:block layout:fragment="script">
 
     <script th:inline="javascript">
-        $(document).ready(function(){
+            $(document).ready(function(){
 
-          var errorMessage = [[${errorMessage}]];
-          if(errorMessage != null){
-              alert(errorMessage);
-              console.log(errorMessage)
-          }
+              var errorMessage = [[${errorMessage}]];
+              if(errorMessage != null){
+                  alert(errorMessage);
+                  console.log(errorMessage)
+              }
 
-      });
+          });
 
-          function bindDomEvent(){
-            $(".custom-file-input").on("change", function() {
-                var fileName = $(this).val().split("\\").pop();  //이미지 파일명
-                var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
-                fileExt = fileExt.toLowerCase(); //소문자 변환
-                console.log(fileName, fileExt);
-                if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
-                    alert("이미지 파일만 등록이 가능합니다.");
-                    return;
-                }
+              function bindDomEvent(){
+                $(".custom-file-input").on("change", function() {
+                    var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+                    fileExt = fileExt.toLowerCase(); //소문자 변환
+                    console.log(fileName, fileExt);
+                    if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                        alert("이미지 파일만 등록이 가능합니다.");
+                        return;
+                    }
 
-                $(this).siblings(".custom-file-label").html(fileName);
-            });
-        }
+                    $(this).siblings(".custom-file-label").html(fileName);
+                });
+            }
 
     </script>
 </th:block>
@@ -93,16 +93,31 @@
                                 fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
                                 maximumImageFileSize: 5000*1024, // 500 KB
                                 callbacks: {
-                            onImageUpload : function(files, editor, welEditable) {
-						    for (var i = 0; i < files.length; i++) {
-							sendFile(files[i], this);
-						}
-					}
+            onImageUpload: function (files, editor, welEditable) {
+                for (var i = 0; i < files.length; i++) {
+                    sendFile(files[i], this);
+                }
+            },
+
+            onImageUploadError: function (msg) {
+                window.alert(msg + "파일 최대 용량을 초과했습니다.");
+            },
+
+            onMediaDelete: function ($target, editor, $editable) {
+                    var deletedImageUrl = $target
+                        .attr('src')
+                        .split('/')
+                        .pop()
+
+                    // ajax 함수 호출
+                    console.log(deletedImageUrl);
+                    deleteSummernoteImageFile(deletedImageUrl)
+            },
                                 }
                             });
                         });
 
-                  function sendFile(file, el) {
+     function sendFile(file, el) {
         var form_data = new FormData();
         form_data.append('file', file);
 
@@ -128,6 +143,28 @@
           }
         });
       }
+
+     function deleteSummernoteImageFile(imageName) {
+        data = new FormData()
+        data.append('file', imageName)
+
+        var header = $("meta[name='_csrf_header']").attr('content');
+        var token = $("meta[name='_csrf']").attr('content');
+
+            $.ajax({
+             data: data,
+             type: 'POST',
+             url: '/imageDelete',
+
+        beforeSend: function(xhr){
+        xhr.setRequestHeader(header, token);
+        },
+
+             contentType: false,
+             enctype: 'multipart/form-data',
+             processData: false,
+          })
+     }
         </script>
 
 

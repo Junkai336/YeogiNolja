@@ -1,5 +1,8 @@
 package com.example.member.service;
 
+import com.example.member.article.Article;
+import com.example.member.article.ArticleDto;
+import com.example.member.constant.EditingExceptionConsideration;
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.UploadFileRepository;
 import lombok.AllArgsConstructor;
@@ -11,10 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,7 +30,6 @@ public class UploadFileService {
 
     @Autowired
     private UploadFileRepository uploadFileRepository;
-
 
 
     private final Path rootLocation; // d:/image/
@@ -41,7 +47,7 @@ public class UploadFileService {
         //		 size : 4994942
         //		 registerDate : 2020-02-06 22:29:57.748
         try {
-            if(file.isEmpty()) {
+            if (file.isEmpty()) {
                 throw new Exception("Failed to store empty file " + file.getOriginalFilename());
             }
 
@@ -51,42 +57,16 @@ public class UploadFileService {
             saveFile.setSaveFileName(saveFileName);
             saveFile.setContentType(file.getContentType());
             saveFile.setSize(file.getResource().contentLength());
-            saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') +'/' + saveFileName);
+            saveFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
+            saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') + '/' + saveFileName);
             uploadFileRepository.save(saveFile);
             System.out.println("이미지가 DB에 저장됩니다.");
             return saveFile;
 
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
         }
     }
-
-//    public UploadFile store(MultipartFile file) throws Exception {
-//        //		 fileName : 예류2.jpg
-//        //		 filePath : d:/images/uuid-예류2.jpg
-//        //		 saveFileName : uuid-예류2.png
-//        //		 contentType : image/jpeg
-//        //		 size : 4994942
-//        //		 registerDate : 2020-02-06 22:29:57.748
-//        try {
-//            if(file.isEmpty()) {
-//                throw new Exception("Failed to store empty file " + file.getOriginalFilename());
-//            }
-//
-//            String saveFileName = fileSave(rootLocation.toString(), file);
-//            UploadFile saveFile = new UploadFile();
-//            saveFile.setFileName(file.getOriginalFilename());
-//            saveFile.setSaveFileName(saveFileName);
-//            saveFile.setContentType(file.getContentType());
-//            saveFile.setSize(file.getResource().contentLength());
-//            saveFile.setFilePath(rootLocation.toString().replace(File.separatorChar, '/') +'/' + saveFileName);
-//            uploadFileRepository.save(saveFile);
-//            return saveFile;
-//
-//        } catch(IOException e) {
-//            throw new Exception("Failed to store file " + file.getOriginalFilename(), e);
-//        }
-//    }
 
     public UploadFile load(Long fileId) {
 
@@ -111,7 +91,120 @@ public class UploadFileService {
     }
 
 
+    public void fileDelete(UploadFile uploadFile) {
+        Path path = Paths.get(uploadFile.getFilePath());
+        try {
+            Files.delete(path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void summernoteFileDelete(Long fileName) {
 
+        UploadFile uploadFile = uploadFileRepository.findById(fileName).orElseThrow(EntityNotFoundException::new);
 
+        String filePath = uploadFile.getFilePath();
+
+        Path path = Paths.get(filePath);
+        try {
+            Files.delete(path);
+            uploadFileRepository.delete(uploadFile);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 편집시 서머노트에서 이미지를 삭제할 때
+    public void summernoteFileDelete(Long fileName, UploadFile uploadFile) {
+
+        // 원본은 이넘타입이 Y 상태가 된다.
+        // 작성하거나 예외사항에서 N 상태가 되어야 하는데 그것은 다른 메소드에서 한다.
+        uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.Y);
+        uploadFileRepository.save(uploadFile);
+
+    }
+
+    public void uploadFileGrantedArticleId(Article article) {
+
+        List<Long> longList = new ArrayList<>();
+        String[] imgNumber = article.getContent().split("\"|\\\"");
+
+        for (int i = 0; i < imgNumber.length; i++) {
+            if (imgNumber[i].contains("/image/")) {
+                String helloNumber = imgNumber[i].replaceAll("/image/", "");
+
+                Long helloLong = Long.parseLong(helloNumber);
+
+                longList.add(helloLong);
+            }
+        }
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for (int i = 0; i < uploadFileList.size(); i++) {
+            for (int l = 0; l < longList.size(); l++) {
+                if (uploadFileList.get(i).getId().equals(longList.get(l))) {
+                    uploadFileList.get(i).setArticle(article);
+                }
+            }
+        }
+
+    }
+
+    public void backwardUploadFileCheck(Long id) {
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for(UploadFile uploadFile : uploadFileList) {
+            if(uploadFile.getArticle().getId().equals(id)) {
+                uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
+            }
+        }
+
+    }
+
+    public void backwardUploadFileCheck() {
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for(UploadFile uploadFile : uploadFileList) {
+                uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
+        }
+
+    }
+
+    public void refreshUploadFileCheck(Long id) {
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for(UploadFile uploadFile : uploadFileList) {
+            if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
+                uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
+            }
+        }
+    }
+
+    public void emptyUploadFileCheck() {
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for(UploadFile uploadFile : uploadFileList) {
+            if(uploadFile.getArticle() == null) {
+                uploadFileRepository.delete(uploadFile);
+                fileDelete(uploadFile);
+
+            }
+        }
+    }
+
+    public void havingIdArticleDelete(ArticleDto articleDto) {
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for(UploadFile uploadFile : uploadFileList) {
+            if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
+                uploadFileRepository.delete(uploadFile);
+                fileDelete(uploadFile);
+
+            }
+        }
+    }
 }
