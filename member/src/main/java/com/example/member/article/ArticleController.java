@@ -58,6 +58,8 @@ public class ArticleController {
         if (articleDto.getId() != null) {
             Long article_id = articleDto.getId();
             try {
+                System.out.println("업데이트2");
+                uploadFileService.havingIdArticleDelete(articleDto);
                 articleService.articleUpdate(articleDto);
 
                 model.addAttribute("articleDto", articleDto);
@@ -106,9 +108,6 @@ public class ArticleController {
     public String update(@Valid ArticleDto articleDto, BindingResult result, Model model) {
 
         try{
-            System.out.println("업데이트2");
-            uploadFileService.havingIdArticleDelete(articleDto);
-
             articleService.articleUpdate(articleDto);
         }catch (Exception e){
             model.addAttribute("errorMsg", result.getFieldError());
