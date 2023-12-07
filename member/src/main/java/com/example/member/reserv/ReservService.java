@@ -9,6 +9,7 @@ import com.example.member.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
@@ -60,7 +61,7 @@ public class ReservService {
 
 
     // 예약 리스트 만들기
-    public List<ReservDto> reservDtoList(Reserv reserv, Principal principal){
+    public List<ReservDto> reservDtoList(Principal principal){
 //        List<Reserv> member = reservRepository.findReservs(principal.getName());
         // principal 사용해서 래파지토리에서 findReservs 쓰기
 //        Member member = reserv.getMember();
@@ -74,9 +75,9 @@ public class ReservService {
 
         for(Reserv savedReserv : reservList){
             ReservDto reservDto = ReservDto.toReservDto(savedReserv);
+            System.out.println(reservDto.getReservationStatus());
             reservDtoList.add(reservDto);
         }
-        System.out.println("reservDtoLsit : "+ reservDtoList);
         return reservDtoList;
     }
 //    public List<ReservDto> reservDtoList(){
@@ -89,20 +90,29 @@ public class ReservService {
 //        }
 //        return reservDtoList;
 //    }
-//
-//
-//
-//
-//    // Controller로 부터 ReservId를 넘겨받아
-//    // 예약한 숙소의 상태를 변경 시키는 Reserv의 cancelReserv() 메서드 호출
-//    public void cancelReserv(Long reservId) {
-//        Reserv reserv = reservRepository.findById(reservId)
-//                .orElseThrow(EntityNotFoundException::new);
-//        reserv.cancelReserv();
-//    }
-//
-//
-//
+
+
+
+    // Controller로 부터 ReservId를 넘겨받아
+    // 예약한 숙소의 상태를 변경 시키는 Reserv의 cancelReserv() 메서드 호출
+    public void cancelReserv(Long reservId) {
+        Reserv reserv = reservRepository.findById(reservId)
+                .orElseThrow(EntityNotFoundException::new);
+        reserv.cancelReserv();
+    }
+
+    // 예약자, 접속자가 동일인물인지 검증
+    public boolean validateCancelReserv(Long reservId, String email) {
+        Member member = memberRepository.findByEmail(email).orElse(null);
+        Reserv reserv = reservRepository.findById(reservId).orElse(null);
+
+        if(StringUtils.equals(member, reserv.getMember().getEmail())){
+            return true;
+        }
+        return false;
+    }
+
+
 //        // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
 //
 //
@@ -120,13 +130,4 @@ public class ReservService {
 //    // memberId
 //
 //
-////    public boolean validateCancelReserv(Long reservId, String email) {
-////        Member member = memberRepository.findByEmail(email).orElse(null);
-////        Reserv reserv = reservRepository.findById(reservId).orElse(null);
-////
-////        if(StringUtils.equals(member, reserv.getMember().getEmail())){
-////            return true;
-////        }
-////        return false;
-////    }
 }

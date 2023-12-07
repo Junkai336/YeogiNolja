@@ -63,7 +63,7 @@ public class ReservController {
     @GetMapping({"/reservs","/reservs/{page}"})
     public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Reserv reserv, Model model){
 //        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
-        List<ReservDto> reservDtoList = reservService.reservDtoList(reserv,principal);
+        List<ReservDto> reservDtoList = reservService.reservDtoList(principal);
         // principal.getName() 현재 로그인된  사용자의 이메일
 
 
@@ -73,17 +73,17 @@ public class ReservController {
     }
 
     // 예약 취소
-//    @PostMapping("/reserv/{reservId}/cancel")
-//    public @ResponseBody ResponseEntity cancelReserv(
-//            @PathVariable("reservId") Long reservId, Principal principal){
-//        // 주문 취소 시 reservId와 접속중인 사용자의 이메일을 가져와서
-//        // 접속중인 USER가 예약한 USER가 맞는지 비교하여 return
-//        String email = principal.getName();
-////        if(!reservService.validateCancelReserv(reservId,email)) {
-////            return new ResponseEntity<String>("예약 취소 권한이 없습니다", HttpStatus.FORBIDDEN);
-////        }
-//        // 예약 취소한 USER가 예약 요청한 USER가 맞을시 ReservService의 cancelReserv() 메서드 호출
-//        reservService.cancelReserv(reservId);
-//        return new ResponseEntity<Long>(reservId, HttpStatus.OK);
-//    }
+    @PostMapping("/{reservId}/cancel")
+    public @ResponseBody ResponseEntity cancelReserv(
+            @PathVariable("reservId") Long reservId, Principal principal){
+        // 주문 취소 시 reservId와 접속중인 사용자의 이메일을 가져와서
+        // 접속중인 USER가 예약한 USER가 맞는지 비교하여 return
+        String email = principal.getName();
+        if(reservService.validateCancelReserv(reservId,email)) {
+            return new ResponseEntity<String>("예약 취소 권한이 없습니다", HttpStatus.FORBIDDEN);
+        }
+        // 예약 취소한 USER가 예약 요청한 USER가 맞을시 ReservService의 cancelReserv() 메서드 호출
+        reservService.cancelReserv(reservId);
+        return new ResponseEntity<Long>(reservId, HttpStatus.OK);
+    }
 }

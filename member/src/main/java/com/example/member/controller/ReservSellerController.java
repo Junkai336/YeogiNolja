@@ -127,6 +127,7 @@ public class ReservSellerController {
             // -----------------------------------------------------------
 
             model.addAttribute("lodgingDto", lodgingDto);
+            model.addAttribute("roomForm", new RoomDto());
             model.addAttribute("roomDtoList", roomDtoList);
 
 

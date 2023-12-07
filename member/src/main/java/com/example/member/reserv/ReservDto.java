@@ -13,6 +13,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class ReservDto {
     private Long id; // 예약 id
 
@@ -29,15 +30,20 @@ public class ReservDto {
 
     private LocalDateTime reservDate; // 예약일
 
+    private ReservationStatus reservationStatus;
+
     public static ReservDto toReservDto(Reserv reserv){
         Member member = reserv.getMember();
         ReservDto reservDto = new ReservDto();
+        reservDto.setId(reserv.getId());
         reservDto.setMember(member);
         reservDto.setReservPN(reservDto.phoneNumber(member));
         reservDto.setRoom(reserv.getRoom());
         reservDto.setReservDate(reserv.getRegTime());
         reservDto.setReservName(reserv.getReservName());
         reservDto.setReservPN(reserv.getReservPN());
+        reservDto.setReservationStatus(reserv.getReservationStatus());
+
 
         return reservDto;
     }
