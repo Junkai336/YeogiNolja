@@ -5,6 +5,9 @@ import com.example.member.dto.RoomDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +23,7 @@ public class Room extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="room_id")
+    @Column(name = "room_id")
     private Long id;
 
     @JoinColumn(name = "lodging_id")
@@ -74,7 +77,5 @@ public class Room extends BaseEntity {
 
         return room;
     }
-
     // Entity 병합용
-
 }

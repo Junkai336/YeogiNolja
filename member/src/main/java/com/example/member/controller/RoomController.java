@@ -40,6 +40,7 @@ public class RoomController {
     public String fromLodgingDetailToRoomCreation(@PathVariable Long id, Model model, Principal principal) {
         String email = principal.getName();
 
+
         System.out.println(principal.getName());
 
         Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);

@@ -13,28 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "reservs")
+@Table(name = "reserv")
 @Getter
 @Setter
 public class Reserv extends BaseEntity {
     @Id
-    @GeneratedValue
-    @Column(name = "reserv_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; // 예약 id
 
     @ManyToOne(fetch = FetchType.LAZY) // 멤버가 주
     @JoinColumn(name = "member_id")
-    private Member member;  // 오더 주체가 되는 Member
+    private Member member;  // reserv 주체가 되는 Member
+
 
     @JoinColumn(name = "lodging_id")
     @ManyToOne(fetch = FetchType.LAZY) // 숙소가 주
     private Lodging lodging; // 숙소 id
-    @Column
-    private String lodgingName;
+
+
 
     @JoinColumn(name = "room_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Room room;
+
 
     @Column
     private String reservName; // 예약자 이름
@@ -46,12 +47,15 @@ public class Reserv extends BaseEntity {
 
 
     // 예약 생성
-    public static Reserv createReserv(ReservDto reservDto){
+    public static Reserv createReserv(ReservDto reservDto, Lodging lodging){
         Reserv reserv = new Reserv();
+
         reserv.setRoom(reservDto.getRoom());
         reserv.setMember(reservDto.getMember());
+        reserv.setLodging(lodging);
         reserv.setReservName(reservDto.getReservName());
         reserv.setReservPN(reservDto.getReservPN());
+        reserv.setReservationStatus(ReservationStatus.RESERVED);
         return reserv;
     }
 

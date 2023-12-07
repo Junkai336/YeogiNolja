@@ -1,10 +1,8 @@
 package com.example.member.reserv;
 
-import com.example.member.constant.ReservationStatus;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
-import com.example.member.repository.LodgingImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
@@ -15,6 +13,9 @@ import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityNotFoundException;
 import java.security.Principal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,31 +23,17 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class ReservService {
-    private final LodgingRepository lodgingRepository;
     private final MemberRepository memberRepository;
     private final ReservRepository reservRepository;
-    private final LodgingImgRepository lodgingImgRepository;
     private final RoomRepository roomRepository;
+    private final LodgingRepository lodgingRepository;
 
-    public ReservDto newReserv(Long roomId, Principal principal) throws Exception{
-        ReservDto reservDto = new ReservDto();
-        Room room = roomRepository.findById(roomId)
-                .orElseThrow(EntityNotFoundException::new);
-        Member member = memberRepository.findByEmail(principal.getName())
-                .orElseThrow(EntityNotFoundException::new);
-
-        reservDto.setRoom(room); // room id
-        reservDto.setMember(member); // member email
-        return reservDto;
-    }
-
-    public Reserv saveReserv(ReservDto reservDto){
-        Reserv reserv = Reserv.createReserv(reservDto);
+    public void saveReserv(ReservDto reservDto){
+        Room room = reservDto.getRoom();
+        Lodging lodging = room.getLodging();
+        Reserv reserv = Reserv.createReserv(reservDto, lodging);
         validateDuplicateMember(reserv);
         reservRepository.save(reserv);
-        reserv.setReservationStatus(ReservationStatus.RESERVED);
-        return reserv;
-
     }
 
     // 예약하려는 방의 상태를 가져와 예약 가능인지 검증
@@ -59,7 +46,51 @@ public class ReservService {
         }
     }
 
+    public ReservDto newReserv(Long roomId, Principal principal) throws Exception{
+        ReservDto reservDto = new ReservDto();
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(EntityNotFoundException::new);
+        Member member = memberRepository.findByEmail(principal.getName())
+                .orElseThrow(EntityNotFoundException::new);
+        reservDto.setReservPN(ReservDto.phoneNumber(member));
+        reservDto.setReservName(member.getName());
+        reservDto.setRoom(room); // room id
+        reservDto.setMember(member); // member email
+        return reservDto;
+    }
+
+
     // 예약 리스트 만들기
+    public List<ReservDto> reservDtoList(Principal principal){
+//        List<Reserv> member = reservRepository.findReservs(principal.getName());
+        // principal 사용해서 래파지토리에서 findReservs 쓰기
+//        Member member = reserv.getMember();
+//        Long member_id = member.getId();
+//        List<Reserv> reservList = reservRepository.findAllByMemberId(member_id);
+//        List<ReservDto> reservDtoList = new ArrayList<>();
+
+        String email = principal.getName();
+        List<Reserv> reservList = reservRepository.findReservs(email);
+        List<ReservDto> reservDtoList = new ArrayList<>();
+
+        for(Reserv savedReserv : reservList){
+            ReservDto reservDto = ReservDto.toReservDto(savedReserv);
+            System.out.println(reservDto.getReservationStatus());
+            reservDtoList.add(reservDto);
+        }
+        return reservDtoList;
+    }
+//    public List<ReservDto> reservDtoList(){
+//        List<Reserv> reservList = reservRepository.findAll();
+//        List<ReservDto> reservDtoList = new ArrayList<>();
+//
+//        for(Reserv reserv : reservList){
+//            ReservDto reservDto = ReservDto.toReservDto(reserv);
+//            reservDtoList.add(reservDto);
+//        }
+//        return reservDtoList;
+//    }
+
 
 
     // Controller로 부터 ReservId를 넘겨받아
@@ -70,42 +101,7 @@ public class ReservService {
         reserv.cancelReserv();
     }
 
-
-    public String findName(String email) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(EntityNotFoundException::new);
-        String memberName = member.getName();
-        return memberName;
-
-    }
-
-        // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
-
-
-    // 주문 내역 조회 시 필요한 데이터
-    // reservID,숙소네임,숙소 대표이미지, roomId,룸 네임 , memberId, reservName,
-    // reservPN,방가격, 예약날짜, 상태, 체크인아웃, 인원(?),
-
-    // room
-    // 숙소네임,숙소 대표이미지, roomId,룸 네임,방가격,상태, 체크인아웃, 인원(?)
-
-    // reserv
-    // reservId, reservName, reservPN, 예약날짜
-
-    // member
-    // memberId
-
-    public List<ReservDto> reservDtoList(){
-        List<Reserv> reservList = reservRepository.findAll();
-        List<ReservDto> reservDtoList = new ArrayList<>();
-
-        for(Reserv reserv : reservList){
-            ReservDto reservDto = ReservDto.toReservDto(reserv);
-            reservDtoList.add(reservDto);
-        }
-        return reservDtoList;
-    }
-
+    // 예약자, 접속자가 동일인물인지 검증
     public boolean validateCancelReserv(Long reservId, String email) {
         Member member = memberRepository.findByEmail(email).orElse(null);
         Reserv reserv = reservRepository.findById(reservId).orElse(null);
@@ -115,4 +111,23 @@ public class ReservService {
         }
         return false;
     }
+
+
+//        // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
+//
+//
+//    // 주문 내역 조회 시 필요한 데이터
+//    // reservID,숙소네임,숙소 대표이미지, roomId,룸 네임 , memberId, reservName,
+//    // reservPN,방가격, 예약날짜, 상태, 체크인아웃, 인원(?),
+//
+//    // room
+//    // 숙소네임,숙소 대표이미지, roomId,룸 네임,방가격,상태, 체크인아웃, 인원(?)
+//
+//    // reserv
+//    // reservId, reservName, reservPN, 예약날짜
+//
+//    // member
+//    // memberId
+//
+//
 }
