@@ -11,10 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="board")
+@Table(name="article")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
 @Getter
 @Setter

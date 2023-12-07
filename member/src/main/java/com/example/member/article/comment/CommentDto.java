@@ -26,7 +26,7 @@ public class CommentDto {
         commentDto.setId(comment.getId());
         commentDto.setMember(comment.getMember());
         commentDto.setComment(comment.getComment());
-        commentDto.setCreatedByTime(LocalDateTime.now());
+        commentDto.setCreatedByTime(comment.getRegTime());
         return commentDto;
     }
 

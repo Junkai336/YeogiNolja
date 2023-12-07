@@ -38,7 +38,7 @@ public class Member extends BaseEntity{
     private String name;
 
     // 특정 열에 중복값이 입력되지 않는다?
-    @Column(unique = true)
+    @Column
     private String email;
 
     @Column
