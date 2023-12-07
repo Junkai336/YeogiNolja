@@ -80,6 +80,7 @@ public class RoomService {
 
 // =====================================================================================================================
 ////            System.out.println("savedReserv CheckIn:"+ savedReserv.getRoom().getCheckInTime());
+
 //        // checkIn
 //        String checkIn = room.getCheckInTime();
 //        String[] checkInSplit =checkIn.split("T");
@@ -158,6 +159,7 @@ public class RoomService {
 //        String totalDateOut = checkOutTime+"("+day2+")"+" "+checkOutSplit[1];
 //
 //        room.setCheckOutTime(totalDateOut);
+
 // =====================================================================================================================
 
 
