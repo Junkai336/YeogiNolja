@@ -6,7 +6,14 @@
 >
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-  <style></style>
+  <style>
+    .show{
+      display: block;
+    }
+    .hide{
+      display: none;
+    }
+  </style>
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
@@ -70,39 +77,32 @@
   </div>
   <!-- //boardDto -->
   <div th:each="commentDto : ${commentDtoList}" class="container">
-    <input type="hidden" th:value="*{commentDto.id}" id="edit-comment-id" />
-    <span th:text="*{commentDto.member.name}"></span> :
+    <input type="hidden" th:value="*{commentDto.id}" class="comment-id" />
+    <input type="hidden" th:value="*{commentDto.member.email}" class="editorEmail">
+    <span th:text="*{commentDto.member.name}" class="commentWriter"></span> :
     <span
-            id="commentContent-{commentDto.id}"
+            class="commentContent"
             th:utext="*{commentDto.comment}"
     ></span>
-    <span th:text="*{commentDto.createdByTime}"></span>
-    <button id="editBtn-{commentDto.id}" class="btn btn-warning">
-      수정하기
-    </button>
-    <!--    <script>-->
-    <!--        function btnClick(e){-->
-    <!--            const comment_id = [[*{commentDto.id}]];-->
-
-    <!--            console.log(comment_id);-->
-    <!--            let target = e.target;-->
-    <!--            console.log("target.value ="+target.value());-->
-    <!--        }-->
-    <!--    </script>-->
-    <form id="commentEditForm-{commentDto.id}" style="display: none">
+    <form class="commentEditForm hide" onsubmit="return false">
       <input
               type="text"
-              id="editedComment-{commentDto.id}"
-              name="editedComment"
+              class="editCommentInput"
+              name="editCommentInput"
               th:value="*{commentDto.comment}"
       />
 
       <button type="submit">수정완료</button>
       <!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
     </form>
+    <span th:text="*{commentDto.createdByTime}"></span>
+    <button  class="btn btn-warning editBtn">
+      수정하기
+    </button>
 
 
-    <!--                    data-bs-comment-id="*{commentDto.id}"-->
+
+
     <a
             th:href="@{/article/{article_id}/commentDelete/{comment_id}(article_id = ${articleDto.id}, comment_id=${commentDto.id})}"
             class="btn btn-danger"
@@ -110,34 +110,46 @@
     >
     <hr />
   </div>
-
+<!-- 
   <script>
     var userEmail = `[[${userEmail}]]`;
     console.log(userEmail);
 
+    var edtiBtnElementList = document.querySelectorAll(".editBtn-{commentDto.id}");
+    var commentContentElementList = document.querySelectorAll(".commentContent-{commentDto.id}");
+    var commentEditFormElementList = document.querySelectorAll( ".commentEditForm-{commentDto.id}");
 
-    var editBtnElement = document.getElementById("editBtn-{commentDto.id}");
-    editBtnElement.addEventListener("click", (e) => {
-      const commentContentElement = document.getElementById(
-        "commentContent-{commentDto.id}"
-      );
-      const commentEditFormElement = document.getElementById(
-        "commentEditForm-{commentDto.id}"
-      );
+
+    let commentContentElement;
+    let commentEditFormElement;
+
+    for(let i = 0; i <edtiBtnElementList.length;i++){
+      editBtnElementList[i].addEventListener("click", (e) => {
+    //   const commentContentElement = document.getElementById(
+    //     "commentContent-{commentDto.id}"
+    //   );
+      
+      commentContentElement =commentContentElementList[i];
+      commentEditFormElement = commentEditFormElementList[i];
 
       // Hide the comment content and show the edit form
       commentContentElement.style.display = "none";
       commentEditFormElement.style.display = "block";
     });
-    var commentEditFormElement = document.getElementById(
-      "commentEditForm-{commentDto.id}"
-    );
+    }
+
+    // var editBtnElement = document.getElementById("editBtn-{commentDto.id}");
+    
+    // var commentEditFormElement = document.getElementById(
+    //   "commentEditForm-{commentDto.id}"
+    // );
     commentEditFormElement.addEventListener("submit", (e) => {
       e.preventDefault(); // Prevent form submission to the default action
 
       const editedComment = document.getElementById(
         "editedComment-{commentDto.id}"
       ).value;
+
       /*<![CDATA[*/
       const commentDto = /*[[${commentDto}]]*/ null; // commentDto를 스크립트에서 사용할 수 있도록 정의
       const articleDto = /*[[${articleDto}]]*/ null;
@@ -174,8 +186,108 @@
           }
         });
     });
-  </script>
+  </script> -->
+  <script>
+      var userEmail = `[[${userEmail}]]`;
+    console.log("수정 요청자의 email :"+userEmail);
+      
+    // 게시글 id = > edit-articleDto-id
+  
+  // 수정 버튼 class :"editBtn"
+  // 기존 댓글의 id class :comment-id
+  // 기존 댓글 comment => class :commentContent
+  
+  // 수정 시 출력할 댓글 수정 창 class : commentEditForm
+  // 수정 form의 입력 창 class: editedComment
+  
+  //  수정 버튼 클릭시 기존 작성된 댓글() hide
+  // 수정할 댓글 입력 input show
+  
+  // 현재 보고있는 게시글의 id값
+  var article_id = document.querySelector("#edit-articleDto-id").value;
+  // 수정 버튼 List
+  var editBtnList = document.querySelectorAll(".editBtn");  
+  // 기존 댓글 id List
+  var comment_idList = document.querySelectorAll(".comment-id");
+  // 기존 댓글 commentList
+  var commentList = document.querySelectorAll(".commentContent");
+  
+  // 수정시 출력할 댓글 수정 창List
+  var commentEditFormList = document.querySelectorAll(".commentEditForm");
+  
+  // 수정시 from 내부 input List
+  var editCommentInputList = document.querySelectorAll(".editCommentInput");
+  
+  var editorEmailList = document.querySelectorAll(".editorEmail");
 
+  let comment_id; // 수정할 댓글의 id
+  let comment;  // 기존 댓글의 내용
+  let commentEditForm; // 수정할 댓글의 form
+  let editCommentInput; // 수정 댓글을 담을 input
+  
+  let editorEmail;
+  for(let i = 0; i<editBtnList.length;i++){
+    editBtnList[i].addEventListener("click", ()=>{
+      console.log(i);
+      comment_id = comment_idList[i];
+      console.log(comment_idList[i]);
+      comment = commentList[i];
+      commentEditForm = commentEditFormList[i];
+      editCommentInput = editCommentInputList[i];
+      editorEmail = editorEmailList[i].value;
+      // 수정 요청을 하는 사용자가 댓글작성자와 같은지 식별
+      if(editorEmail == userEmail){
+        // 조건 충족시 댓글 수정창을 보여줌
+      comment.classList.toggle("hide");
+      commentEditForm.classList.toggle("hide");
+      editBtnList[i].classList.toggle("hide");
+    }else{
+      // 조건 불충족시 권한없음을 알림
+      alert("권한이 없습니다.");
+    }
+      console.log("editorEmail : "+ editorEmail);
+      console.log("comment_id:"+comment_id.value);
+      console.log("comment:"+ editCommentInput.value);
+
+        
+  commentEditForm.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        const articleId = article_id; 
+        const commentId = comment_id.value;
+        
+        const editComment = editCommentInput.value;
+        console.log("article_id : "+ articleId);
+        console.log("comment_id : "+ commentId);
+        console.log("editComment : "+ editComment);
+
+
+        editBtnList[i].classList.toggle("hide");
+        comment.classList.toggle("hide");
+      commentEditForm.classList.toggle("hide");
+      comment.innerText= editComment;
+
+    // api 처리할 부분
+
+    
+
+
+    });
+  
+  
+    });
+  
+    
+  }
+
+   
+
+  console.log("article_id:"+article_id);
+  
+  
+
+  
+  
+  </script>
 
   <a href="/article/list">게시글 목록</a>
 </div>
