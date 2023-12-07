@@ -8,13 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 
 
 @Controller
@@ -61,15 +59,26 @@ public class CommentController {
         return "redirect:/article/"+article_id;
     }
 
+    @PostMapping(value = "/article/{article_id}/editComment/{comment_id}")
+    public String commentEdit(@PathVariable("article_id") Long article_id,
+        @PathVariable("comment_id") Long comment_id,@ModelAttribute CommentDto commentDto){
+        commentService.update(comment_id, commentDto);
 
-    @PutMapping("/article/{article_id}/commentUpdate/{comment_id}")
-    public ResponseEntity<CommentDto> commentUpdate(@PathVariable("article_id") Long article_id,
-                                                    @PathVariable("comment_id")Long comment_id,
-                                                    @RequestBody CommentDto commentDto){
-        CommentDto commentDto1 = commentService.update(article_id, comment_id, commentDto);
+        return "redirect:/article/"+article_id;
 
-        return ResponseEntity.status(HttpStatus.OK).body(commentDto1);
     }
 
+
+
+    //댓글 수정
+    @ResponseBody
+    @PostMapping("/article/{articleId}/commentEdit/{commentId}")
+    public void update(@PathVariable("articleId") Long article_id,@PathVariable("commentId") Long comment_id,
+                         @RequestBody HashMap<String, Object> map){
+        //서비스에 위임
+        System.out.println(map);
+//        CommentDto commentDto = commentService.update(comment_id, dto);
+
+    }
 
 }

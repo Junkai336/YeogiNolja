@@ -79,17 +79,17 @@
   <div th:each="commentDto : ${commentDtoList}" class="container">
     <input type="hidden" th:value="*{commentDto.id}" class="comment-id" />
     <input type="hidden" th:value="*{commentDto.member.email}" class="editorEmail">
+    <input type="hidden" th:value="*{commentDto.comment}" class="commentContent">
     <span th:text="*{commentDto.member.name}" class="commentWriter"></span> :
     <span
-            class="commentContent"
             th:utext="*{commentDto.comment}"
     ></span>
-    <form class="commentEditForm hide" onsubmit="return false">
+    <form class="commentEditForm hide" role="form">
+      <input  th:field="*{id}" type="hidden" name="comment_id" class="postComment_id"/>
       <input
               type="text"
               class="editCommentInput"
-              name="editCommentInput"
-              th:value="*{commentDto.comment}"
+              name="comment"
       />
 
       <button type="submit">수정완료</button>
@@ -118,7 +118,7 @@
     var edtiBtnElementList = document.querySelectorAll(".editBtn-{commentDto.id}");
     var commentContentElementList = document.querySelectorAll(".commentContent-{commentDto.id}");
     var commentEditFormElementList = document.querySelectorAll( ".commentEditForm-{commentDto.id}");
-
+    
 
     let commentContentElement;
     let commentEditFormElement;
@@ -217,14 +217,15 @@
   
   // 수정시 from 내부 input List
   var editCommentInputList = document.querySelectorAll(".editCommentInput");
-  
+  // 수정 요청 시 들고 나갈 comment_id 창
+  var postComment_idList = document.querySelectorAll(".postComment_id");
   var editorEmailList = document.querySelectorAll(".editorEmail");
 
   let comment_id; // 수정할 댓글의 id
   let comment;  // 기존 댓글의 내용
   let commentEditForm; // 수정할 댓글의 form
   let editCommentInput; // 수정 댓글을 담을 input
-  
+  let postComment_id;
   let editorEmail;
   for(let i = 0; i<editBtnList.length;i++){
     editBtnList[i].addEventListener("click", ()=>{
@@ -232,8 +233,11 @@
       comment_id = comment_idList[i];
       console.log(comment_idList[i]);
       comment = commentList[i];
+      console.log(comment.value);
       commentEditForm = commentEditFormList[i];
       editCommentInput = editCommentInputList[i];
+      editCommentInput.value = comment.value;
+
       editorEmail = editorEmailList[i].value;
       // 수정 요청을 하는 사용자가 댓글작성자와 같은지 식별
       if(editorEmail == userEmail){
@@ -247,12 +251,12 @@
     }
       console.log("editorEmail : "+ editorEmail);
       console.log("comment_id:"+comment_id.value);
-      console.log("comment:"+ editCommentInput.value);
+      console.log("comment:"+ comment.value);
 
         
   commentEditForm.addEventListener("submit", (e)=>{
         e.preventDefault();
-        const articleId = article_id; 
+        const articleId = article_id;
         const commentId = comment_id.value;
         
         const editComment = editCommentInput.value;
@@ -261,19 +265,40 @@
         console.log("editComment : "+ editComment);
 
 
-        editBtnList[i].classList.toggle("hide");
-        comment.classList.toggle("hide");
-      commentEditForm.classList.toggle("hide");
-      comment.innerText= editComment;
+      //   editBtnList[i].classList.toggle("hide");
+      //   comment.classList.toggle("hide");
+      // commentEditForm.classList.toggle("hide");
+      // comment.innerText= editComment;
 
-    // api 처리할 부분
+        const comment = {
+        id: commentId,
+        comment: editComment,
+    };
 
-    
+    //수정 Rest APi 호출 - fetch()
+    //주의 method : "POST"
+
+    const url = `/article/${articleId}/commentEdit/${commentId}`;
+    fetch(url,{
+        method: "POST",
+        body : JSON.stringify(comment),
+        headers:{
+            "Content-Type": "application/json"
+        }
+    }).then(response => {
+        //http 응답 코드에 따른 메시지 출력
+        const msg = (response.ok) ? "댓글이 수정 되었습니다." : "댓글 수정 실패..!";
+        alert(msg);
+
+    // 현재 페이지를 새로고침
+      window.location.reload();
+    });
+
 
 
     });
-  
-  
+
+
     });
   
     
