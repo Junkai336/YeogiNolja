@@ -43,19 +43,16 @@ public class MemberController {
     @PostMapping(value = "/join")
     public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
 
-        if(bindingResult.hasErrors()){
-            return "member/join";
-        }
 
         try {
             Member member = Member.toMember(memberFormDto, passwordEncoder);
             memberService.saveMember(member);
         } catch (Exception e){
-            model.addAttribute("errorMessage", e.getMessage());
-            return "member/join";
+            model.addAttribute("errorMessage", bindingResult.getFieldError());
+            return "redirect:/member/join";
         }
 
-        return "redirect:/";
+        return "/index";
     }
 
     @GetMapping(value = "/login")
@@ -104,7 +101,7 @@ public class MemberController {
 
         return "redirect:/";
     }
-    @GetMapping(value = "/members")
+    @GetMapping(value = "/list")
     public String management(Model model){
         List<MemberFormDto> memberDtoList = memberService.memberList();
         model.addAttribute("memberDtoList" ,memberDtoList);
