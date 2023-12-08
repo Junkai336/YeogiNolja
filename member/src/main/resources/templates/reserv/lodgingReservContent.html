@@ -3,6 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <!-- include summernote css/js-->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+    <meta id="_csrf_header" name="_csrf_header"
+          th:content="${_csrf.headerName}" />
+</head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
@@ -10,9 +16,39 @@
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-    </script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        var errorMessage = [[${errorMessage}]];
+        if(errorMessage != null){
+            alert(errorMessage);
+        }
+    //상품등고시 실패 메세지를 받아서 상품등록페이지 재 진입시 alert() 실패사유
+        bindDomEvent();
+
+    });
+// c:\images\셔츠.jpg
+    function bindDomEvent(){
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+            var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+            fileExt = fileExt.toLowerCase(); //소문자 변환
+
+            if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                alert("이미지 파일만 등록이 가능합니다.");
+                return;
+            }
+
+            $(this).siblings(".custom-file-label").html(fileName);
+        });
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+            // csrf 라는 url 공격을 막기 위해 적는 것
+
+
+</script>
+
 </th:block>
 
 <div layout:fragment="content">
@@ -63,8 +99,152 @@
     </div>
 
 <div class="d-flex justify-content-center">
-    <button type="button" onclick="addRoomPage" class="btn btn-primary">객실 추가</button>
+    <button type="button" onclick="addRoomPage()" class="btn btn-primary">객실 추가</button>
 </div>
+
+    <div class="add">
+
+    </div>
+
+    <script>
+
+        function addRoomPage () {
+        const addRoom = document.querySelector('.add');
+
+        addRoom.innerHTML =
+        `
+        <div class = "container w-100">
+        <div class= "d-flex justify-content-center w-50">
+            <form role="form" method="post" enctype="multipart/form-data"">
+            <p class="h2">
+                객실 등록
+            </p>
+
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">객실명</span>
+                </div>
+                <input type="text" class="form-control name" placeholder="객실명을 입력해주세요">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">가격</span>
+                </div>
+                <input type="number" class="form-control price" placeholder="객실의 가격을 입력해주세요">
+            </div>
+
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">인원수</span>
+                </div>
+
+                <span>성인</span>
+                <select class="form-select adult" aria-label="Default select example">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <span>아동</span>
+                <select class="form-select children" aria-label="Default select example">
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">객실 상세 내용</span>
+                </div>
+                <textarea class="form-control detail" aria-label="With textarea"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">체크인 시간</span>
+                </div>
+                <input type="time" class="form-control checkInTime" placeholder="체크인 시간을 입력해주세요">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">체크아웃 시간</span>
+                </div>
+                <input type="time" class="form-control checkOutTime" placeholder="체크아웃 시간을 입력해주세요">
+            </div>
+
+            <div>
+                <div class="form-group">
+                    <div class="custom-file img-div">
+                        <input type="file" class="custom-file-input" name="itemImgFile">
+                        <label class="custom-file-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" onclick="roomRegistration()" class="btn btn-primary mt-1">객실 등록</button>
+            </div>
+
+            </form>
+        </div>
+</div>
+        `;
+        }
+
+        function roomRegistration() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var url = `/lodging/helloworld`;
+    var paramData = {
+        name : $(".name").val(),
+        detail : $(".detail").val(),
+        price : $(".price").val(),
+        adult : $(".adult").val(),
+        children : $(".children").val(),
+        checkInTime : $(".checkInTime").val(),
+        checkOutTime : $(".checkOutTime").val()
+    };
+
+    var param = JSON.stringify(paramData);
+
+    $.ajax({
+        url      : url,
+        type     : "POST",
+        contentType : "application/json",
+        data     : param,
+        beforeSend : function(xhr){
+            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+            xhr.setRequestHeader(header, token);
+        },
+        dataType : "json",
+        cache   : false,
+        success  : function(result, status){
+            alert("객실 정보가 저장되었습니다.");
+            location.href='/';
+        },
+        error : function(jqXHR, status, error){
+
+            if(jqXHR.status == '401'){
+                alert('로그인 후 이용해주세요');
+                location.href='/members/login';
+            } else{
+                alert(jqXHR.responseText);
+            }
+
+        }
+    });
+}
+
+    </script>
 
     <p class="h4 text-center mt-3">
         객실 목록

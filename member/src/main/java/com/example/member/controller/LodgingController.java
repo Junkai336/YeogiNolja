@@ -174,6 +174,26 @@ public class LodgingController {
         }
     }
 
+    private final RoomRepository roomRepository;
+
+    @PostMapping(value = "/helloworld")
+    @ResponseBody
+    public String addRoom(@RequestBody Room room) {
+        System.out.println();
+        System.out.println("room.getName(): " + room.getName());
+        System.out.println("room.getPrice(): " + room.getPrice());
+        System.out.println("room.getDetail(): " + room.getDetail());
+        System.out.println("room.getAdult(): " + room.getAdult());
+        System.out.println("room.getChildren(): " + room.getChildren());
+        System.out.println("room.getCheckInTime(): " + room.getCheckInTime());
+        System.out.println("room.getCheckOutTime(): " + room.getCheckOutTime());
+        System.out.println();
+
+        roomRepository.save(room);
+
+//        return "redirect:/reserv/lodgingReservContent";
+        return "왜 주소로 가지지 않는거임?";
+    }
 
 
 
