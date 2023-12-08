@@ -42,11 +42,25 @@
             <td th:utext="${lodging.detail}"></td>
             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
             <td th:text="${lodging.address}">a</td>
+            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가</a>
+            </td>
         </tr>
         </tbody>
     </table>
 
-    <a href="/reserv/lodgingReservList" class="d-flex justify-content-center">숙소 목록</a>
+    <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+        <a th:href="@{/lodging/{id}/lodgingForm(id = ${lodgingDto.id})}" class="btn btn-primary w-10 mx-2">수정</a>
+        <a th:href="@{/lodging/{id}/lodgingDelete(id = ${lodgingDto.id})}" class="btn btn-danger w-10 mx-2">삭제</a>
+    </div>
+
+    <div th:unless="${#strings.equals(prevPage, 'LodgingController')}">
+        <a href="/reserv/lodgingReservList" class="d-flex justify-content-center">숙소 목록</a>
+    </div>
+
+    <div th:if="${#strings.equals(prevPage, 'LodgingController')}">
+        <a href="/lodging/list" class="d-flex justify-content-center">숙소 목록</a>
+    </div>
 
     <p class="h4 text-center mt-3">
         객실 목록
@@ -60,11 +74,16 @@
         <p th:text="'객실가격: '+${roomDto.price}"></p>
         <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
         <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
+        <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary">수정</a>
+            <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
+        </div>
+        <hr>
         <div>
 
 
 
-            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" class="btn btn-primary my-2">예약하기</a>
+            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary my-2" >예약하기</a>
 
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->

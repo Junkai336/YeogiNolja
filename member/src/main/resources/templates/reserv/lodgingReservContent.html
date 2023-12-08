@@ -43,7 +43,7 @@
             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
             <td th:text="${lodging.address}">a</td>
             <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가</a>
+                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>
             </td>
         </tr>
         </tbody>
@@ -54,7 +54,17 @@
         <a th:href="@{/lodging/{id}/lodgingDelete(id = ${lodgingDto.id})}" class="btn btn-danger w-10 mx-2">삭제</a>
     </div>
 
+    <div th:unless="${#strings.equals(prevPage, 'LodgingController')}">
     <a href="/reserv/lodgingReservList" class="d-flex justify-content-center">숙소 목록</a>
+    </div>
+
+    <div th:if="${#strings.equals(prevPage, 'LodgingController')}">
+    <a href="/lodging/list" class="d-flex justify-content-center">숙소 목록</a>
+    </div>
+
+<div class="d-flex justify-content-center">
+    <button type="button" onclick="addRoomPage" class="btn btn-primary">객실 추가</button>
+</div>
 
     <p class="h4 text-center mt-3">
         객실 목록

@@ -107,6 +107,7 @@ public class LodgingController {
 
         model.addAttribute("lodgingDto", lodgingDto);
         model.addAttribute("roomDtoList", roomDtoListContainImage);
+        model.addAttribute("prevPage", "LodgingController");
 
         return "reserv/lodgingReservContent";
         }
