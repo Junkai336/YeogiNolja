@@ -59,26 +59,24 @@ public class CommentController {
         return "redirect:/article/"+article_id;
     }
 
-    @PostMapping(value = "/article/{article_id}/editComment/{comment_id}")
-    public String commentEdit(@PathVariable("article_id") Long article_id,
-        @PathVariable("comment_id") Long comment_id,@ModelAttribute CommentDto commentDto){
-        commentService.update(comment_id, commentDto);
+//    @PostMapping(value = "/article/{article_id}/editComment/{comment_id}")
+//    public String commentEdit(@PathVariable("article_id") Long article_id,
+//        @PathVariable("comment_id") Long comment_id,@ModelAttribute CommentDto commentDto){
+//        commentService.update(comment_id, commentDto);
+//
+//        return "redirect:/article/"+article_id;
+//
+//    }
 
-        return "redirect:/article/"+article_id;
-
+    @PostMapping(value = "/article/{article_id}/commentEdit/{comment_id}")
+    public void editComment(@PathVariable("comment_id") Long comment_id, @PathVariable("article_id") Long article_id, @RequestBody EditCommentDto editCommentDto){
+        System.out.println("view에서 넘어온 내용! : 아이디"+editCommentDto.getId());
+        System.out.println("view에서 넘어온 내용! : 내용"+editCommentDto.getComment());
+        commentService.update(comment_id, editCommentDto);
     }
 
 
 
-    //댓글 수정
-    @ResponseBody
-    @PostMapping("/article/{articleId}/commentEdit/{commentId}")
-    public void update(@PathVariable("articleId") Long article_id,@PathVariable("commentId") Long comment_id,
-                         @RequestBody HashMap<String, Object> map){
-        //서비스에 위임
-        System.out.println(map);
-//        CommentDto commentDto = commentService.update(comment_id, dto);
 
-    }
 
 }

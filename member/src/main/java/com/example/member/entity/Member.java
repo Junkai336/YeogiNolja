@@ -13,12 +13,10 @@ import javax.persistence.*;
 @Entity
 // 별도의 이름을 가진 데이터베이스 테이블과 매핑 (엔티티 클래스를 어떤 테이블로 생성할 것이냐)
 // Entity의 클래스명과 데이터베이스의 테이블명이 다를 경우 name=""로 매핑
-@Table(name="member")
 @Getter
 @Setter
 @ToString
 // NoArgs 와 AllArgs가 같이 있어야 에러가 발생하지 않는다.
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Member extends BaseEntity{

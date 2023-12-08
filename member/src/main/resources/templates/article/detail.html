@@ -4,6 +4,12 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/layout1}"
 >
+<head>
+  <!-- include summernote css/js-->
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+  <meta id="_csrf_header" name="_csrf_header"
+        th:content="${_csrf.headerName}" />
+</head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
   <style>
@@ -84,7 +90,7 @@
     <span
             th:utext="*{commentDto.comment}"
     ></span>
-    <form class="commentEditForm hide" role="form">
+    <form class="commentEditForm hide">
       <input  th:field="*{id}" type="hidden" name="comment_id" class="postComment_id"/>
       <input
               type="text"
@@ -110,7 +116,7 @@
     >
     <hr />
   </div>
-<!-- 
+<!--
   <script>
     var userEmail = `[[${userEmail}]]`;
     console.log(userEmail);
@@ -118,7 +124,7 @@
     var edtiBtnElementList = document.querySelectorAll(".editBtn-{commentDto.id}");
     var commentContentElementList = document.querySelectorAll(".commentContent-{commentDto.id}");
     var commentEditFormElementList = document.querySelectorAll( ".commentEditForm-{commentDto.id}");
-    
+
 
     let commentContentElement;
     let commentEditFormElement;
@@ -128,7 +134,7 @@
     //   const commentContentElement = document.getElementById(
     //     "commentContent-{commentDto.id}"
     //   );
-      
+
       commentContentElement =commentContentElementList[i];
       commentEditFormElement = commentEditFormElementList[i];
 
@@ -139,7 +145,7 @@
     }
 
     // var editBtnElement = document.getElementById("editBtn-{commentDto.id}");
-    
+
     // var commentEditFormElement = document.getElementById(
     //   "commentEditForm-{commentDto.id}"
     // );
@@ -190,31 +196,31 @@
   <script>
       var userEmail = `[[${userEmail}]]`;
     console.log("수정 요청자의 email :"+userEmail);
-      
+
     // 게시글 id = > edit-articleDto-id
-  
+
   // 수정 버튼 class :"editBtn"
   // 기존 댓글의 id class :comment-id
   // 기존 댓글 comment => class :commentContent
-  
+
   // 수정 시 출력할 댓글 수정 창 class : commentEditForm
   // 수정 form의 입력 창 class: editedComment
-  
+
   //  수정 버튼 클릭시 기존 작성된 댓글() hide
   // 수정할 댓글 입력 input show
-  
+
   // 현재 보고있는 게시글의 id값
   var article_id = document.querySelector("#edit-articleDto-id").value;
   // 수정 버튼 List
-  var editBtnList = document.querySelectorAll(".editBtn");  
+  var editBtnList = document.querySelectorAll(".editBtn");
   // 기존 댓글 id List
   var comment_idList = document.querySelectorAll(".comment-id");
   // 기존 댓글 commentList
   var commentList = document.querySelectorAll(".commentContent");
-  
+
   // 수정시 출력할 댓글 수정 창List
   var commentEditFormList = document.querySelectorAll(".commentEditForm");
-  
+
   // 수정시 from 내부 input List
   var editCommentInputList = document.querySelectorAll(".editCommentInput");
   // 수정 요청 시 들고 나갈 comment_id 창
@@ -253,65 +259,90 @@
       console.log("comment_id:"+comment_id.value);
       console.log("comment:"+ comment.value);
 
-        
+
   commentEditForm.addEventListener("submit", (e)=>{
         e.preventDefault();
         const articleId = article_id;
         const commentId = comment_id.value;
         
         const editComment = editCommentInput.value;
-        console.log("article_id : "+ articleId);
         console.log("comment_id : "+ commentId);
         console.log("editComment : "+ editComment);
-
+        
 
       //   editBtnList[i].classList.toggle("hide");
       //   comment.classList.toggle("hide");
       // commentEditForm.classList.toggle("hide");
       // comment.innerText= editComment;
 
-        const comment = {
+        const postComment = {
         id: commentId,
-        comment: editComment,
+        comment: editComment
     };
 
     //수정 Rest APi 호출 - fetch()
-    //주의 method : "POST"
+    //주의 method : "post"
 
+      var token = $("meta[name='_csrf']").attr("content");
+      var header = $("meta[name='_csrf_header']").attr("content");
+
+    // 넘길 데이터 json 형식
+     var paramData = JSON.stringify(postComment);
+
+    console.log(paramData);
+
+    // URL
     const url = `/article/${articleId}/commentEdit/${commentId}`;
-    fetch(url,{
-        method: "POST",
-        body : JSON.stringify(comment),
-        headers:{
-            "Content-Type": "application/json"
-        }
-    }).then(response => {
-        //http 응답 코드에 따른 메시지 출력
-        const msg = (response.ok) ? "댓글이 수정 되었습니다." : "댓글 수정 실패..!";
-        alert(msg);
+    console.log(url);
 
-    // 현재 페이지를 새로고침
-      window.location.reload();
+    $.ajax({
+                url      : url,
+                type     : "POST",
+                contentType : "application/json",
+                data     : paramData,
+                beforeSend : function(xhr){
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache   : false,
+                success  : function(result, status){
+
+                    alert("댓글 수정이 완료 되었습니다.");
+                    window.location.reload();
+                },
+                error : function(jqXHR, status, error){
+
+                    if(jqXHR.status == '401'){
+                        alert('로그인 후 이용해주세요');
+                        location.href ="members/login";
+                    }
+                  window.location.reload();
+                }
+
+            });
+
+          // 수정 요청이 끝난 후
+
+
+
+
     });
 
 
-
     });
 
 
-    });
-  
-    
   }
 
-   
+
 
   console.log("article_id:"+article_id);
-  
-  
 
-  
-  
+
+
+
+
   </script>
 
   <a href="/article/list">게시글 목록</a>
