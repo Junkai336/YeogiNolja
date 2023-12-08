@@ -6,6 +6,7 @@ import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 //import com.example.member.repository.ItemImgRepository;
 import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
@@ -26,6 +27,7 @@ public class LodgingService {
     private final LodgingRepository lodgingRepository;
     private final MemberRepository memberRepository;
     private final ItemImgService itemImgService;
+    private final ItemImgRepository itemImgRepository;
 
 
 
@@ -87,6 +89,29 @@ public class LodgingService {
         lodging.setLodgingType(lodgingDto.getLodgingType());
 //        lodging.setRegTime(lodgingDto.getRegTime());
 //        lodging.setUpdateTime(lodgingDto.getUpdateTime());
+
+    }
+
+    public Lodging findById(Long id) {
+        Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        return lodgingEntity;
+    }
+
+    public void deleteLodging(Long id, Lodging target, List<Room> targetRoom) {
+
+        // 숙소 이미지 삭제
+        List<ItemImg> targetLodgingItemImgList = itemImgRepository.findByLodgingId(id);
+        itemImgRepository.deleteAll(targetLodgingItemImgList);
+
+        // 객실 이미지 삭제
+        for (int i = 0; i < targetRoom.size(); i++) {
+            Room roomTarget = targetRoom.get(i);
+            List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomTarget.getId());
+            itemImgRepository.deleteAll(targetRoomItemImgList);
+        }
+
+        lodgingRepository.delete(target);
 
     }
 }

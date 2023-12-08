@@ -32,18 +32,15 @@ import java.util.List;
 public class RoomController {
 
     private final LodgingService lodgingService;
-    private final LodgingRepository lodgingRepository;
     private final RoomService roomService;
-    private final RoomRepository roomRepository;
 
     @GetMapping(value = "lodging/{id}/roomRegistration")
     public String fromLodgingDetailToRoomCreation(@PathVariable Long id, Model model, Principal principal) {
         String email = principal.getName();
 
-
         System.out.println(principal.getName());
 
-        Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Lodging lodgingEntity = lodgingService.findById(id);
 
         if(email.equals(lodgingEntity.getCreatedBy())) {
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
@@ -91,8 +88,8 @@ public class RoomController {
     public String fromLodgingDetailToRoomUpdate(@PathVariable("lodging_id") Long lodgingId, @PathVariable("room_id") Long roomId, Model model, Principal principal) {
         String email = principal.getName();
 
-        Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
-        Room room = roomRepository.findById(roomId).orElseThrow(EntityNotFoundException::new);
+        Lodging lodgingEntity = lodgingService.findById(lodgingId);
+        Room room = roomService.findById(roomId);
 
         if(email.equals(lodgingEntity.getCreatedBy())) {
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
@@ -137,7 +134,7 @@ public class RoomController {
     public String deleteRoom(@PathVariable("lodging_id") Long lodgingId, @PathVariable("room_id") Long roomId, Model model, Principal principal) {
         String email = principal.getName();
 
-        Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
+        Lodging lodgingEntity = lodgingService.findById(lodgingId);
 
         if(email.equals(lodgingEntity.getCreatedBy())) {
 
