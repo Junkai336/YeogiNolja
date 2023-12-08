@@ -116,83 +116,7 @@
     >
     <hr />
   </div>
-<!--
-  <script>
-    var userEmail = `[[${userEmail}]]`;
-    console.log(userEmail);
 
-    var edtiBtnElementList = document.querySelectorAll(".editBtn-{commentDto.id}");
-    var commentContentElementList = document.querySelectorAll(".commentContent-{commentDto.id}");
-    var commentEditFormElementList = document.querySelectorAll( ".commentEditForm-{commentDto.id}");
-
-
-    let commentContentElement;
-    let commentEditFormElement;
-
-    for(let i = 0; i <edtiBtnElementList.length;i++){
-      editBtnElementList[i].addEventListener("click", (e) => {
-    //   const commentContentElement = document.getElementById(
-    //     "commentContent-{commentDto.id}"
-    //   );
-
-      commentContentElement =commentContentElementList[i];
-      commentEditFormElement = commentEditFormElementList[i];
-
-      // Hide the comment content and show the edit form
-      commentContentElement.style.display = "none";
-      commentEditFormElement.style.display = "block";
-    });
-    }
-
-    // var editBtnElement = document.getElementById("editBtn-{commentDto.id}");
-
-    // var commentEditFormElement = document.getElementById(
-    //   "commentEditForm-{commentDto.id}"
-    // );
-    commentEditFormElement.addEventListener("submit", (e) => {
-      e.preventDefault(); // Prevent form submission to the default action
-
-      const editedComment = document.getElementById(
-        "editedComment-{commentDto.id}"
-      ).value;
-
-      /*<![CDATA[*/
-      const commentDto = /*[[${commentDto}]]*/ null; // commentDto를 스크립트에서 사용할 수 있도록 정의
-      const articleDto = /*[[${articleDto}]]*/ null;
-
-      /*]]>*/
-      const commentId = document.querySelector("#edit-comment-id").value;
-
-      const articleId = document.querySelector("#edit-articleDto-id").value;
-
-      console.log(commentId, articleId);
-      // Send an AJAX request to update the comment with the edited content
-      fetch(`/article/${articleId}/commentUpdate/${commentId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          article_id: articleId, // 수정된 부분
-          comment_id: commentId,
-          editedComment: editedComment,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            // Update the comment content with the edited content
-            commentContentElement.textContent = editedComment;
-
-            // Hide the edit form and show the comment content
-            commentEditFormElement.style.display = "none";
-            commentContentElement.style.display = "block";
-          } else {
-            console.error("Failed to update comment:", data.error);
-          }
-        });
-    });
-  </script> -->
   <script>
       var userEmail = `[[${userEmail}]]`;
     console.log("수정 요청자의 email :"+userEmail);
@@ -270,10 +194,6 @@
         console.log("editComment : "+ editComment);
         
 
-      //   editBtnList[i].classList.toggle("hide");
-      //   comment.classList.toggle("hide");
-      // commentEditForm.classList.toggle("hide");
-      // comment.innerText= editComment;
 
         const postComment = {
         id: commentId,
