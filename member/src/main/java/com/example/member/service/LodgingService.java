@@ -10,6 +10,7 @@ import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
+import com.example.member.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.List;
 public class LodgingService {
 
     private final LodgingRepository lodgingRepository;
+    private final RoomRepository roomRepository;
     private final MemberRepository memberRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
@@ -112,6 +114,18 @@ public class LodgingService {
         }
 
         lodgingRepository.delete(target);
+
+    }
+
+    public void emptyRoomGrantedLodgingId(Long id, Lodging lodgingEntity) {
+
+        List<Room> roomList = roomRepository.findAll();
+
+        for (Room room : roomList) {
+            if(room.getLodging() == null) {
+                room.setLodging(lodgingEntity);
+            }
+        }
 
     }
 }

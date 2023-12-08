@@ -85,6 +85,8 @@ public class ReservSellerController {
 
         Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
+        lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodging);
+
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
 
         Member member = lodging.getMember();

@@ -153,15 +153,15 @@ public class UploadFileService {
 
     }
 
+    // nullpointerException 에러 (이미지 지우고 새로운 이미지 넣고 뒤로가기)
     public void backwardUploadFileCheck(Long id) {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
         for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getArticle().getId().equals(id)) {
+            if(uploadFile.getArticle() != null && uploadFile.getArticle().getId().equals(id)) {
                 uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
             }
         }
-
     }
 
     public void backwardUploadFileCheck() {

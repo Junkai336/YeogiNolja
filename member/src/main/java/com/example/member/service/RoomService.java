@@ -267,4 +267,8 @@ public class RoomService {
         Room room = roomRepository.findById(roomId).orElseThrow(EntityNotFoundException::new);
         return room;
     }
+
+    public void saveRoomJS(Room room) {
+        roomRepository.save(room);
+    }
 }

@@ -30,7 +30,6 @@ public class ArticleController {
     @GetMapping(value = "/list")
     public String list(Model model) {
         try {
-            System.out.println("업데이트1");
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
 
@@ -58,7 +57,6 @@ public class ArticleController {
         if (articleDto.getId() != null) {
             Long article_id = articleDto.getId();
             try {
-                System.out.println("업데이트2");
                 uploadFileService.havingIdArticleDelete(articleDto);
                 articleService.articleUpdate(articleDto);
 

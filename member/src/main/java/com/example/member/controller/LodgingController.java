@@ -1,5 +1,6 @@
 package com.example.member.controller;
 
+import com.example.member.constant.ReservationStatus;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
@@ -102,6 +103,8 @@ public class LodgingController {
         Lodging lodgingEntity = lodgingService.findById(id);
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
 
+        lodgingService.emptyRoomGrantedLodgingId(id, lodgingEntity);
+
         List<RoomDto> roomDtoList = roomService.roomDtoList(id);
         List<RoomDto> roomDtoListContainImage = roomService.imageLoad(roomDtoList);
 
@@ -174,25 +177,22 @@ public class LodgingController {
         }
     }
 
-    private final RoomRepository roomRepository;
-
-    @PostMapping(value = "/helloworld")
+    @PostMapping(value = "/addRoom")
     @ResponseBody
-    public String addRoom(@RequestBody Room room) {
-        System.out.println();
-        System.out.println("room.getName(): " + room.getName());
-        System.out.println("room.getPrice(): " + room.getPrice());
-        System.out.println("room.getDetail(): " + room.getDetail());
-        System.out.println("room.getAdult(): " + room.getAdult());
-        System.out.println("room.getChildren(): " + room.getChildren());
-        System.out.println("room.getCheckInTime(): " + room.getCheckInTime());
-        System.out.println("room.getCheckOutTime(): " + room.getCheckOutTime());
-        System.out.println();
+    public void addRoom(@RequestBody Room room) {
+//        System.out.println();
+//        System.out.println("room.getName(): " + room.getName());
+//        System.out.println("room.getPrice(): " + room.getPrice());
+//        System.out.println("room.getDetail(): " + room.getDetail());
+//        System.out.println("room.getAdult(): " + room.getAdult());
+//        System.out.println("room.getChildren(): " + room.getChildren());
+//        System.out.println("room.getCheckInTime(): " + room.getCheckInTime());
+//        System.out.println("room.getCheckOutTime(): " + room.getCheckOutTime());
+//        System.out.println();
 
-        roomRepository.save(room);
+        room.setReservationStatus(ReservationStatus.AVAILABLE);
 
-//        return "redirect:/reserv/lodgingReservContent";
-        return "왜 주소로 가지지 않는거임?";
+        roomService.saveRoomJS(room);
     }
 
 
