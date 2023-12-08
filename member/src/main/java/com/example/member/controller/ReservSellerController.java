@@ -133,7 +133,7 @@ public class ReservSellerController {
 
             model.addAttribute("lodgingDto", lodgingDto);
             model.addAttribute("roomDtoList", roomDtoList);
-            model.addAttribute("checkForm", new ReservDto());
+            model.addAttribute("checkForm", new RoomDto());
 
         }
 
@@ -154,23 +154,20 @@ public class ReservSellerController {
 //        System.out.println("reservDto.getCheckOutTime = "+ reservDto.getCheckOut());
 //        return "reserv/reservPage";
 //    }
-    @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-    public String newCheckDate(ReservDto reservDto){
 
-        ReservDto checkForm = new ReservDto();
-        System.out.println("reservDto.getCheckInTime = "+ checkForm.getCheckIn());
-        System.out.println("reservDto.getCheckOutTime = "+ checkForm.getCheckOut());
-//        LocalDate localDate1 = LocalDate.parse(checkForm.getCheckInTime());
-//        LocalDate localDate2 = LocalDate.parse(checkForm.getCheckOutTime());
-//        System.out.println(localDate1);
-//        System.out.println(localDate2);
+        @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
+    public String newCheckDate(){
+        RoomDto checkForm = new RoomDto();
+
+//        model.addAttribute("checkForm", checkForm);
+        ReservDto reservDto = new ReservDto();
 //        ReservService.newCheckTime(roomForm,reservDto);
-        checkForm.setCheckIn(checkForm.getCheckIn());
-        checkForm.setCheckOut(checkForm.getCheckOut());
+        reservDto.setCheckIn(checkForm.getCheckInTime());
+        reservDto.setCheckOut(checkForm.getCheckOutTime());
 
-        System.out.println("reservDto.getCheckInTime = "+ checkForm.getCheckIn());
-        System.out.println("reservDto.getCheckOutTime = "+ checkForm.getCheckOut());
-        return "";
+        System.out.println("reservDto.getCheckInTime = "+ reservDto.getCheckIn());
+        System.out.println("reservDto.getCheckOutTime = "+ reservDto.getCheckOut());
+        return "reserv/reservPage";
     }
 
 

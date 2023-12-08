@@ -66,12 +66,15 @@
 <!--    </div>-->
 <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
     </form>
-        <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}" th:object="${checkForm}" role="form" method="post" id="check">
+        <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"
+              th:object="${checkForm}" role="form" method="post"
+              id="check">
         <div class="input-group">
+            <input type="hidden" th:field="*{id}">
             <div class="input-group-prepend">
                 <span class="input-group-text">체크인 시간</span>
             </div>
-            <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">
+            <input type="date" th:field="*{checkInTime}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">
         </div>
     <!--    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>-->
 
@@ -79,7 +82,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">체크아웃 시간</span>
             </div>
-            <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">
+            <input type="date" th:field="*{checkOutTime}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">
         </div>
     <!--    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>-->
         </form>
