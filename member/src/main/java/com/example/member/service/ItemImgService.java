@@ -1,8 +1,12 @@
 package com.example.member.service;
 
 import com.example.member.dto.ItemImgDto;
+import com.example.member.dto.LodgingDto;
 import com.example.member.entity.ItemImg;
+import com.example.member.entity.Lodging;
+import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
+import com.example.member.repository.LodgingRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.groovy.parser.antlr4.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,8 +33,17 @@ public class ItemImgService {
 
     private final FileService fileService;
 
+    private final LodgingRepository lodgingRepository;
+
     public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile)
             throws Exception {
+
+        File uploadDir = new File(itemImgLocation);
+
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+
         String oriImgName = itemImgFile.getOriginalFilename();
         String imgName = "";
         String imgUrl = "";
@@ -48,15 +62,20 @@ public class ItemImgService {
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);
     }
-//saveItemImg(ItemImg itemImg - 업로드된 이미지와 관련된 상품이미지 정보를 가진
-    //ItemImg 객체입니다.
-// MultipartFile itemImgFile - 업로드할 상품 이미지 파일 나타내는 MultipartFile
-    //oriImgName  - 업로드된 이미지 파일의 원래 파일명을 저장
 
+    public void saveItemImg(List<MultipartFile> file, Room room) throws Exception {
+        for(int i = 0; i < file.size(); i++) {
+            ItemImg itemImg = new ItemImg();
+            MultipartFile multipartFile = file.get(i);
+            saveItemImg(itemImg, multipartFile);
+            itemImg.setRoom(room);
+            itemImg.setRepimgYn("N");
+        }
 
-    //   itemImg.updateItemImg(oriImgName, imgName, imgUrl);
-    // 업로드된 이미지 파일의 원래파일명, 저장된파일명, 이미지 url을 업데이트
-    // 업데이트된 상품 이미지 정보를 데이터베이스에 저장
+        List<ItemImg> itemImgList =  itemImgRepository.findByRoomId(room.getId());
+        itemImgList.get(0).setRepimgYn("Y");
+
+    }
 
 
     public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception {
@@ -67,10 +86,11 @@ public class ItemImgService {
 
 
             //기존 이미지 파일 삭제
-            if (!StringUtils.isEmpty(savedItemImg.getImgName())) {
-                fileService.deleteFile(itemImgLocation + "/" +
-                        savedItemImg.getImgName());
-            }
+            fileService.deleteFile(itemImgLocation + "/" + savedItemImg.getImgName());
+//            if (!StringUtils.isEmpty(savedItemImg.getImgName())) {
+//                fileService.deleteFile(itemImgLocation + "/" +
+//                        savedItemImg.getImgName());
+//            }
 
             String oriImgName = itemImgFile.getOriginalFilename();
             //새로운 이미지 파일의 원본 파일 이름을 가져온다.
@@ -85,6 +105,8 @@ public class ItemImgService {
         }
     }
 
+
+
     // List Entity -> List Dto
     public List<ItemImgDto> toItemImgDtos() {
         List<ItemImg> itemImgList = itemImgRepository.findAll();
@@ -97,6 +119,32 @@ public class ItemImgService {
         }
 
         return itemImgDtoList;
+    }
+
+    public void updateItemImg(List<MultipartFile> file, Room room) throws Exception {
+
+        List<ItemImg> itemImgList = itemImgRepository.findByRoomId(room.getId());
+        List<ItemImg> itemImgListEdited = new ArrayList<>();
+
+        for(int i = 0; i < file.size(); i++) {
+            ItemImg itemImg = new ItemImg();
+            MultipartFile multipartFile = file.get(i);
+            saveItemImg(itemImg, multipartFile);
+            itemImg.setRoom(room);
+            itemImgListEdited.add(itemImg);
+        }
+
+        for(int i = 0; i < itemImgList.size(); i++) {
+            if(itemImgList.get(i).getRoom().equals(itemImgListEdited.get(i).getRoom())) {
+                itemImgList.get(i).setRoom(itemImgListEdited.get(i).getRoom());
+            }
+        }
+
+    }
+
+
+    public void deleteFile(ItemImg itemImg) throws Exception {
+        fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
     }
 
 

@@ -1,7 +1,9 @@
 package com.example.member.entity;
 
 import com.example.member.dto.ItemImgDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Table(name="item_img")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemImg {
     @Id
     @Column(name="item_img_id")

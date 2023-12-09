@@ -9,6 +9,7 @@ import com.example.member.entity.Member;
 import com.example.member.entity.Room;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.RoomRepository;
+import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
 import lombok.Getter;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,7 @@ public class RoomController {
 
     private final LodgingService lodgingService;
     private final RoomService roomService;
+    private final ItemImgService itemImgService;
 
     @GetMapping(value = "lodging/{id}/roomRegistration")
     public String fromLodgingDetailToRoomCreation(@PathVariable Long id, Model model, Principal principal) {
@@ -156,6 +159,46 @@ public class RoomController {
         }
     }
 
+//    @PostMapping(value = "/editRoom")
+//    @ResponseBody
+//    public void editRoom(@RequestBody Room room) {
+//        Room target = roomService.findById(room.getId());
+//
+//        target.setName(room.getName());
+//        target.setPrice(room.getPrice());
+//        target.setDetail(room.getDetail());
+//        target.setAdult(room.getAdult());
+//        target.setChildren(room.getChildren());
+//        target.setCheckInTime(room.getCheckInTime());
+//        target.setCheckOutTime(room.getCheckOutTime());
+//
+//        roomService.saveRoomJS(target);
+//    }
+//
+//
+//}
 
+    @PostMapping(value = "/editRoom")
+    @ResponseBody
+    public void editRoom(@RequestPart(value = "paramData") Room room,
+                        @RequestPart(value = "img", required = false) List<MultipartFile> file
+    ) throws IOException {
+        Room target = roomService.findById(room.getId());
 
+        target.setName(room.getName());
+        target.setPrice(room.getPrice());
+        target.setDetail(room.getDetail());
+        target.setAdult(room.getAdult());
+        target.setChildren(room.getChildren());
+        target.setCheckInTime(room.getCheckInTime());
+        target.setCheckOutTime(room.getCheckOutTime());
+
+        roomService.saveRoomJS(target);
+
+        try {
+            itemImgService.updateItemImg(file, room);
+        } catch (Exception e) {
+        }
+
+    }
 }

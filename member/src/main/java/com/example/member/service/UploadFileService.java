@@ -36,7 +36,6 @@ public class UploadFileService {
 
     public UploadFileService(String uploadPath) {
         this.rootLocation = Paths.get(uploadPath);
-        System.out.println(rootLocation.toString());
     }
 
     public UploadFile store(MultipartFile file) throws Exception {

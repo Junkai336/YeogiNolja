@@ -211,18 +211,13 @@ public class RoomService {
 
         roomRepository.delete(room);
 
-        List<Room> roomExistList = roomRepository.findAll();
+        // 객실이 존재하는 숙소 탐색 후 숙소 roomExist 상태 변환
+        List<Room> roomList = roomRepository.findAllByLodgingId(lodgingId);
 
-        for(int i = 0; i < roomExistList.size(); i++) {
-            boolean ExistAtLeastOne = roomExistList.get(i).getLodging().getId().equals(lodgingEntity.getId());
-            if(ExistAtLeastOne == true) {
-                lodgingEntity.setRoomExist(RoomExist.Y);
-            } else if (ExistAtLeastOne == false) {
-                lodgingEntity.setRoomExist(RoomExist.N);
-            }
+        if(roomList.isEmpty()) {
+            System.out.println("리스트가 비어있음");
+            lodgingEntity.setRoomExist(RoomExist.N);
         }
-        // 목적 : 객실 쪽에서 숙소의 아이디를 가진 객실이 있으면 상태를 변환하지 않는다.
-        // 이유 : 숙소가 객실을 가져오지 못하니깐.
 
     }
 
