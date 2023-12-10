@@ -8,6 +8,9 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
     <meta id="_csrf_header" name="_csrf_header"
           th:content="${_csrf.headerName}" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script type="text/javascript" src="/js/imgUpload.js"></script>
 </head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -48,7 +51,7 @@
 
 
 </script>
-
+<script type="text/javascript" src="/js/imgUpload.js"></script>
 </th:block>
 
 <div layout:fragment="content">
@@ -280,12 +283,58 @@ function roomRegistration() {
 
 
     <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
-        <img th:src="${roomDto.imgUrl}" class="card-img-top"
-             th:alt="${roomDto.name}" height="600">
-        <p th:text="'객실명: '+${roomDto.name}"></p>
+        <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail"
+             th:alt="${roomDto.name}">
+        <div class="d-flex">
+            <h4 th:text="'객실명: '+${roomDto.name}"></h4>
+
+            <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalToggleLabel">
+                                <span th:text="${roomDto.name}"></span>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div th:utext="${roomDto.detail}"></div>
+                            <hr>
+                            <div class="text-danger">
+                                <h6><b>취소 및 환불 규정</b></h6>
+
+                                <ul>
+                                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+                                    <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
+                                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
+
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-primary ms-auto" data-bs-toggle="modal" href="#exampleModalToggle" role="button">방 상세 보기</a>
+
+        </div>
+
         <p th:text="'객실가격: '+${roomDto.price}"></p>
-        <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
-        <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
+
+        <div class="d-flex">
+            <p  th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
+            <p class="ms-3" th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
+            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
+        </div>
+
+
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <button type="button" onclick="roomEditPage()" class="btn btn-primary editButton">수정</button>
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
@@ -387,32 +436,31 @@ function roomRegistration() {
             <!--            // 가려져 있는 수정 폼 -->
         </div>
         <hr>
-        <div>
 
-            <script>
-                var editForm = document.querySelectorAll('.editForm');
-                var editButton = document.querySelectorAll('.editButton');
+        <script>
+            var editForm = document.querySelectorAll('.editForm');
+            var editButton = document.querySelectorAll('.editButton');
 
-               // console.log(editForm.length);
-               // console.log(editButton.length);
+           // console.log(editForm.length);
+           // console.log(editButton.length);
 
-                for(let l = 0; l < editForm.length; l++) {
-                editForm[l].style.display = 'none';
-                }
-
-
-                function roomEditPage() {
-    for (let i = 0; i < editButton.length; i++) {
-        editButton[i].addEventListener('click', function () {
-            if (editForm[i].classList.contains('hide')) {
-                editForm[i].style.display = 'none';
-                editForm[i].classList.remove('hide');
-            } else {
-                editForm[i].style.display = 'block';
-                editForm[i].classList.add('hide');
+            for(let l = 0; l < editForm.length; l++) {
+            editForm[l].style.display = 'none';
             }
-        })
-    }
+
+
+            function roomEditPage() {
+for (let i = 0; i < editButton.length; i++) {
+    editButton[i].addEventListener('click', function () {
+        if (editForm[i].classList.contains('hide')) {
+            editForm[i].style.display = 'none';
+            editForm[i].classList.remove('hide');
+        } else {
+            editForm[i].style.display = 'block';
+            editForm[i].classList.add('hide');
+        }
+    })
+}
 }
 
 
@@ -424,6 +472,7 @@ var header = $("meta[name='_csrf_header']").attr("content");
 var url = `/room/editRoom`;
 
 var paramData = {
+id: $(".id").val(),
 name: $(".name").val(),
 detail: $(".detail").val(),
 price: $(".price").val(),
@@ -473,14 +522,29 @@ window.location.reload();
 }
 
 
-            </script>
+        </script>
 
+        <div class="text-danger">
+            <h6><b>취소 및 환불 규정</b></h6>
 
-            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary my-2" >예약하기</a>
+            <ul>
+                <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+                <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
+                <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
 
-            <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
-            <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
+            </ul>
         </div>
+
+
+        <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
+        <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
         <hr>
     </div>
 
