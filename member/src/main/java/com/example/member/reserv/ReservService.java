@@ -28,6 +28,14 @@ public class ReservService {
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
 
+    //    public static void newCheckDateTime(ReservDto checkForm, RoomDto roomDto) {
+//        String newCheckDateTime1 = checkForm.getCheckIn()+roomDto.getCheckInTime();
+//        String newCheckDateTime2 = checkForm.getCheckOut()+roomDto.getCheckOutTime();
+//        checkForm.setCheckIn(newCheckDateTime1);
+//        checkForm.setCheckOut(newCheckDateTime2);
+//        System.out.println("checkFormEx = "+checkForm);
+//    }
+
     public void saveReserv(ReservDto reservDto){
         Room room = reservDto.getRoom();
         Lodging lodging = room.getLodging();
