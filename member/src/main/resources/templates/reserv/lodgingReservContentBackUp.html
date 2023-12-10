@@ -3,6 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <!-- include summernote css/js-->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+    <meta id="_csrf_header" name="_csrf_header"
+          th:content="${_csrf.headerName}" />
+</head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
@@ -10,9 +16,39 @@
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-    </script>
+<script th:inline="javascript">
+    $(document).ready(function(){
+        var errorMessage = [[${errorMessage}]];
+        if(errorMessage != null){
+            alert(errorMessage);
+        }
+    //상품등고시 실패 메세지를 받아서 상품등록페이지 재 진입시 alert() 실패사유
+        bindDomEvent();
+
+    });
+// c:\images\셔츠.jpg
+    function bindDomEvent(){
+        $(".custom-file-input").on("change", function() {
+            var fileName = $(this).val().split("\\").pop();  //이미지 파일명
+            var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
+            fileExt = fileExt.toLowerCase(); //소문자 변환
+
+            if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif" && fileExt != "png" && fileExt != "bmp"){
+                alert("이미지 파일만 등록이 가능합니다.");
+                return;
+            }
+
+            $(this).siblings(".custom-file-label").html(fileName);
+        });
+    }
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+            // csrf 라는 url 공격을 막기 위해 적는 것
+
+
+</script>
+
 </th:block>
 
 <div layout:fragment="content">
@@ -42,9 +78,9 @@
             <td th:utext="${lodging.detail}"></td>
             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
             <td th:text="${lodging.address}">a</td>
-            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가</a>
-            </td>
+            <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
+            <!--                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>-->
+            <!--            </td>-->
         </tr>
         </tbody>
     </table>
@@ -62,6 +98,187 @@
         <a href="/lodging/list" class="d-flex justify-content-center">숙소 목록</a>
     </div>
 
+    <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+        <button type="button" onclick="addRoomPage()" class="btn btn-primary">객실 추가</button>
+    </div>
+
+    <div class="add">
+
+    </div>
+
+    <script>
+
+        function addRoomPage () {
+        const addRoom = document.querySelector('.add');
+        if(addRoom.classList.contains('hide')) {
+
+        addRoom.classList.remove("hide");
+
+        addRoom.innerHTML = '';
+        } else {
+
+        addRoom.classList.add("hide");
+
+        addRoom.innerHTML =
+        `
+        <div class = "container w-100">
+        <div class= "d-flex justify-content-center w-50">
+            <form role="form" method="post" enctype="multipart/form-data">
+            <p class="h2">
+                객실 등록
+            </p>
+
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">객실명</span>
+                </div>
+                <input type="text" class="form-control name" placeholder="객실명을 입력해주세요">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">가격</span>
+                </div>
+                <input type="number" class="form-control price" placeholder="객실의 가격을 입력해주세요">
+            </div>
+
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">인원수</span>
+                </div>
+
+                <span>성인</span>
+                <select class="form-select adult" aria-label="Default select example">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <span>아동</span>
+                <select class="form-select children" aria-label="Default select example">
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">객실 상세 내용</span>
+                </div>
+                <textarea class="form-control detail" aria-label="With textarea"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">체크인 시간</span>
+                </div>
+                <input type="time" class="form-control checkInTime" placeholder="체크인 시간을 입력해주세요">
+            </div>
+
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">체크아웃 시간</span>
+                </div>
+                <input type="time" class="form-control checkOutTime" placeholder="체크아웃 시간을 입력해주세요">
+            </div>
+
+                <div class="input-group-prepend">
+                    <span class="input-group-text">대표 이미지 등록</span>
+                </div>
+
+            <div>
+                <div class="form-group">
+                    <div class="custom-file img-div">
+                        <input type="file" class="custom-file-input1" name="itemImgFile">
+                        <label class="custom-file-label"></label>
+                    </div>
+                </div>
+            </div>
+
+                        <div>
+                <div class="form-group">
+                    <div class="custom-file img-div">
+                        <input type="file" class="custom-file-input2" name="itemImgFile">
+                        <label class="custom-file-label"></label>
+                    </div>
+                </div>
+            </div>
+
+                        <div>
+                <div class="form-group">
+                    <div class="custom-file img-div">
+                        <input type="file" class="custom-file-input3" name="itemImgFile">
+                        <label class="custom-file-label"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" onclick="roomRegistration()" class="btn btn-primary mt-1">객실 등록</button>
+            </div>
+
+            </form>
+        </div>
+</div>
+        `;
+        }
+}
+        function roomRegistration() {
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var url = `/lodging/addRoom`;
+    console.log(url);
+    var paramData = {
+        name : $(".name").val(),
+        detail : $(".detail").val(),
+        price : $(".price").val(),
+        adult : $(".adult").val(),
+        children : $(".children").val(),
+        checkInTime : $(".checkInTime").val(),
+        checkOutTime : $(".checkOutTime").val()
+    };
+
+    var param = JSON.stringify(paramData);
+
+    $.ajax({
+        url      : url,
+        type     : "POST",
+        contentType : "application/json",
+        data     : param,
+        beforeSend : function(xhr){
+            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+            xhr.setRequestHeader(header, token);
+        },
+        dataType : "json",
+        cache   : false,
+        success  : function(result, status){
+            alert("객실 정보가 저장되었습니다.");
+  //          window.location.reload();
+            location.href='/';
+        },
+        error : function(jqXHR, status, error){
+
+            if(jqXHR.status == '401'){
+                alert('로그인 후 이용해주세요');
+                location.href='/members/login';
+            } else{
+           //     alert(jqXHR.responseText);
+           window.location.reload();
+            }
+
+        }
+    });
+}
+
+    </script>
+
     <p class="h4 text-center mt-3">
         객실 목록
     </p>
@@ -75,12 +292,201 @@
         <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
         <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary">수정</a>
+            <button type="button" onmouseenter="roomEditPage()" class="btn btn-primary editButton">수정</button>
+            <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
+        </div>
+        <div class="editForm">
+            <!--            가려져 있는 수정 폼-->
+            <div class = "container w-100">
+                <div class= "d-flex justify-content-center w-50">
+                    <form role="form" method="post" enctype="multipart/form-data" th:object="${roomDto}">
+                        <p class="h2">
+                            객실 수정
+                        </p>
+
+                        <input type="hidden" class="id" th:value="*{id}">
+
+                        <div class="input-group mt-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">객실명</span>
+                            </div>
+                            <input type="text" th:value="*{name}" class="form-control name" placeholder="객실명을 입력해주세요">
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">가격</span>
+                            </div>
+                            <input type="number" th:value="*{price}" class="form-control price" placeholder="객실의 가격을 입력해주세요">
+                        </div>
+
+                        <div class="input-group mt-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">인원수</span>
+                            </div>
+
+                            <span>성인</span>
+                            <select th:value="*{adult}" class="form-select adult" aria-label="Default select example">
+                                <option th:selected="${roomDto.adult}=='1'" value="1">1</option>
+                                <option th:selected="${roomDto.adult}=='2'" value="2">2</option>
+                                <option th:selected="${roomDto.adult}=='3'" value="3">3</option>
+                                <option th:selected="${roomDto.adult}=='4'" value="4">4</option>
+                                <option th:selected="${roomDto.adult}=='5'" value="5">5</option>
+                            </select>
+
+                            <span>아동</span>
+                            <select th:value="*{children}" class="form-select children" aria-label="Default select example">
+                                <option th:selected="${roomDto.children}=='0'" value="0">0</option>
+                                <option th:selected="${roomDto.children}=='1'" value="1">1</option>
+                                <option th:selected="${roomDto.children}=='2'" value="2">2</option>
+                                <option th:selected="${roomDto.children}=='3'" value="3">3</option>
+                                <option th:selected="${roomDto.children}=='4'" value="4">4</option>
+                                <option th:selected="${roomDto.children}=='5'" value="5">5</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">객실 상세 내용</span>
+                            </div>
+                            <textarea th:text="*{detail}" class="form-control detail" aria-label="With textarea"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">체크인 시간</span>
+                            </div>
+                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime" placeholder="체크인 시간을 입력해주세요">
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">체크아웃 시간</span>
+                            </div>
+                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime" placeholder="체크아웃 시간을 입력해주세요">
+                        </div>
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">대표 이미지 등록</span>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <div class="custom-file img-div">
+                                    <input type="file" class="custom-file-input1" name="itemImgFile">
+                                    <label class="custom-file-label"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <div class="custom-file img-div">
+                                    <input type="file" class="custom-file-input2" name="itemImgFile">
+                                    <label class="custom-file-label"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="form-group">
+                                <div class="custom-file img-div">
+                                    <input type="file" class="custom-file-input3" name="itemImgFile">
+                                    <label class="custom-file-label"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button type="button" onclick="roomEdit()" class="btn btn-primary mt-1">객실 수정</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!--            // 가려져 있는 수정 폼 -->
         </div>
         <hr>
         <div>
 
+            <script>
+                var editForm = document.querySelectorAll('.editForm');
+                var editButton = document.querySelectorAll('.editButton');
+
+                console.log(editForm.length);
+                console.log(editButton.length);
+
+                for(let l = 0; l < editForm.length; l++) {
+                editForm[l].style.display = 'none';
+                }
+
+
+                function roomEditPage() {
+    for (let i = 0; i < editButton.length; i++) {
+        editButton[i].addEventListener('click', function () {
+            if (editForm[i].classList.contains('hide')) {
+                editForm[i].style.display = 'none';
+                editForm[i].classList.remove('hide');
+            } else {
+                editForm[i].style.display = 'block';
+                editForm[i].classList.add('hide');
+            }
+        })
+    }
+}
+
+
+
+function roomEdit() {
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+var url = `/editRoom`;
+console.log(url);
+var paramData = {
+id: $(".id").val(),
+name: $(".name").val(),
+detail: $(".detail").val(),
+price: $(".price").val(),
+adult: $(".adult").val(),
+children: $(".children").val(),
+checkInTime: $(".checkInTime").val(),
+checkOutTime: $(".checkOutTime").val()
+};
+
+var param = JSON.stringify(paramData);
+
+$.ajax({
+url: url,
+type: "POST",
+contentType: "application/json",
+data: param,
+beforeSend: function (xhr) {
+/* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+xhr.setRequestHeader(header, token);
+},
+dataType: "json",
+cache: false,
+success: function (result, status) {
+window.location.reload();
+},
+error: function (jqXHR, status, error) {
+
+if (jqXHR.status == '401') {
+    alert('로그인 후 이용해주세요');
+    location.href = '/members/login';
+} else {
+alert(jqXHR.responseText);
+    // window.location.reload();
+}
+
+}
+});
+}
+
+
+            </script>
 
 
             <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary my-2" >예약하기</a>
