@@ -61,7 +61,7 @@ public class ReservController {
 
     // 예약 내역
     @GetMapping({"/reservs","/reservs/{page}"})
-    public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
+    public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Reserv reserv, Model model){
 //        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
         List<ReservDto> reservDtoList = reservService.reservDtoList(principal);
         // principal.getName() 현재 로그인된  사용자의 이메일
