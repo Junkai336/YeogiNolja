@@ -78,9 +78,6 @@
             <td th:utext="${lodging.detail}"></td>
             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
             <td th:text="${lodging.address}">a</td>
-<!--            map에 필요한 숙소,주소-->
-            <input type="hidden" name="lodging_address" th:value="${lodging.address}">
-            <input type="hidden" name="lodging_name" th:value="${lodging.name}">
             <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
             <!--                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>-->
             <!--            </td>-->
@@ -108,45 +105,7 @@
     <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
         <button type="button" onclick="addRoomPage()" class="btn btn-primary">객실 추가</button>
     </div>
-    <!------------------------------------------------------------------------------------------------------->
-    <!--    <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}" th:object="${checkForm}" role="form" method="post">-->
-    <!--    <div class="input-group">-->
-    <!--        <div class="input-group-prepend">-->
-    <!--            <span class="input-group-text">체크인 시간</span>-->
-    <!--        </div>-->
-    <!--        <input type="date" th:field="*{checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-    <!--    </div>-->
-    <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-    <!--    <div class="input-group">-->
-    <!--        <div class="input-group-prepend">-->
-    <!--            <span class="input-group-text">체크아웃 시간</span>-->
-    <!--        </div>-->
-    <!--        <input type="date" th:field="*{checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-    <!--    </div>-->
-    <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-    <!--    </form>-->
-    <!--        <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"-->
-    <!--              th:object="${checkForm}" role="form" method="post"-->
-    <!--              id="check">-->
-    <!--        <div class="input-group">-->
-    <!--            <input type="hidden" th:field="*{room.id}">-->
-    <!--            <div class="input-group-prepend">-->
-    <!--                <span class="input-group-text">체크인 시간</span>-->
-    <!--            </div>-->
-    <!--            <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-    <!--        </div>-->
-    <!--    &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-    <!--        <div class="input-group">-->
-    <!--            <div class="input-group-prepend">-->
-    <!--                <span class="input-group-text">체크아웃 시간</span>-->
-    <!--            </div>-->
-    <!--            <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-    <!--        </div>-->
-    <!--    &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-    <!--        </form>-->
-    <!----------------------------------------------------------------------------------------------------->
     <div class="add">
 
     </div>
@@ -312,9 +271,8 @@ function roomRegistration() {
         }
     });
 }
+
     </script>
-<!--  map div  -->
-    <div id="map" style="width:300px;height:200px;"></div>
 
     <p class="h4 text-center mt-3">
         객실 목록
@@ -368,13 +326,9 @@ function roomRegistration() {
         <p th:text="'객실가격: '+${roomDto.price}"></p>
 
         <div class="d-flex">
-            <p  th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
-            <p class="ms-3" th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
+            <p  th:text="'입실: '+${roomDto.checkInTime}"></p>
+            <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
             <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
-            <!--            <button type="submit"-->
-            <!--                    form="check"-->
-            <!--                    th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
-            <!--                    class="btn btn-primary my-2">예약하기</button>-->
         </div>
 
 
@@ -479,6 +433,17 @@ function roomRegistration() {
             <!--            // 가려져 있는 수정 폼 -->
         </div>
         <hr>
+        <h5 class="mb-3"><b>숙소 이용 정보</b></h5>
+
+        <div class="text-dark">
+            <h6><b>기본 정보</b></h6>
+            <ul class="text-secondary">
+                <li><span>22시 이후 입실 시 사전문의 (필수)</span></li>
+                <li><span>무료 Wi-Fi</span></li>
+                <li><span>전 객실 금연</span></li>
+                <li><span>주차 가능</span></li>
+            </ul>
+        </div>
 
             <script>
                 var editForm = document.querySelectorAll('.editForm');
@@ -564,28 +529,71 @@ window.location.reload();
 });
 }
 
-
             </script>
+      
+      <div class="text-dark">
+            <h6><b>인원 추가 정보</b></h6>
+            <ul class="text-secondary">
+                <li><span>1인당 20,000원 (24개월 이상)</span></li>
+                <li><span>24개월 미만 입실 불가, 인원 추가 비용은 1박당 발생</span></li>
+                <li><span>영유아 인원수 포함 / 최대인원 초과 불가</span></li>
+                <li><span>침구 추가 : 1SET 10,000원</span></li>
+                <li><span><b>현장 결제</b></span></li>
+            </ul>
+        </div>
 
-            <div class="text-danger">
-                <h6><b>취소 및 환불 규정</b></h6>
+        <div class="text-dark">
+            <h6><b>공지 사항</b></h6>
 
-                <ul>
-                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
-                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
-                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
-                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
-                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
-                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
-                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
-                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
-                    <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
-                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
+            <ul class="text-secondary">
+                <li><span>안전상의 이유로 24개월 미만은 입실이 절대 불가하십니다.</span></li>
+                <li><span>강풍, 우천 등 기상악화시에는 야외바베큐장 이용이 불가하고 실내에서 사용 할 수 있는 전기그릴만 대여가능합니다.[유료]</span></li>
+                <li><span>전 객시 개별 테라스 바베큐가 불가능한 펜션입니다.</span></li>
+                <li><span>후라이팬, 와인잔은 구비되어 있지 않습니다.</span></li>
+                <li><span>객실타입별 뷰와 월풀욕조 유무가 다르오니 사진과 객실명을 참고해주세요.</span></li>
+                <li><span>꽃게, 해산물 등 비린내가 심한음식은 객실내에서 조리가 불가합니다.</span></li>
+                <li><span>개인화로, 버너, 그릴은 화재위험으로 절대 반입 금지입니다.</span></li>
+            </ul>
+        </div>
 
-                </ul>
-            </div>
+        <div class="text-dark">
+            <h6><b>취소 및 환불 규정</b></h6>
 
+            <ul class="text-secondary">
+                <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+            </ul>
+        </div>
 
+        <div class="text-dark">
+            <h6><b>확인 사항 및 기타</b></h6>
+
+            <ul class="text-secondary">
+                <li><span>24개월 미만 영유아 입실 불가 합니다.</span></li>
+                <li><span>최대 인원 초과시 입실이 불가 합니다.(방문객 불가)</span></li>
+                <li><span>객실 내 육류, 튀김류, 생선류 조리를 할 수 없습니다.</span></li>
+                <li><span>전 객실 애완동물 출입이 불가합니다.</span></li>
+                <li><span>보호자 동반없는 미성년자는 이용하실 수 없습니다.</span></li>
+                <li><span>해당 이미지는 실제와 상이 할 수 있습니다.</span></li>
+                <li><span>이용시설의 분실 및 훼손의 책임은 이용자에게 있으니 주의부탁드립니다.</span></li>
+                <li><span>객실 내에서는 화재 위험물질 (화약, 폭죽 등)은 사용 하실 수 없습니다. (화재로 인한 책음은 사용자에게 있습니다.)</span></li>
+                <li><span>쓰레기는 지정된 장소에 분리하여 주시기 바랍니다.</span></li>
+                <li><span>위의 정보는 펜션의 사정에 따라 변경될 수 있습니다.</span></li>
+                <li><span>성수기 기간동안 일부 객실의 경우 요금변동이 있을 수 있습니다.</span></li>
+            </ul>
+        </div>
+
+        <hr>
+        <h5 class="mb-3"><b>취소 및 환불 규정</b></h5>
+        <ul class="text-secondary">
+            <li><span><b>객실별 취소 정책이 상이하니 객실 상세정보에서 확인해주세요.</b></span></li>
+        </ul>
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
         <hr>
@@ -603,49 +611,7 @@ window.location.reload();
         </div>
     </div>
 
-<!--    map script-->
-    <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
     <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 4 // 지도의 확대 레벨
-            };
-
-        // 지도를 생성합니다
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        // 주소-좌표 변환 객체를 생성합니다
-        var geocoder = new kakao.maps.services.Geocoder();
-
-        // 숙소 명,주소
-        var lodging_address = $('input[name=lodging_address]').val();
-        var lodging_name = $('input[name=lodging_name]').val();
-
-        // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(lodging_address, function(result, status) {
-
-            // 정상적으로 검색이 완료됐으면
-             if (status === kakao.maps.services.Status.OK) {
-
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                // 결과값으로 받은 위치를 마커로 표시합니다
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: coords
-                });
-
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                var infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="width:150px;text-align:center;padding:6px 0;">'+lodging_name+'</div>'
-                });
-                infowindow.open(map, marker);
-
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                map.setCenter(coords);
-            }
-        });
     </script>
 
 </div>
