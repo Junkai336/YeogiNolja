@@ -268,6 +268,25 @@
                         </div>
                         <div class="modal-body">
                             <div th:utext="${roomDto.detail}"></div>
+                            <hr>
+                            <div class="text-danger">
+                                <h6><b>취소 및 환불 규정</b></h6>
+
+                                <ul>
+                                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+                                    <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
+                                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
+
+                                </ul>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -290,15 +309,29 @@
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
         </div>
         <hr>
-        <div>
 
 
+            <div class="text-danger">
+                <h6><b>취소 및 환불 규정</b></h6>
 
+                <ul>
+                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+                    <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
+                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
+
+                </ul>
+            </div>
 
 
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
-        </div>
         <hr>
     </div>
 
