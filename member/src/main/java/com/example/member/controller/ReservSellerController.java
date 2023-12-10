@@ -85,7 +85,7 @@ public class ReservSellerController {
     @GetMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
     public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model) {
 
-        Lodging lodging = lodgingService.findById(lodgingId);
+        Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
         lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodging);
 
