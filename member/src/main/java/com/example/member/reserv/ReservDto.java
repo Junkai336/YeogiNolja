@@ -1,26 +1,25 @@
 package com.example.member.reserv;
 
 import com.example.member.constant.ReservationStatus;
-import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 public class ReservDto {
     private Long id; // 예약 id
 
     private Member member;
 
     private Room room;
-    private Lodging lodging;
 
     //예약자 정보
     @NotEmpty(message = "성명을 입력해주세요")
@@ -32,9 +31,6 @@ public class ReservDto {
     private LocalDateTime reservDate; // 예약일
 
     private ReservationStatus reservationStatus;
-
-    private String checkIn;
-    private String checkOut;
 
     public static ReservDto toReservDto(Reserv reserv){
         Member member = reserv.getMember();
@@ -58,9 +54,7 @@ public class ReservDto {
                         member.getPhoneN3();
         return number;
     }
-
-
-
+    
     // 주문 내역 조회 시 필요한 데이터
     // reservID,숙소네임,숙소 대표이미지, roomId,룸 네임 , memberId, reservName,
     // reservPN,방가격, 예약날짜, 상태, 체크인아웃, 인원(?),
