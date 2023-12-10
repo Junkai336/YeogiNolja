@@ -64,24 +64,66 @@
         <p th:text="${roomSuccessMsg}">성공출력용</p>
     </div>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">번호</th>
-            <th scope="col">숙소명</th>
-            <th scope="col">숙소상세내용</th>
-            <th scope="col">종류</th>
-            <th scope="col">위치</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="lodging : ${lodgingDto}">
-            <th th:text="${lodging.id}">a</th>
-            <td th:text="${lodging.name}">a</td>
-            <td th:utext="${lodging.detail}"></td>
-            <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
-            <td th:text="${lodging.address}">a</td>
-            <!-- map에 필요한 숙소,주소-->
+         <div class="container-fluid mt-3">
+             <div th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
+                 <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
+             <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail span4 rounded float-start"
+                  th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
+                 </a>
+                 <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
+             <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail span4 rounded float-start" style="width:25%"
+                  th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                 </a>
+             </div>
+        </div>
+
+    <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel" tabindex="-1">
+        <div th:each="lodging : ${lodgingDto}">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+        <div class="modal-header">
+            <h5 class="modal-title" id="lodgingModalToggleLabel">
+                <p th:text="${lodging.name}"></p>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+            <div class="modal-body">
+                <p>내용</p>
+            </div>
+
+            <div class="modal-footer">
+                <p>내용</p>
+            </div>
+
+                </div>
+            </div>
+
+</div>
+
+
+
+    </div>
+
+     <table class="table">
+         <thead>
+         <tr>
+             <th scope="col">번호</th>
+             <th scope="col">숙소명</th>
+             <th scope="col">숙소상세내용</th>
+             <th scope="col">종류</th>
+             <th scope="col">위치</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr th:each="lodging : ${lodgingDto}">
+             <th th:text="${lodging.id}">a</th>
+             <td th:text="${lodging.name}">a</td>
+             <td th:utext="${lodging.detail}"></td>
+             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
+             <td th:text="${lodging.address}">a</td>
+             <!-- map에 필요한 숙소,주소-->
             <input type="hidden" name="lodging_address" th:value="${lodging.address}">
             <input type="hidden" name="lodging_name" th:value="${lodging.name}">
             <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
@@ -401,6 +443,7 @@ function roomRegistration() {
                         </p>
 
                         <input type="hidden" class="id" th:value="*{id}">
+                        <input type="hidden" class="reservationStatus" th:value="*{reservationStatus}">
 
                         <div class="input-group mt-3">
                             <div class="input-group-prepend">
@@ -540,7 +583,8 @@ price: $(".price").val(),
 adult: $(".adult").val(),
 children: $(".children").val(),
 checkInTime: $(".checkInTime").val(),
-checkOutTime: $(".checkOutTime").val()
+checkOutTime: $(".checkOutTime").val(),
+reservationStatus: $(".reservationStatus").val()
 };
 
 let formData = new FormData();

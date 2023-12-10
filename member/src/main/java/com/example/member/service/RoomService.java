@@ -241,7 +241,7 @@ public class RoomService {
             for (int l = 0; l < itemImgDtoList.size(); l++) {
                 ItemImgDto itemImgDto = itemImgDtoList.get(l);
 
-                if (itemImgDto.getRepImgYn().equals("Y") && itemImgDto.getRoom().getId().equals(roomDto.getId())) {
+                if (itemImgDto.getRepimgYn().equals("Y") && itemImgDto.getRoom().getId().equals(roomDto.getId())) {
                     roomDto.setImgUrl(itemImgDto.getImgUrl());
                 }
             }

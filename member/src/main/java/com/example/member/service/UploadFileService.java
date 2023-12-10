@@ -70,6 +70,7 @@ public class UploadFileService {
     public UploadFile load(Long fileId) throws Exception {
 
         UploadFile uploadFile = uploadFileRepository.findById(fileId).get();
+        //UploadFile uploadFile = uploadFileRepository.findById(fileId).orElse(null);
         return uploadFileRepository.saveAndFlush(uploadFile);
     }
 

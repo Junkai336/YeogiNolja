@@ -101,19 +101,26 @@ public class LodgingController {
 //    }
 
     @GetMapping(value = "/{id}")
-    public String show(@PathVariable Long id, Model model) {
+    public String show(@PathVariable Long id, Model model) throws Exception {
 
         Lodging lodgingEntity = lodgingService.findById(id);
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
+        LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, id);
+
+//        for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
+//            System.out.println(itemImgDto);
+//            System.out.println("byeworld!");
+//        }
 
         lodgingService.emptyRoomGrantedLodgingId(id, lodgingEntity);
 
         List<RoomDto> roomDtoList = roomService.roomDtoList(id);
         List<RoomDto> roomDtoListContainImage = roomService.imageLoad(roomDtoList);
 
-        model.addAttribute("lodgingDto", lodgingDto);
+        model.addAttribute("lodgingDto", lodgingDtoContainImage);
         model.addAttribute("roomDtoList", roomDtoListContainImage);
         model.addAttribute("prevPage", "LodgingController");
+
 
         return "reserv/lodgingReservContent";
     }

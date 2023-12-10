@@ -49,7 +49,7 @@ public class UploadFileController {
     }
 
     @GetMapping("/image/{fileId}")
-    public ResponseEntity<?> serveFile(@PathVariable Long fileId){
+    public ResponseEntity<?> serveFile(@PathVariable Long fileId) throws Exception{
         try {
             UploadFile uploadFile = uploadFileService.load(fileId);
 

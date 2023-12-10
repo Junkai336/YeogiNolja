@@ -24,7 +24,7 @@ public class ItemImgDto {
 
     private String imgUrl;
 
-    private String repImgYn;
+    private String repimgYn;
 
     private Room room;
 
@@ -64,7 +64,7 @@ public class ItemImgDto {
         itemImgDto.setImgUrl(itemImg.getImgUrl());
         itemImgDto.setOriImgName(itemImg.getOriImgName());
         itemImgDto.setImgName(itemImg.getImgName());
-        itemImgDto.setRepImgYn(itemImg.getRepimgYn());
+        itemImgDto.setRepimgYn(itemImg.getRepimgYn());
         itemImgDto.setLodging(itemImg.getLodging());
         itemImgDto.setRoom(itemImg.getRoom());
         return itemImgDto;
