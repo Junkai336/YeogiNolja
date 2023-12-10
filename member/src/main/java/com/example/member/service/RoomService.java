@@ -2,6 +2,7 @@ package com.example.member.service;
 
 import com.example.member.constant.ReservationStatus;
 import com.example.member.constant.RoomExist;
+import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.ItemImg;
@@ -19,6 +20,7 @@ import org.thymeleaf.util.StringUtils;
 import javax.persistence.EntityNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -209,18 +211,59 @@ public class RoomService {
 
         roomRepository.delete(room);
 
-        List<Room> roomExistList = roomRepository.findAll();
+        // 객실이 존재하는 숙소 탐색 후 숙소 roomExist 상태 변환
+        List<Room> roomList = roomRepository.findAllByLodgingId(lodgingId);
 
-        for(int i = 0; i < roomExistList.size(); i++) {
-            boolean ExistAtLeastOne = roomExistList.get(i).getLodging().getId().equals(lodgingEntity.getId());
-            if(ExistAtLeastOne == true) {
-                lodgingEntity.setRoomExist(RoomExist.Y);
-            } else if (ExistAtLeastOne == false) {
-                lodgingEntity.setRoomExist(RoomExist.N);
-            }
+        if(roomList.isEmpty()) {
+            System.out.println("리스트가 비어있음");
+            lodgingEntity.setRoomExist(RoomExist.N);
         }
-        // 목적 : 객실 쪽에서 숙소의 아이디를 가진 객실이 있으면 상태를 변환하지 않는다.
-        // 이유 : 숙소가 객실을 가져오지 못하니깐.
 
+    }
+
+
+    public List<RoomDto> imageLoad(List<RoomDto> roomDtoList) {
+        for (int i = 0; i < roomDtoList.size(); i++) {
+            // 객실 DTO i번쨰 꺼내오기
+            RoomDto roomDto = roomDtoList.get(i);
+            // 꺼내온 숙소 DTO의 아이디를 조회하고 아이디에 맞는 이미지들을 리스트로 뽑아오기
+            List<ItemImg> itemImgList = itemImgRepository.findByRoomId(roomDto.getId());
+
+            List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+            for (ItemImg itemImg : itemImgList) {
+                ItemImgDto itemImgDto = ItemImgDto.toItemImgDto(itemImg);
+                itemImgDtoList.add(itemImgDto);
+            }
+
+            // 숙소 DTO 대표 imgUrl을 저장하기 위한 과정
+            for (int l = 0; l < itemImgDtoList.size(); l++) {
+                ItemImgDto itemImgDto = itemImgDtoList.get(l);
+
+                if (itemImgDto.getRepImgYn().equals("Y") && itemImgDto.getRoom().getId().equals(roomDto.getId())) {
+                    roomDto.setImgUrl(itemImgDto.getImgUrl());
+                }
+            }
+
+            // 숙소 DTO에 이미지 DTO 저장
+            roomDto.setItemImgDtoList(itemImgDtoList);
+            // 다시 숙소 DTO에 저장
+            roomDtoList.set(i, roomDto);
+        }
+        return roomDtoList;
+    }
+
+    public List<Room> findAllByLodgingId(Long id) {
+        List<Room> roomList = roomRepository.findAllByLodgingId(id);
+        return roomList;
+    }
+
+    public Room findById(Long roomId) {
+        Room room = roomRepository.findById(roomId).orElseThrow(EntityNotFoundException::new);
+        return room;
+    }
+
+    public void saveRoomJS(Room room) {
+        roomRepository.save(room);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.member.entity;
 
 import com.example.member.article.Article;
+import com.example.member.constant.EditingExceptionConsideration;
 import com.example.member.dto.RoomDto;
 import com.example.member.dto.UploadFileDto;
 import lombok.*;
@@ -33,6 +34,9 @@ public class UploadFile extends BaseEntity {
 
     private long size;                      // 4476873 (byte)
 
+    @Enumerated(EnumType.STRING)
+    private EditingExceptionConsideration editingExceptionConsideration; // 서머노트 업로드 이미지 편집시 예외 잡기용 필드 (평소에 N으로 둘 것)
+
     @JoinColumn(name = "article_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Article article;
@@ -48,6 +52,7 @@ public class UploadFile extends BaseEntity {
         uploadFile.setFilePath(uploadFileDto.getFilePath());
         uploadFile.setContentType(uploadFileDto.getContentType());
         uploadFile.setSize(uploadFileDto.getSize());
+        uploadFile.setEditingExceptionConsideration(uploadFileDto.getEditingExceptionConsideration());
         uploadFile.setArticle(article);
 
         return uploadFile;

@@ -11,27 +11,24 @@ import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
 import com.example.member.reserv.ReservDto;
-import com.example.member.reserv.ReservService;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.ReservSellerService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 public class ReservSellerController {
 
     private final LodgingService lodgingService;
@@ -90,6 +87,8 @@ public class ReservSellerController {
 
         Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
+        lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodging);
+
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
 
         Member member = lodging.getMember();
@@ -132,8 +131,9 @@ public class ReservSellerController {
             // -----------------------------------------------------------
 
             model.addAttribute("lodgingDto", lodgingDto);
+            model.addAttribute("roomForm", new RoomDto());
             model.addAttribute("roomDtoList", roomDtoList);
-            model.addAttribute("checkForm", new RoomDto());
+
 
         }
 
@@ -141,34 +141,17 @@ public class ReservSellerController {
 
     }
 
+
 //    @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-//    public String newCheckDate(Model model){
-//        RoomDto checkForm = new RoomDto();
-//        model.addAttribute("checkForm", checkForm);
+//    public String newCheckDate(ReservDto checkForm, RoomDto roomDto){ // 룸 디티오 말고
 //        ReservDto reservDto = new ReservDto();
-////        ReservService.newCheckTime(roomForm,reservDto);
+//        System.out.println("checkForm = "+ checkForm);
+//        ReservService.newCheckDateTime(checkForm,roomDto);
 //        reservDto.setCheckIn(checkForm.getCheckInTime());
 //        reservDto.setCheckOut(checkForm.getCheckOutTime());
-//
-//        System.out.println("reservDto.getCheckInTime = "+ reservDto.getCheckIn());
-//        System.out.println("reservDto.getCheckOutTime = "+ reservDto.getCheckOut());
-//        return "reserv/reservPage";
+
+//        System.out.println("reservDto.getCheckIn = "+ reservDto.getCheckIn());
+//        System.out.println("reservDto.getCheckOut = "+ reservDto.getCheckOut());
+//        return "checkForm";
 //    }
-
-        @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-    public String newCheckDate(){
-        RoomDto checkForm = new RoomDto();
-
-//        model.addAttribute("checkForm", checkForm);
-        ReservDto reservDto = new ReservDto();
-//        ReservService.newCheckTime(roomForm,reservDto);
-        reservDto.setCheckIn(checkForm.getCheckInTime());
-        reservDto.setCheckOut(checkForm.getCheckOutTime());
-
-        System.out.println("reservDto.getCheckInTime = "+ reservDto.getCheckIn());
-        System.out.println("reservDto.getCheckOutTime = "+ reservDto.getCheckOut());
-        return "reserv/reservPage";
-    }
-
-
 }

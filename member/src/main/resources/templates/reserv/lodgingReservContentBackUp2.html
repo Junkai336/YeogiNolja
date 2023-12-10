@@ -78,9 +78,6 @@
             <td th:utext="${lodging.detail}"></td>
             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
             <td th:text="${lodging.address}">a</td>
-<!--            map에 필요한 숙소,주소-->
-            <input type="hidden" name="lodging_address" th:value="${lodging.address}">
-            <input type="hidden" name="lodging_name" th:value="${lodging.name}">
             <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
             <!--                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>-->
             <!--            </td>-->
@@ -108,45 +105,7 @@
     <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
         <button type="button" onclick="addRoomPage()" class="btn btn-primary">객실 추가</button>
     </div>
-    <!------------------------------------------------------------------------------------------------------->
-    <!--    <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}" th:object="${checkForm}" role="form" method="post">-->
-    <!--    <div class="input-group">-->
-    <!--        <div class="input-group-prepend">-->
-    <!--            <span class="input-group-text">체크인 시간</span>-->
-    <!--        </div>-->
-    <!--        <input type="date" th:field="*{checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-    <!--    </div>-->
-    <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-    <!--    <div class="input-group">-->
-    <!--        <div class="input-group-prepend">-->
-    <!--            <span class="input-group-text">체크아웃 시간</span>-->
-    <!--        </div>-->
-    <!--        <input type="date" th:field="*{checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-    <!--    </div>-->
-    <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-    <!--    </form>-->
-    <!--        <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"-->
-    <!--              th:object="${checkForm}" role="form" method="post"-->
-    <!--              id="check">-->
-    <!--        <div class="input-group">-->
-    <!--            <input type="hidden" th:field="*{room.id}">-->
-    <!--            <div class="input-group-prepend">-->
-    <!--                <span class="input-group-text">체크인 시간</span>-->
-    <!--            </div>-->
-    <!--            <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-    <!--        </div>-->
-    <!--    &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-    <!--        <div class="input-group">-->
-    <!--            <div class="input-group-prepend">-->
-    <!--                <span class="input-group-text">체크아웃 시간</span>-->
-    <!--            </div>-->
-    <!--            <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-    <!--        </div>-->
-    <!--    &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-    <!--        </form>-->
-    <!----------------------------------------------------------------------------------------------------->
     <div class="add">
 
     </div>
@@ -312,9 +271,8 @@ function roomRegistration() {
         }
     });
 }
+
     </script>
-<!--  map div  -->
-    <div id="map" style="width:300px;height:200px;"></div>
 
     <p class="h4 text-center mt-3">
         객실 목록
@@ -322,62 +280,12 @@ function roomRegistration() {
 
 
     <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
-        <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail"
-             th:alt="${roomDto.name}">
-        <div class="d-flex">
-        <h4 th:text="'객실명: '+${roomDto.name}"></h4>
-
-            <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalToggleLabel">
-                                <span th:text="${roomDto.name}"></span>
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div th:utext="${roomDto.detail}"></div>
-                            <hr>
-                            <div class="text-danger">
-                                <h6><b>취소 및 환불 규정</b></h6>
-
-                                <ul>
-                                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
-                                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
-                                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
-                                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
-                                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
-                                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
-                                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
-                                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
-                                    <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
-                                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
-
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a class="btn btn-primary ms-auto" data-bs-toggle="modal" href="#exampleModalToggle" role="button">방 상세 보기</a>
-
-        </div>
-
+        <img th:src="${roomDto.imgUrl}" class="card-img-top"
+             th:alt="${roomDto.name}" height="600">
+        <p th:text="'객실명: '+${roomDto.name}"></p>
         <p th:text="'객실가격: '+${roomDto.price}"></p>
-
-        <div class="d-flex">
-            <p  th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
-            <p class="ms-3" th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
-            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
-            <!--            <button type="submit"-->
-            <!--                    form="check"-->
-            <!--                    th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
-            <!--                    class="btn btn-primary my-2">예약하기</button>-->
-        </div>
-
-
+        <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
+        <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <button type="button" onclick="roomEditPage()" class="btn btn-primary editButton">수정</button>
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
@@ -479,6 +387,7 @@ function roomRegistration() {
             <!--            // 가려져 있는 수정 폼 -->
         </div>
         <hr>
+        <div>
 
             <script>
                 var editForm = document.querySelectorAll('.editForm');
@@ -515,7 +424,6 @@ var header = $("meta[name='_csrf_header']").attr("content");
 var url = `/room/editRoom`;
 
 var paramData = {
-id: $(".id").val(),
 name: $(".name").val(),
 detail: $(".detail").val(),
 price: $(".price").val(),
@@ -567,27 +475,12 @@ window.location.reload();
 
             </script>
 
-            <div class="text-danger">
-                <h6><b>취소 및 환불 규정</b></h6>
 
-                <ul>
-                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
-                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
-                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
-                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
-                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
-                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
-                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
-                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
-                    <li><span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span></li>
-                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
-
-                </ul>
-            </div>
-
+            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary my-2" >예약하기</a>
 
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
+        </div>
         <hr>
     </div>
 
@@ -603,49 +496,7 @@ window.location.reload();
         </div>
     </div>
 
-<!--    map script-->
-    <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
     <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 4 // 지도의 확대 레벨
-            };
-
-        // 지도를 생성합니다
-        var map = new kakao.maps.Map(mapContainer, mapOption);
-
-        // 주소-좌표 변환 객체를 생성합니다
-        var geocoder = new kakao.maps.services.Geocoder();
-
-        // 숙소 명,주소
-        var lodging_address = $('input[name=lodging_address]').val();
-        var lodging_name = $('input[name=lodging_name]').val();
-
-        // 주소로 좌표를 검색합니다
-        geocoder.addressSearch(lodging_address, function(result, status) {
-
-            // 정상적으로 검색이 완료됐으면
-             if (status === kakao.maps.services.Status.OK) {
-
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                // 결과값으로 받은 위치를 마커로 표시합니다
-                var marker = new kakao.maps.Marker({
-                    map: map,
-                    position: coords
-                });
-
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                var infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="width:150px;text-align:center;padding:6px 0;">'+lodging_name+'</div>'
-                });
-                infowindow.open(map, marker);
-
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                map.setCenter(coords);
-            }
-        });
     </script>
 
 </div>

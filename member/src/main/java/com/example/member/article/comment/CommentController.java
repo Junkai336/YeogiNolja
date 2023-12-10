@@ -8,13 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.HashMap;
 
 
 @Controller
@@ -26,24 +24,22 @@ public class CommentController {
 
 // 댓글 생성
 
-    @GetMapping("/article/{article_id}/comment")
-    public String newComment(@PathVariable Long article_id,
-                             @Valid CommentDto commentDto, BindingResult result,
-                             Principal principal
-            ,Model model){
+    @PostMapping("/article/{article_id}/comment")
+    public void newComment(@PathVariable("article_id") Long article_id,
+                             @RequestBody CommentDto commentDto, BindingResult result,
+                             Principal principal, Model model){
         System.out.println(article_id);
+        System.out.println(commentDto.getComment());
         String email = principal.getName().toString();
         commentService.newComment(commentDto, email, article_id);
         try {
             ArticleDto articleDto = articleService.findArticle(article_id);
-            model.addAttribute("articleDto", articleDto);
             // CommentList 가 추가된 board 를 모델에 담아 리턴
         }catch (Exception e){
             model.addAttribute("errorMessage", result.getFieldError());
 
         }
 
-        return "redirect:/article/"+article_id;
 
     }
 
@@ -61,15 +57,25 @@ public class CommentController {
         return "redirect:/article/"+article_id;
     }
 
+//    @PostMapping(value = "/article/{article_id}/editComment/{comment_id}")
+//    public String commentEdit(@PathVariable("article_id") Long article_id,
+//        @PathVariable("comment_id") Long comment_id,@ModelAttribute CommentDto commentDto){
+//        commentService.update(comment_id, commentDto);
+//
+//        return "redirect:/article/"+article_id;
+//
+//    }
 
-    @PutMapping("/article/{article_id}/commentUpdate/{comment_id}")
-    public ResponseEntity<CommentDto> commentUpdate(@PathVariable("article_id") Long article_id,
-                                                    @PathVariable("comment_id")Long comment_id,
-                                                    @RequestBody CommentDto commentDto){
-        CommentDto commentDto1 = commentService.update(article_id, comment_id, commentDto);
-
-        return ResponseEntity.status(HttpStatus.OK).body(commentDto1);
+    @PostMapping(value = "/article/{article_id}/commentEdit/{comment_id}")
+    public void editComment(@PathVariable("comment_id") Long comment_id, @PathVariable("article_id") Long article_id
+            , @RequestBody EditCommentDto editCommentDto){
+        System.out.println("view에서 넘어온 내용! : 아이디"+editCommentDto.getId());
+        System.out.println("view에서 넘어온 내용! : 내용"+editCommentDto.getComment());
+        commentService.update(comment_id, editCommentDto);
     }
+
+
+
 
 
 }
