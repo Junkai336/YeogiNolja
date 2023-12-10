@@ -8,6 +8,10 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
     <meta id="_csrf_header" name="_csrf_header"
           th:content="${_csrf.headerName}" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script type="text/javascript" src="/js/imgUpload.js"></script>
+    <script type="text/javascript" src="/js/imgUploadRoom.js"></script>
 </head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -48,7 +52,7 @@
 
 
 </script>
-
+<script type="text/javascript" src="/js/imgUpload.js"></script>
 </th:block>
 
 <div layout:fragment="content">
@@ -175,7 +179,8 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">객실 상세 내용</span>
                 </div>
-                <textarea class="form-control detail" aria-label="With textarea"></textarea>
+            <label th:for="summernote" class="form-label"></label>
+            <textarea id="summernote" class="form-control" name="summernote" aria-label="With textarea" th:field="*{detail}" rows="3"></textarea>
             </div>
 
             <div class="input-group">
