@@ -3,7 +3,9 @@ package com.example.member.dto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Room;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ItemImgDto {
     private Long id;
 
