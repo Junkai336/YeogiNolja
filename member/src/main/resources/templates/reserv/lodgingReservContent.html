@@ -664,6 +664,11 @@ window.location.reload();
     <!--    map script-->
     <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
     <script>
+
+        // 콘솔창에 뜨는 A parser-blocking, cross site 오류는 document.write로 스크립트로 스크립트를 생성하는 것은 가급적
+        // 자제해달라는 문구
+        // 카카오의 답변에 따르면
+        // 지도가 로드되지 않는게 아니라면 무시해도 된다.
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
