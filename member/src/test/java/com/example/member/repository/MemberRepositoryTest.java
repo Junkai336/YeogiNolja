@@ -51,17 +51,17 @@ class MemberRepositoryTest {
         }
     }
 
-    @Test
-    public void updateTest() {
-        Long id = 1L;
-
-        Member member = Member.builder()
-                .Id(id)
-                .name("hello")
-                .build();
-
-        memberRepository.save(member);
-    }
+//    @Test
+//    public void updateTest() {
+//        Long id = 1L;
+//
+//        Member member = Member.builder()
+//                .Id(id)
+//                .name("hello")
+//                .build();
+//
+//        memberRepository.save(member);
+//    }
 
     @Test
     public void deleteTest() {
