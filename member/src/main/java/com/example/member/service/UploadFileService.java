@@ -67,7 +67,7 @@ public class UploadFileService {
         }
     }
 
-    public UploadFile load(Long fileId) {
+    public UploadFile load(Long fileId) throws Exception {
 
         UploadFile uploadFile = uploadFileRepository.findById(fileId).get();
         return uploadFileRepository.saveAndFlush(uploadFile);
