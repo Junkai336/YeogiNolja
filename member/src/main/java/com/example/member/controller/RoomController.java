@@ -4,6 +4,7 @@ import com.example.member.constant.ReservationStatus;
 import com.example.member.constant.RoomExist;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
+import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
@@ -178,24 +179,18 @@ public class RoomController {
 //
 //}
 
-    @PostMapping(value = "/editRoom")
+    @RequestMapping(value = "/room/editRoom", method = {RequestMethod.POST})
     @ResponseBody
     public void editRoom(@RequestPart(value = "paramData") Room room,
                         @RequestPart(value = "img", required = false) List<MultipartFile> file
     ) throws IOException {
-        Room target = roomService.findById(room.getId());
 
-        target.setName(room.getName());
-        target.setPrice(room.getPrice());
-        target.setDetail(room.getDetail());
-        target.setAdult(room.getAdult());
-        target.setChildren(room.getChildren());
-        target.setCheckInTime(room.getCheckInTime());
-        target.setCheckOutTime(room.getCheckOutTime());
+        Room roomOriginal = roomService.findById(room.getId());
 
-        roomService.saveRoomJS(target);
+        roomService.saveRoomJS(room);
 
         try {
+            itemImgService.deleteImg(roomOriginal);
             itemImgService.updateItemImg(file, room);
         } catch (Exception e) {
         }

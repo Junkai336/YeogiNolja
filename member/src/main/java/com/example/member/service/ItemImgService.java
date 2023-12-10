@@ -123,7 +123,6 @@ public class ItemImgService {
 
     public void updateItemImg(List<MultipartFile> file, Room room) throws Exception {
 
-        List<ItemImg> itemImgList = itemImgRepository.findByRoomId(room.getId());
         List<ItemImg> itemImgListEdited = new ArrayList<>();
 
         for(int i = 0; i < file.size(); i++) {
@@ -132,13 +131,9 @@ public class ItemImgService {
             saveItemImg(itemImg, multipartFile);
             itemImg.setRoom(room);
             itemImgListEdited.add(itemImg);
+            itemImg.setRepimgYn("N");
         }
-
-        for(int i = 0; i < itemImgList.size(); i++) {
-            if(itemImgList.get(i).getRoom().equals(itemImgListEdited.get(i).getRoom())) {
-                itemImgList.get(i).setRoom(itemImgListEdited.get(i).getRoom());
-            }
-        }
+            itemImgListEdited.get(0).setRepimgYn("Y");
 
     }
 
@@ -148,4 +143,13 @@ public class ItemImgService {
     }
 
 
+    public void deleteImg(Room roomOriginal) throws Exception {
+        List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomOriginal.getId());
+
+        for(ItemImg itemImg : targetRoomItemImgList) {
+            deleteFile(itemImg);
+        itemImgRepository.delete(itemImg);
+        }
+
+    }
 }
