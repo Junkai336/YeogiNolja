@@ -252,12 +252,39 @@
 
 
     <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
-        <img th:src="${roomDto.imgUrl}" class="card-img-top"
-             th:alt="${roomDto.name}" height="600">
-        <p th:text="'객실명: '+${roomDto.name}"></p>
+        <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail"
+             th:alt="${roomDto.name}">
+        <div class="d-flex">
+        <h4 th:text="'객실명: '+${roomDto.name}"></h4>
+
+            <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalToggleLabel">
+                                <span th:text="${roomDto.name}"></span>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div th:utext="${roomDto.detail}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-primary ms-auto" data-bs-toggle="modal" href="#exampleModalToggle" role="button">방 상세 보기</a>
+
+        </div>
+
         <p th:text="'객실가격: '+${roomDto.price}"></p>
-        <p th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
-        <p th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
+
+        <div class="d-flex">
+            <p  th:text="'체크인시간: '+${roomDto.checkInTime}"></p>
+            <p class="ms-3" th:text="'체크아웃시간: '+${roomDto.checkOutTime}"></p>
+            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
+        </div>
+
+
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary">수정</a>
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
@@ -267,7 +294,7 @@
 
 
 
-            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary my-2" >예약하기</a>
+
 
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
