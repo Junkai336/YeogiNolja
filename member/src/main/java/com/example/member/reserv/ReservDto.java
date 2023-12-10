@@ -21,6 +21,8 @@ public class ReservDto {
 
     private Room room;
 
+    private Lodging lodging;
+
     //예약자 정보
     @NotEmpty(message = "성명을 입력해주세요")
     private String reservName; // 예약자 이름
@@ -31,6 +33,9 @@ public class ReservDto {
     private LocalDateTime reservDate; // 예약일
 
     private ReservationStatus reservationStatus;
+
+    private String checkIn;
+    private String checkOut;
 
     public static ReservDto toReservDto(Reserv reserv){
         Member member = reserv.getMember();

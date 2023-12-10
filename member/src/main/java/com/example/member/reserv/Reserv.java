@@ -45,6 +45,11 @@ public class Reserv extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus; // 예약 상태
 
+    @Column
+    private String checkIn;
+    @Column
+    private String checkOut;
+
 
     // 예약 생성
     public static Reserv createReserv(ReservDto reservDto, Lodging lodging){
