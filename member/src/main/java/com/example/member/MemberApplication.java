@@ -13,7 +13,8 @@ public class MemberApplication {
 
 	@Bean(name = "uploadPath")
 	public String uploadPath() {
-		return "D:/shop/item";
+//		return "D:/shop/item";
+		return "C:/Dev/item";	// 임시경로
 	}
 
 }
