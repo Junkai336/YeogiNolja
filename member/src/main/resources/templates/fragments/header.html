@@ -38,7 +38,7 @@
                         <a class="nav-link"  href="/reserv/reservs">나의 예약 현황</a>
                     </li>
                     <li class="nav-item"  sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                        <a class="nav-link"  href="/members/members">회원 관리</a>
+                        <a class="nav-link"  href="/members/list">회원 관리</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAnonymous()">
                         <a class="nav-link" href="/members/login">로그인</a>
