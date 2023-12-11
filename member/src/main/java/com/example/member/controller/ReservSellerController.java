@@ -19,6 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -135,9 +137,17 @@ public class ReservSellerController {
     }
 
         @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-    public void newCheckDate(ReservDto checkForm, Room room){ // 룸 디티오 말고
-        System.out.println("checkForm = "+ checkForm);
+    public String newCheckDate(ReservDto checkForm, Room room,
+                               @RequestParam("lodgingId") String lodgingId,
+                               @RequestParam("checkIn") String checkIn,
+                               @RequestParam("checkOut") String checkOut){ // 룸 디티오 말고
+
+            System.out.println("paramlodgingId = " +lodgingId);
+            System.out.println("paramCheckIn = " +checkIn);
+            System.out.println("paramCheckOut = " +checkOut);
+//        System.out.println("checkForm = "+ checkForm);
         reservService.newCheckDateTime(checkForm,room);
+        return "redirect:/reserv/lodgingReservContent/{lodging_id}";
     }
 
 }
