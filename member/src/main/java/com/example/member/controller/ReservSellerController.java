@@ -137,6 +137,7 @@ public class ReservSellerController {
     }
 
         @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
+
     public String newCheckDate(ReservDto checkForm, Room room,
                                @RequestParam("lodgingId") String lodgingId,
                                @RequestParam("checkIn") String checkIn,
@@ -148,6 +149,7 @@ public class ReservSellerController {
 //        System.out.println("checkForm = "+ checkForm);
         reservService.newCheckDateTime(checkForm,room);
         return "redirect:/reserv/lodgingReservContent/{lodging_id}";
+
     }
 
 }
