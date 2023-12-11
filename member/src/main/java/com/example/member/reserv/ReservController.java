@@ -2,6 +2,7 @@ package com.example.member.reserv;
 
 
 import com.example.member.repository.MemberRepository;
+import com.example.member.reserv.reservDate.ReservedDateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,9 +28,9 @@ public class ReservController {
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
     @GetMapping("/roomReservation/{room_id}") // roomId/reserv
-    public String newReserv (@PathVariable("room_id") Long roomId , Principal principal, Model model){
+    public String newReserv (@PathVariable("room_id") Long roomId, Principal principal,Reserv reserv, Model model){
         try {
-            ReservDto reservDto = reservService.newReserv(roomId, principal);
+            ReservDto reservDto = reservService.newReserv(roomId, principal,reserv);
             model.addAttribute("reservDto", reservDto);
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());

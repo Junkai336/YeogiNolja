@@ -7,6 +7,7 @@ import com.example.member.entity.Room;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
+import com.example.member.reserv.reservDate.ReservedDateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +56,7 @@ public class ReservService {
         }
     }
 
-    public ReservDto newReserv(Long roomId, Principal principal) throws Exception{
+    public ReservDto newReserv(Long roomId, Principal principal,Reserv reserv) throws Exception{
         ReservDto reservDto = new ReservDto();
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException::new);
@@ -65,9 +66,9 @@ public class ReservService {
         reservDto.setReservName(member.getName());
         reservDto.setRoom(room); // room id
         reservDto.setMember(member); // member email
+        reservDto.setCheckIn(reserv.getCheckIn());
         return reservDto;
     }
-
 
     // 예약 리스트 만들기
     public List<ReservDto> reservDtoList(Principal principal){
@@ -101,7 +102,6 @@ public class ReservService {
 //    }
 
 
-
     // Controller로 부터 ReservId를 넘겨받아
     // 예약한 숙소의 상태를 변경 시키는 Reserv의 cancelReserv() 메서드 호출
     public void cancelReserv(Long reservId) {
@@ -120,6 +120,8 @@ public class ReservService {
         }
         return false;
     }
+
+
 
 
 //        // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호

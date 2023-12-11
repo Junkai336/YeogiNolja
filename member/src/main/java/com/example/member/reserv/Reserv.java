@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "reserv")
@@ -68,5 +66,4 @@ public class Reserv extends BaseEntity {
     public void cancelReserv() {
         this.reservationStatus = ReservationStatus.AVAILABLE;
     }
-
 }
