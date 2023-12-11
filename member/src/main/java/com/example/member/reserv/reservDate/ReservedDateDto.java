@@ -1,7 +1,6 @@
 package com.example.member.reserv.reservDate;
 
 import com.example.member.entity.Room;
-import com.example.member.reserv.Reserv;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

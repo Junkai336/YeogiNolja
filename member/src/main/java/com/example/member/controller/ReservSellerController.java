@@ -9,8 +9,10 @@ import com.example.member.entity.Member;
 import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
+import com.example.member.reserv.Reserv;
 import com.example.member.reserv.ReservDto;
 import com.example.member.reserv.ReservService;
+import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
@@ -36,8 +38,6 @@ public class ReservSellerController {
     private final LodgingRepository lodgingRepository;
     private final RoomService roomService;
     private final ItemImgRepository itemImgRepository;
-    private final ReservService reservService;
-    private final ReservedDateService reservedDateService;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
@@ -143,20 +143,16 @@ public class ReservSellerController {
 
         @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
 
-    public String newCheckDate(ReservDto checkForm, Room room,
-                               @RequestParam("lodging_id") String lodgingId,
+    public String newCheckDate(Reserv reserv, Room room,
                                @RequestParam("checkIn") String checkIn,
                                @RequestParam("checkOut") String checkOut){ // 룸 디티오 말고
 
-            System.out.println("paramlodgingId = " +lodgingId);
             System.out.println("paramCheckIn = " +checkIn);
             System.out.println("paramCheckOut = " +checkOut);
-            checkForm.setCheckIn(checkIn);
-            checkForm.setCheckOut(checkOut);
-            List<LocalDate> localDate = reservedDateService.toLocalDate(checkIn, checkOut);
 
-
-        return "/reserv/lodgingReservContent/{lodging_id}";
+            reserv.setCheckIn(checkIn);
+            reserv.setCheckOut(checkOut);
+            return "/reserv/lodgingReservContent/{lodging_id}";
 
     }
 

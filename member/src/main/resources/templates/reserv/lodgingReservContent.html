@@ -282,30 +282,14 @@ function roomRegistration() {
     </script>
 
     <!------------------------------------------------------------------------------------------------------->
-    <!--    <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}" th:object="${checkForm}" role="form" method="post">-->
-    <!--    <div class="input-group">-->
-    <!--        <div class="input-group-prepend">-->
-    <!--            <span class="input-group-text">체크인 시간</span>-->
-    <!--        </div>-->
-    <!--        <input type="date" th:field="*{checkInTime}" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-    <!--    </div>-->
-    <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-
-    <!--    <div class="input-group">-->
-    <!--        <div class="input-group-prepend">-->
-    <!--            <span class="input-group-text">체크아웃 시간</span>-->
-    <!--        </div>-->
-    <!--        <input type="date" th:field="*{checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-    <!--    </div>-->
-    <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-<!--        </form>-->
-            <form th:action="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodgingDto.id})}"
+                <form th:action="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodgingDto.id})}"
                   th:object="${checkForm}" role="form" method="post"
                   id="check"
-                  sec:authorize="hasAnyAuthority('ROLE_USER')">
+                  sec:authorize="hasAnyAuthority('ROLE_USER')"
+                    target="form">
             <div class="input-group">
                 <!--            체크 폼에 같이 보낼 로징 id-->
-                <input id="lodging_id" type="hidden" name="lodging_id" th:value="${lodgingDto.id}">
+<!--                <input id="lodging_id" type="hidden" name="lodging_id" form="check" th:value="${lodgingDto.id}">-->
 <!--                <input type="hidden" name="lodging_name" th:value="${lodging.name}">-->
                 <div class="input-group-prepend">
                     <span class="input-group-text">체크인 시간</span>
@@ -329,6 +313,8 @@ function roomRegistration() {
 <!--                th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
 
             </form>
+<!--            form submit 페이지 이동 방지-->
+            <iframe name="form" style="display:none;"></iframe>
     <!----------------------------------------------------------------------------------------------------->
 
     <!--  map div  -->
@@ -403,11 +389,11 @@ function roomRegistration() {
 <!--                  // 서브밋 시 들고 나갈 checkIn, checkOut 날짜-->
 <!--                  var check_in = document.querySelector("#checkIn");-->
 <!--                  var check_out = document.querySelector("#checkOut");-->
-<!--                  var checkForm = document.querySelector("#check");-->
 
 
-<!--                  if(checkIn != null && checkOut != null){-->
-<!--                      checkForm.addEventListener("submit", (e)=>{-->
+
+
+<!--                      checkForm.addEventListener("click", (e)=>{-->
 
 <!--                            e.preventDefault();-->
 <!--                            const lodgingId = lodging_id.value;-->
@@ -458,8 +444,6 @@ function roomRegistration() {
 <!--                        });-->
 
 <!--                      });-->
-<!--                  }-->
-
 <!--            </script>-->
         </div>
 
