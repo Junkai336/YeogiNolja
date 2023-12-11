@@ -3,6 +3,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <!-- include summernote css/js-->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+    <meta id="_csrf_header" name="_csrf_header"
+          th:content="${_csrf.headerName}" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <script type="text/javascript" src="/js/imgUpload.js"></script>
+</head>
+
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
 
@@ -79,7 +89,6 @@ function roomRegistration() {
 }
 
     </script>
-
 </th:block>
 
 <!-- 사용자 CSS 추가 -->
@@ -147,9 +156,12 @@ function roomRegistration() {
 
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">숙소 상세 내용</span>
+                <p class="input-group-text">숙소 상세 내용</p>
             </div>
-            <textarea class="form-control" aria-label="With textarea" th:field="*{detail}"></textarea>
+            <div class="d-flex justify-content-start">
+                <label th:for="summernote" class="form-label"></label>
+                <textarea id="summernote" class="form-control" name="summernote" aria-label="With textarea" th:field="*{detail}" rows="3"></textarea>
+            </div>
         </div>
         <p th:if="${#fields.hasErrors('detail')}" th:errors="*{detail}" class="fieldError">Incorrect data</p>
 

@@ -9,6 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.time.Period.between;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -40,7 +47,51 @@ class ReservControllerTest {
 //        System.out.println("숙소의 위치" + room.getLodging().getLocation());
         System.out.println("숙소의 판매자 이름" + room.getLodging().getMember().getName());
         System.out.println("판매자 이메일"+ room.getLodging().getMember().getEmail());
+
+        // LocalDate Test
+        ReservDto reservDto = new ReservDto();
+        reservDto.setCheckIn("2023-12-30");
+        reservDto.setCheckOut("2024-01-06");
+        // String => LocalDate
+        LocalDate checkInDate = toLocalDate(reservDto.getCheckIn());
+        LocalDate checkOutDate = toLocalDate(reservDto.getCheckOut());
+        // checkOut - checkIn
+         int countDate = doubleDate(checkInDate, checkOutDate);  // 4
+
+        List<LocalDate> useDateList = aroundDate(checkInDate, countDate);
+        System.out.println(useDateList.toString());
     }
+
+    // String -> LocalDate
+    public LocalDate toLocalDate(String dateString){
+
+        LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_DATE);
+        System.out.println(date);
+        System.out.println(date.getClass());
+        return date;
+    }
+
+    // 두 날짜 차이 구하기
+    public int doubleDate(LocalDate checkIn, LocalDate checkOut){
+        int dateMinus = Period.between(checkIn, checkOut).getDays();
+        System.out.println(dateMinus);
+        return dateMinus;
+    }
+
+    public List<LocalDate> aroundDate(LocalDate startDate, long countDate){
+
+        List<LocalDate> reservDate = new ArrayList<>();
+        reservDate.add(startDate);
+        LocalDate sumDate = startDate;
+        for(int i  = 0; i< countDate; i++){
+            sumDate = sumDate.plusDays(1);
+            reservDate.add(sumDate);
+        }
+
+        return reservDate;
+    }
+
+
 
     public Room createRoom(Long RoomId){
         Room room = new Room();
