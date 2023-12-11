@@ -474,13 +474,13 @@ window.location.reload();
 
 
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-            <button type="button" onclick="roomEditPage()" class="btn btn-primary editButton">수정</button>
+            <button type="button" class="btn btn-primary editButton">수정</button>
 <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
             <button type="button" onclick="roomEditPage()" class="btn btn-success">대표이미지 변경</button>
         </div>
-        <div class="editForm">
+        <div class="editForm hide">
             <!--            가려져 있는 수정 폼-->
             <div class = "container w-100">
                 <div class= "d-flex justify-content-center w-50">
@@ -584,42 +584,38 @@ window.location.reload();
                 var editForm = document.querySelectorAll('.editForm');
                 var editButton = document.querySelectorAll('.editButton');
                 var detail = document.querySelectorAll('.detail');
-var addFormDetail = addForm.querySelector('.detail');
+                var addFormDetail = addForm.querySelector('.addDetail');
 
-       // console.log(editForm.length);
-       // console.log(editButton.length);
-
-
-function roomEditPage() {
-// window.location.reload();
-
-  // 일괄 hide 처리 및 서머노트 아이디 제거
-  // detail 하나에 editform 하나. 1:1매칭 그러나 add폼에도 있다.
-  addForm.classList.add('hide');
-  addFormDetail.removeAttribute('id');
-  for (let k = 0; k < editForm.length; k++) {
-    editForm[k].classList.add('hide');
-    detail[k].removeAttribute('id');
-  }
 
   for (let i = 0; i < editButton.length; i++) {
     editButton[i].addEventListener('click', function (e) {
     e.preventDefault();
+
+  // 일괄 hide 처리 및 서머노트 아이디 제거
+  // detail 하나에 editform 하나
+  addForm.classList.add('hide');
+  addFormDetail.removeAttribute('id');
+  for (let k = 0; k < editForm.length; k++) {
+  if(editForm[k] != editForm[i]) {
+    editForm[k].classList.add('hide');
+    detail[k].removeAttribute('id');
+  }
+  }
+
+    editForm[i].classList.toggle('hide');
+
       if (editForm[i].classList.contains('hide')) {
-        editForm[i].classList.remove('hide');
       } else {
-        editForm[i].classList.add('hide');
-        detail[i+1].id = 'summernote';
-
-        console.log(detail[i+1].id);
-        console.log(editForm[i]);
-
+        detail[i].id = 'summernote';
         window.summernoteCall();
+
+        console.log(detail[i].id);
+        console.log(editForm[i]);
 
       }
     })
   }
-}
+// }
 
 
 
