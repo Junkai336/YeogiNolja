@@ -6,6 +6,7 @@ import com.example.member.dto.RoomDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.reserv.ReservDto;
@@ -123,7 +124,7 @@ public class ReservSellerController {
             // -----------------------------------------------------------
 
             model.addAttribute("lodgingDto", lodgingDto);
-            model.addAttribute("roomForm", new RoomDto());
+            model.addAttribute("checkForm", new ReservDto());
             model.addAttribute("roomDtoList", roomDtoList);
 
 
@@ -133,16 +134,10 @@ public class ReservSellerController {
 
     }
 
-//        @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-//    public String newCheckDate(ReservDto checkForm, RoomDto roomDto){ // 룸 디티오 말고
-//        ReservDto reservDto = new ReservDto();
-////        System.out.println("checkForm = "+ checkForm);
-//        reservService.newCheckDateTime(checkForm,roomDto);
-////        reservDto.setCheckIn(checkForm.getCheckInTime());
-////        reservDto.setCheckOut(checkForm.getCheckOutTime());
-////        System.out.println("reservDto.getCheckIn = "+ reservDto.getCheckIn());
-////        System.out.println("reservDto.getCheckOut = "+ reservDto.getCheckOut());
-//        return "checkForm";
-//    }
+        @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
+    public void newCheckDate(ReservDto checkForm, Room room){ // 룸 디티오 말고
+        System.out.println("checkForm = "+ checkForm);
+        reservService.newCheckDateTime(checkForm,room);
+    }
 
 }

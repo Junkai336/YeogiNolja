@@ -295,26 +295,26 @@ function roomRegistration() {
     <!--    </div>-->
     <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 <!--        </form>-->
-<!--            <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"-->
-<!--                  th:object="${checkForm}" role="form" method="post"-->
-<!--                  id="check">-->
-<!--            <div class="input-group">-->
-<!--&lt;!&ndash;                <input type="hidden" th:field="*{room.id}">&ndash;&gt;-->
-<!--                <div class="input-group-prepend">-->
-<!--                    <span class="input-group-text">체크인 시간</span>-->
-<!--                </div>-->
-<!--                <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-<!--            </div>-->
-<!--        &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+            <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"
+                  th:object="${checkForm}" role="form" method="post"
+                  id="check">
+            <div class="input-group">
+                <input type="hidden" th:field="${roomDtoList}">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">체크인 시간</span>
+                </div>
+                <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">
+            </div>
+        <!--    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>-->
 
-<!--            <div class="input-group">-->
-<!--                <div class="input-group-prepend">-->
-<!--                    <span class="input-group-text">체크아웃 시간</span>-->
-<!--                </div>-->
-<!--                <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-<!--            </div>-->
-<!--        &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-<!--            </form>-->
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">체크아웃 시간</span>
+                </div>
+                <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">
+            </div>
+        <!--    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>-->
+            </form>
     <!----------------------------------------------------------------------------------------------------->
 
     <!--  map div  -->
@@ -375,11 +375,49 @@ function roomRegistration() {
         <div class="d-flex">
             <p  th:text="'입실: '+${roomDto.checkInTime}"></p>
             <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
-            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
-            <!--            <button type="submit"-->
-            <!--                    form="check"-->
-            <!--                    th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
-            <!--                    class="btn btn-primary my-2">예약하기</button>-->
+<!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
+                        <button type="submit"
+                                form="check"
+                                th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"
+                                class="btn btn-primary my-2">예약하기</button>
+            <script>
+
+
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            // 넘길 데이터 json 형식
+            var paramData = JSON.stringify(newComment);
+
+            console.log(paramData);
+            // URL
+            const url = `/reserv/roomReservation/`;
+            console.log(url);
+
+            $.ajax({
+            url      : url,
+            type     : "post",
+            contentType : "application/json",
+            data     : paramData,
+            beforeSend : function(xhr){
+            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+            xhr.setRequestHeader(header, token);
+            },
+            dataType : "json",
+            cache   : false
+            });
+
+
+            alert("댓글 등록!");
+            window.location.reload();
+            }else{
+            alert("댓글 입력 후 등록해주시기 바랍니다.");
+            }
+
+
+
+            });
+            </script>
         </div>
 
 
