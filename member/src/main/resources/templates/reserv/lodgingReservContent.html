@@ -79,7 +79,7 @@
             <th th:text="${lodging.id}">a</th>
             <td th:text="${lodging.name}">a</td>
             <td th:utext="${lodging.detail}"></td>
-            <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
+<!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
             <td th:text="${lodging.address}">a</td>
             <!-- map에 필요한 숙소,주소-->
             <input type="hidden" name="lodging_address" th:value="${lodging.address}">
@@ -297,31 +297,32 @@ function roomRegistration() {
     <!--        <input type="date" th:field="*{checkOutTime}" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
     <!--    </div>-->
     <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-    <!--    </form>-->
-    <!--        <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"-->
-    <!--              th:object="${checkForm}" role="form" method="post"-->
-    <!--              id="check">-->
-    <!--        <div class="input-group">-->
-    <!--            <input type="hidden" th:field="*{room.id}">-->
-    <!--            <div class="input-group-prepend">-->
-    <!--                <span class="input-group-text">체크인 시간</span>-->
-    <!--            </div>-->
-    <!--            <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
-    <!--        </div>-->
-    <!--    &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+<!--        </form>-->
+<!--            <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"-->
+<!--                  th:object="${checkForm}" role="form" method="post"-->
+<!--                  id="check">-->
+<!--            <div class="input-group">-->
+<!--&lt;!&ndash;                <input type="hidden" th:field="*{room.id}">&ndash;&gt;-->
+<!--                <div class="input-group-prepend">-->
+<!--                    <span class="input-group-text">체크인 시간</span>-->
+<!--                </div>-->
+<!--                <input type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">-->
+<!--            </div>-->
+<!--        &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 
-    <!--        <div class="input-group">-->
-    <!--            <div class="input-group-prepend">-->
-    <!--                <span class="input-group-text">체크아웃 시간</span>-->
-    <!--            </div>-->
-    <!--            <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
-    <!--        </div>-->
-    <!--    &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
-    <!--        </form>-->
+<!--            <div class="input-group">-->
+<!--                <div class="input-group-prepend">-->
+<!--                    <span class="input-group-text">체크아웃 시간</span>-->
+<!--                </div>-->
+<!--                <input type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">-->
+<!--            </div>-->
+<!--        &lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
+<!--            </form>-->
     <!----------------------------------------------------------------------------------------------------->
 
     <!--  map div  -->
-    <div id="map" style="width:300px;height:200px;"></div>
+    <div id="map1" style="width:300px;height:200px;"></div>
+
 
     <p class="h4 text-center mt-3">
         객실 목록
@@ -650,6 +651,8 @@ window.location.reload();
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
         <hr>
+        <div id="map2" class="mt-3" style="width:100%;height:500px;"></div>
+
     </div>
 
     <div class="container-fluid d-flex justify-content-center">
@@ -664,6 +667,7 @@ window.location.reload();
         </div>
     </div>
 
+
     <!--    map script-->
     <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
     <script>
@@ -672,11 +676,19 @@ window.location.reload();
         // 자제해달라는 문구
         // 카카오의 답변에 따르면
         // 지도가 로드되지 않는게 아니라면 무시해도 된다.
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
+        const mapContainer1 = document.getElementById('map1'); // 지도를 표시할 div
+        const mapContainer2 = document.getElementById('map2'); // 지도를 표시할 div
+
+
+
+
+
+function maps (mapContainer){
+         mapOption = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 4 // 지도의 확대 레벨
             };
+
 
         // 지도를 생성합니다
         var map = new kakao.maps.Map(mapContainer, mapOption);
@@ -712,6 +724,13 @@ window.location.reload();
                 map.setCenter(coords);
             }
         });
+
+        }   // maps
+
+
+        maps(mapContainer1);
+        maps(mapContainer2);
+
     </script>
 
 </div>

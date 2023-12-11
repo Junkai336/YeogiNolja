@@ -8,19 +8,16 @@ import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
-import com.example.member.repository.MemberRepository;
-import com.example.member.repository.RoomRepository;
-import com.example.member.service.ItemImgService;
+import com.example.member.reserv.ReservDto;
+import com.example.member.reserv.ReservService;
 import com.example.member.service.LodgingService;
-import com.example.member.service.ReservSellerService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import javax.persistence.EntityExistsException;
+import org.springframework.web.bind.annotation.PostMapping;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +29,8 @@ public class ReservSellerController {
     private final LodgingService lodgingService;
     private final LodgingRepository lodgingRepository;
     private final RoomService roomService;
-    private final RoomRepository roomRepository;
     private final ItemImgRepository itemImgRepository;
-    private final ItemImgService itemImgService;
-    private final ReservSellerService reservSellerService;
-    private final MemberRepository memberRepository;
+    private final ReservService reservService;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
@@ -139,16 +133,15 @@ public class ReservSellerController {
 
     }
 
-    //    @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
+//        @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
 //    public String newCheckDate(ReservDto checkForm, RoomDto roomDto){ // 룸 디티오 말고
 //        ReservDto reservDto = new ReservDto();
-//        System.out.println("checkForm = "+ checkForm);
-//        ReservService.newCheckDateTime(checkForm,roomDto);
-//        reservDto.setCheckIn(checkForm.getCheckInTime());
-//        reservDto.setCheckOut(checkForm.getCheckOutTime());
-
-//        System.out.println("reservDto.getCheckIn = "+ reservDto.getCheckIn());
-//        System.out.println("reservDto.getCheckOut = "+ reservDto.getCheckOut());
+////        System.out.println("checkForm = "+ checkForm);
+//        reservService.newCheckDateTime(checkForm,roomDto);
+////        reservDto.setCheckIn(checkForm.getCheckInTime());
+////        reservDto.setCheckOut(checkForm.getCheckOutTime());
+////        System.out.println("reservDto.getCheckIn = "+ reservDto.getCheckIn());
+////        System.out.println("reservDto.getCheckOut = "+ reservDto.getCheckOut());
 //        return "checkForm";
 //    }
 
