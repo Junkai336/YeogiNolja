@@ -36,7 +36,10 @@ public class RoomService {
     // 매개변수 숙소 id를 제공받고 그 숙소 id의 room을 전부 선택한다.
     // 그 room들을 roomList 받고 roomDtoList로 바꾸기
     public List<RoomDto> roomDtoList(Long lodging_id){
+        //        LocalDate defaultNow = LocalDate.now();
+//        LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<Room> roomList = roomRepository.findAllByLodgingId(lodging_id);
+
         List<RoomDto> roomDtoList = RoomDto.toRoomDtoList(roomList);
 //        for (CommentDto commentDto : commentDtoList){
 //            System.out.println(commentDto.toString());
