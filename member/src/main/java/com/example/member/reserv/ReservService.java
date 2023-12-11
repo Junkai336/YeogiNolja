@@ -1,5 +1,6 @@
 package com.example.member.reserv;
 
+import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
@@ -28,7 +29,7 @@ public class ReservService {
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
 
-    //    public static void newCheckDateTime(ReservDto checkForm, RoomDto roomDto) {
+//        public static void newCheckDateTime(ReservDto checkForm, RoomDto roomDto) {
 //        String newCheckDateTime1 = checkForm.getCheckIn()+roomDto.getCheckInTime();
 //        String newCheckDateTime2 = checkForm.getCheckOut()+roomDto.getCheckOutTime();
 //        checkForm.setCheckIn(newCheckDateTime1);
