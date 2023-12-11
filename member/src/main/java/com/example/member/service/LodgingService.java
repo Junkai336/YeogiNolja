@@ -184,8 +184,10 @@ public class LodgingService {
         List<ItemImgDto> itemImgDtoList = new ArrayList<>();
 
         for(ItemImg itemImg : itemImgList) {
+            if(itemImg.getImgUrl() != null) {
             ItemImgDto itemImgDto = ItemImgDto.toItemImgDto(itemImg);
             itemImgDtoList.add(itemImgDto);
+            }
         }
 
         lodgingDto.setItemImgDtoList(itemImgDtoList);

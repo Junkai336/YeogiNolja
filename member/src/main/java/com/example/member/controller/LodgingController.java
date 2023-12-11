@@ -107,10 +107,10 @@ public class LodgingController {
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
         LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, id);
 
-//        for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
-//            System.out.println(itemImgDto);
-//            System.out.println("byeworld!");
-//        }
+        for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
+            System.out.println(itemImgDto);
+            System.out.println("byeworld!");
+        }
 
         lodgingService.emptyRoomGrantedLodgingId(id, lodgingEntity);
 

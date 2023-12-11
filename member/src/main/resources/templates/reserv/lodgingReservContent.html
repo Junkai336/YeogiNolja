@@ -10,11 +10,22 @@
           th:content="${_csrf.headerName}" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<!--    <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>-->
     <script type="text/javascript" src="/js/imgUpload.js"></script>
+
 </head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+        ul,
+        li {
+            list-style: none;
+        }
+
+        .hide {
+            display: none;
+        }
+
     </style>
 </th:block>
 
@@ -67,44 +78,87 @@
          <div class="container-fluid mt-3">
              <div th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
                  <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
-             <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail span4 rounded float-start"
+             <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail span4 rounded float-start" sizes="800px"
                   th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                  </a>
                  <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
-             <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail span4 rounded float-start" style="width:25%"
+             <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail span4 rounded float-start" sizes="200px"
                   th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
                  </a>
              </div>
         </div>
 
-    <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel" tabindex="-1">
-        <div th:each="lodging : ${lodgingDto}">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
+    <div class="d-flex">
+        <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel"
+             tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered" th:each="lodging : ${lodgingDto}">
+                <div class="modal-content">
 
-        <div class="modal-header">
-            <h5 class="modal-title" id="lodgingModalToggleLabel">
-                <p th:text="${lodging.name}"></p>
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="lodgingModalToggleLabel">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="allTab" data-bs-toggle="tab" data-bs-target="#allTab-pane"
+                                            type="button" role="tab" aria-controls="allTab-pane" aria-selected="true">전체</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="roomTab" data-bs-toggle="tab" data-bs-target="#roomTab-pane" type="button"
+                                            role="tab" aria-controls="roomTab-pane" aria-selected="false">객실</button>
+                                </li>
+                            </ul>
+                            <span class="text-center" th:text="${lodging.name}"></span>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
 
-            <div class="modal-body">
-                <p>내용</p>
-            </div>
+                    <div class="modal-body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="allTab-pane" role="tabpanel" aria-labelledby="allTab"
+                                 tabindex="0">
 
-            <div class="modal-footer">
-                <p>내용</p>
-            </div>
+                                <!-- Carousel -->
+                                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+                                    <!-- The slideshow/carousel -->
+                                    <div class="carousel-inner" style="height:500px;">
+                                        <div class="carousel-item active w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
+                                            <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
+                                        </div>
+                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                                            <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Left and right controls/icons -->
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon text-muted">prev</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon text-muted">next</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="roomTab-pane" role="tabpanel" aria-labelledby="roomTab" tabindex="0">
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <p>내용</p>
+                    </div>
 
                 </div>
             </div>
-
-</div>
-
-
-
+        </div>
     </div>
+
+
 
      <table class="table">
          <thead>
@@ -121,7 +175,7 @@
              <th th:text="${lodging.id}">a</th>
              <td th:text="${lodging.name}">a</td>
              <td th:utext="${lodging.detail}"></td>
-             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>
+<!--             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>-->
              <td th:text="${lodging.address}">a</td>
              <!-- map에 필요한 숙소,주소-->
             <input type="hidden" name="lodging_address" th:value="${lodging.address}">
@@ -151,173 +205,165 @@
     </div>
 
     <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-        <button type="button" onclick="addRoomPage()" class="btn btn-primary">객실 추가</button>
+        <button type="button" class="btn btn-primary addBtn">객실 추가</button>
     </div>
 
-    <div class="add">
-
-    </div>
-
-    <script>
-
-        function addRoomPage () {
-        const addRoom = document.querySelector('.add');
-        if(addRoom.classList.contains('hide')) {
-
-        addRoom.classList.remove("hide");
-
-        addRoom.innerHTML = '';
-        } else {
-
-        addRoom.classList.add("hide");
-
-        addRoom.innerHTML =
-        `
-        <div class = "container w-100">
+    <div class = "container w-100 addForm hide">
         <div class= "d-flex justify-content-center w-50">
             <form role="form" method="post" enctype="multipart/form-data">
-            <p class="h2">
-                객실 등록
-            </p>
+                <p class="h2">
+                    객실 등록
+                </p>
 
-            <div class="input-group mt-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">객실명</span>
-                </div>
-                <input type="text" class="form-control name" placeholder="객실명을 입력해주세요">
-            </div>
-
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">가격</span>
-                </div>
-                <input type="number" class="form-control price" placeholder="객실의 가격을 입력해주세요">
-            </div>
-
-            <div class="input-group mt-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">인원수</span>
+                <div class="input-group mt-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">객실명</span>
+                    </div>
+                    <input id="name" type="text" class="form-control" placeholder="객실명을 입력해주세요">
                 </div>
 
-                <span>성인</span>
-                <select class="form-select adult" aria-label="Default select example">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-
-                <span>아동</span>
-                <select class="form-select children" aria-label="Default select example">
-                    <option value="1">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">객실 상세 내용</span>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">가격</span>
+                    </div>
+                    <input id="price" type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">
                 </div>
-                <textarea class="form-control detail" aria-label="With textarea"></textarea>
-            </div>
 
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">체크인 시간</span>
-                </div>
-                <input type="time" class="form-control checkInTime" placeholder="체크인 시간을 입력해주세요">
-            </div>
+                <div class="input-group mt-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">인원수</span>
+                    </div>
 
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">체크아웃 시간</span>
+                    <span>성인</span>
+                    <select id="adult" class="form-select" aria-label="Default select example">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+
+                    <span>아동</span>
+                    <select id="children" class="form-select" aria-label="Default select example">
+                        <option value="1">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                 </div>
-                <input type="time" class="form-control checkOutTime" placeholder="체크아웃 시간을 입력해주세요">
-            </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">객실 상세 내용</span>
+                    </div>
+                    <label th:for="summernote" class="form-label"></label>
+                    <textarea id="summernote" class="form-control addDetail" name="summernote" aria-label="With textarea" rows="3"></textarea>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">체크인 시간</span>
+                    </div>
+                    <input id="checkInTime" type="time" class="form-control" placeholder="체크인 시간을 입력해주세요">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">체크아웃 시간</span>
+                    </div>
+                    <input id="checkOutTime" type="time" class="form-control" placeholder="체크아웃 시간을 입력해주세요">
+                </div>
 
                 <div class="input-group-prepend">
                     <span class="input-group-text">객실 이미지 등록</span>
                 </div>
 
-            <div>
-                <div class="form-group">
-                    <div class="custom-file img-div">
-                        <input type="file" class="custom-file-input fileInputAddRoom" name="itemImgFile" multiple="true">
-                        <label class="custom-file-label"></label>
+                <div>
+                    <div class="form-group">
+                        <div class="custom-file img-div">
+                            <input type="file" class="custom-file-input fileInputAddRoom" name="itemImgFile" multiple="true">
+                            <label class="custom-file-label"></label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div>
-                <button type="button" onclick="roomRegistration()" class="btn btn-primary mt-1">객실 등록</button>
-            </div>
+                <div>
+                    <button type="button" onclick="roomRegistration()" class="btn btn-primary mt-1">객실 등록</button>
+                </div>
 
             </form>
         </div>
-</div>
-        `;
-        }
-}
+    </div>
 
+    <script>
+
+
+        var addForm = document.querySelector('.addForm');
+        var addBtn = document.querySelector('.addBtn');
+        var editForm = document.querySelectorAll('.editForm');
+        var editButton = document.querySelectorAll('.editButton');
+
+
+addBtn.addEventListener('click', function (e) {
+e.preventDefault();
+addForm.classList.toggle('hide');
+})
 
 function roomRegistration() {
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
 
-    var url = `/lodging/addRoom`;
+var url = `/lodging/addRoom`;
 
-    var paramData = {
-        name: $(".name").val(),
-        detail: $(".detail").val(),
-        price: $(".price").val(),
-        adult: $(".adult").val(),
-        children: $(".children").val(),
-        checkInTime: $(".checkInTime").val(),
-        checkOutTime: $(".checkOutTime").val()
-    };
+var paramData = {
+name: $("#name").eq(0).val(),
+detail: $(".addDetail").eq(0).val(),
+price: $("#price").eq(0).val(),
+adult: $("#adult").eq(0).val(),
+children: $("#children").eq(0).val(),
+checkInTime: $("#checkInTime").eq(0).val(),
+checkOutTime: $("#checkOutTime").eq(0).val()
+};
 
-    let formData = new FormData();
+let formData = new FormData();
 
-    var fileInput = $('.fileInputAddRoom');
+var fileInput = $('.fileInputAddRoom');
 
-    for (var i = 0; i < fileInput.length; i++) {
-	if (fileInput[i].files.length > 0) {
-		for (var j = 0; j < fileInput[i].files.length; j++) {
-			console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+for (var i = 0; i < fileInput.length; i++) {
+if (fileInput[i].files.length > 0) {
+for (var j = 0; j < fileInput[i].files.length; j++) {
+console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
 
-			// formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
-			formData.append('img', $('.fileInputAddRoom')[i].files[j]);
-		}
-	}
-	}
-    // formData.append('img', $('.fileInputAddRoom')[0].files[0]);
+// formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+formData.append('img', $('.fileInputAddRoom')[i].files[j]);
+}
+}
+}
+// formData.append('img', $('.fileInputAddRoom')[0].files[0]);
 
-    formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
+formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
 
-    $.ajax({
-        url: url,
-        type: "POST",
-        enctype: 'multipart/form-data',
-        data: formData,
-        contentType: false,
-        processData: false,
-        cache: false,
+$.ajax({
+url: url,
+type: "POST",
+enctype: 'multipart/form-data',
+data: formData,
+contentType: false,
+processData: false,
+cache: false,
 
-        beforeSend: function (xhr) {
-            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-            xhr.setRequestHeader(header, token);
-        },
+beforeSend: function (xhr) {
+/* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+xhr.setRequestHeader(header, token);
+},
 
-        success: function (result, status) {
-            alert("객실 정보가 저장되었습니다.");
-            window.location.reload();
-        }
-    });
+success: function (result, status) {
+alert("객실 정보가 저장되었습니다.");
+window.location.reload();
+}
+});
 }
 
     </script>
@@ -429,6 +475,7 @@ function roomRegistration() {
 
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <button type="button" onclick="roomEditPage()" class="btn btn-primary editButton">수정</button>
+<!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
             <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
             <button type="button" onclick="roomEditPage()" class="btn btn-success">대표이미지 변경</button>
@@ -444,6 +491,8 @@ function roomRegistration() {
 
                         <input type="hidden" class="id" th:value="*{id}">
                         <input type="hidden" class="reservationStatus" th:value="*{reservationStatus}">
+
+
 
                         <div class="input-group mt-3">
                             <div class="input-group-prepend">
@@ -488,7 +537,9 @@ function roomRegistration() {
                             <div class="input-group-prepend">
                                 <span class="input-group-text">객실 상세 내용</span>
                             </div>
-                            <textarea th:text="*{detail}" class="form-control detail" aria-label="With textarea"></textarea>
+                            <label th:for="summernote" class="form-label"></label>
+                            <textarea class="form-control detail detail2" name="summernote" th:text="*{detail}" aria-label="With textarea" rows="3"></textarea>
+<!--                            <textarea th:text="*{detail}" class="form-control detail" aria-label="With textarea"></textarea>-->
                         </div>
 
                         <div class="input-group">
@@ -526,45 +577,48 @@ function roomRegistration() {
                     </form>
                 </div>
             </div>
-            <!--            // 가려져 있는 수정 폼 -->
-        </div>
-        <hr>
-        <h5 class="mb-3"><b>숙소 이용 정보</b></h5>
-
-        <div class="text-dark">
-            <h6><b>기본 정보</b></h6>
-            <ul class="text-secondary">
-                <li><span>22시 이후 입실 시 사전문의 (필수)</span></li>
-                <li><span>무료 Wi-Fi</span></li>
-                <li><span>전 객실 금연</span></li>
-                <li><span>주차 가능</span></li>
-            </ul>
-        </div>
-
             <script>
+
+                var addForm = document.querySelector('.addForm');
+                var addBtn = document.querySelector('.addBtn');
                 var editForm = document.querySelectorAll('.editForm');
                 var editButton = document.querySelectorAll('.editButton');
+                var detail = document.querySelectorAll('.detail');
+var addFormDetail = addForm.querySelector('.detail');
 
-               // console.log(editForm.length);
-               // console.log(editButton.length);
-
-                for(let l = 0; l < editForm.length; l++) {
-                editForm[l].style.display = 'none';
-                }
+       // console.log(editForm.length);
+       // console.log(editButton.length);
 
 
-                function roomEditPage() {
-    for (let i = 0; i < editButton.length; i++) {
-        editButton[i].addEventListener('click', function () {
-            if (editForm[i].classList.contains('hide')) {
-                editForm[i].style.display = 'none';
-                editForm[i].classList.remove('hide');
-            } else {
-                editForm[i].style.display = 'block';
-                editForm[i].classList.add('hide');
-            }
-        })
-    }
+function roomEditPage() {
+// window.location.reload();
+
+  // 일괄 hide 처리 및 서머노트 아이디 제거
+  // detail 하나에 editform 하나. 1:1매칭 그러나 add폼에도 있다.
+  addForm.classList.add('hide');
+  addFormDetail.removeAttribute('id');
+  for (let k = 0; k < editForm.length; k++) {
+    editForm[k].classList.add('hide');
+    detail[k].removeAttribute('id');
+  }
+
+  for (let i = 0; i < editButton.length; i++) {
+    editButton[i].addEventListener('click', function (e) {
+    e.preventDefault();
+      if (editForm[i].classList.contains('hide')) {
+        editForm[i].classList.remove('hide');
+      } else {
+        editForm[i].classList.add('hide');
+        detail[i+1].id = 'summernote';
+
+        console.log(detail[i+1].id);
+        console.log(editForm[i]);
+
+        window.summernoteCall();
+
+      }
+    })
+  }
 }
 
 
@@ -576,15 +630,15 @@ var header = $("meta[name='_csrf_header']").attr("content");
 var url = `/room/editRoom`;
 
 var paramData = {
-id: $(".id").val(),
-name: $(".name").val(),
-detail: $(".detail").val(),
-price: $(".price").val(),
-adult: $(".adult").val(),
-children: $(".children").val(),
-checkInTime: $(".checkInTime").val(),
-checkOutTime: $(".checkOutTime").val(),
-reservationStatus: $(".reservationStatus").val()
+id: $(".id").eq(1).val(),
+name: $(".name").eq(1).val(),
+detail: $(".detail").eq(1).val(),
+price: $(".price").eq(1).val(),
+adult: $(".adult").eq(1).val(),
+children: $(".children").eq(1).val(),
+checkInTime: $(".checkInTime").eq(1).val(),
+checkOutTime: $(".checkOutTime").eq(1).val(),
+reservationStatus: $(".reservationStatus").eq(1).val()
 };
 
 let formData = new FormData();
@@ -620,6 +674,7 @@ xhr.setRequestHeader(header, token);
 },
 
 success: function (result, status) {
+console.log(paramData);
 alert("객실 정보가 수정되었습니다.");
 window.location.reload();
 }
@@ -627,7 +682,21 @@ window.location.reload();
 }
 
             </script>
-      
+            <!--            // 가려져 있는 수정 폼 -->
+        </div>
+        <hr>
+        <h5 class="mb-3"><b>숙소 이용 정보</b></h5>
+
+        <div class="text-dark">
+            <h6><b>기본 정보</b></h6>
+            <ul class="text-secondary">
+                <li><span>22시 이후 입실 시 사전문의 (필수)</span></li>
+                <li><span>무료 Wi-Fi</span></li>
+                <li><span>전 객실 금연</span></li>
+                <li><span>주차 가능</span></li>
+            </ul>
+        </div>
+
       <div class="text-dark">
             <h6><b>인원 추가 정보</b></h6>
             <ul class="text-secondary">

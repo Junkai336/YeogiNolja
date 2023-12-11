@@ -49,7 +49,7 @@ public class UploadFileController {
     }
 
     @GetMapping("/image/{fileId}")
-    public ResponseEntity<?> serveFile(@PathVariable Long fileId) throws Exception{
+    public ResponseEntity<?> serveFile(@PathVariable Long fileId){
         try {
             UploadFile uploadFile = uploadFileService.load(fileId);
 
@@ -57,7 +57,7 @@ public class UploadFileController {
 
             return ResponseEntity.ok().body(resource);
         } catch(Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest().build();
         }
 
@@ -65,14 +65,22 @@ public class UploadFileController {
     @PostMapping(value = "/imageDelete")
     @ResponseBody
     public void deleteSummernoteImageFile(@RequestParam("file") Long fileName) {
-        UploadFile uploadFile = uploadFileRepository.findById(fileName).orElseThrow(EntityNotFoundException::new);
+        try {
 
+        UploadFile uploadFile = uploadFileService.findById(fileName);
         if(uploadFile.getArticle() != null) {
             uploadFileService.summernoteFileDelete(fileName, uploadFile);
         } else {
         // 해당 파일 삭제
         uploadFileService.summernoteFileDelete(fileName);
         }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
+
 
     }
 
