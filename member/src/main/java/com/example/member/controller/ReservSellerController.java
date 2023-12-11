@@ -11,9 +11,11 @@ import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.reserv.ReservDto;
 import com.example.member.reserv.ReservService;
+import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class ReservSellerController {
     private final RoomService roomService;
     private final ItemImgRepository itemImgRepository;
     private final ReservService reservService;
+    private final ReservedDateService reservedDateService;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
@@ -93,7 +97,8 @@ public class ReservSellerController {
 
 
         // ------------------------------------------------------------
-
+//        LocalDate defaultNow = LocalDate.now();
+//        LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
 
         for (int i = 0; i < roomDtoList.size(); i++) {
@@ -139,16 +144,19 @@ public class ReservSellerController {
         @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
 
     public String newCheckDate(ReservDto checkForm, Room room,
-                               @RequestParam("lodgingId") String lodgingId,
+                               @RequestParam("lodging_id") String lodgingId,
                                @RequestParam("checkIn") String checkIn,
                                @RequestParam("checkOut") String checkOut){ // 룸 디티오 말고
 
             System.out.println("paramlodgingId = " +lodgingId);
             System.out.println("paramCheckIn = " +checkIn);
             System.out.println("paramCheckOut = " +checkOut);
-//        System.out.println("checkForm = "+ checkForm);
-        reservService.newCheckDateTime(checkForm,room);
-        return "redirect:/reserv/lodgingReservContent/{lodging_id}";
+            checkForm.setCheckIn(checkIn);
+            checkForm.setCheckOut(checkOut);
+            List<LocalDate> localDate = reservedDateService.toLocalDate(checkIn, checkOut);
+
+
+        return "/reserv/lodgingReservContent/{lodging_id}";
 
     }
 

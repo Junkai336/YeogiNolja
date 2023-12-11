@@ -79,7 +79,7 @@ public class Member extends BaseEntity{
         member.setAddress(memberFormDto.getAddress());
         member.setDetailAddress(memberFormDto.getDetailAddress());
         member.setExtraAddress(memberFormDto.getExtraAddress());
-        member.setUserRole(UserRole.ADMIN);
+        member.setUserRole(UserRole.USER);
         return member;
     }
 

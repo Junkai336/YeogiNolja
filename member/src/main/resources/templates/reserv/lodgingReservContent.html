@@ -84,6 +84,7 @@
             <!-- map에 필요한 숙소,주소-->
             <input type="hidden" name="lodging_address" th:value="${lodging.address}">
             <input type="hidden" name="lodging_name" th:value="${lodging.name}">
+
             <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
             <!--                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>-->
             <!--            </td>-->
@@ -298,12 +299,14 @@ function roomRegistration() {
     <!--    </div>-->
     <!--&lt;!&ndash;    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>&ndash;&gt;-->
 <!--        </form>-->
-            <form th:action="@{/reserv/lodgingReservContent/{lodging_id}}"
+            <form th:action="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodgingDto.id})}"
                   th:object="${checkForm}" role="form" method="post"
-                  id="check">
+                  id="check"
+                  sec:authorize="hasAnyAuthority('ROLE_USER')">
             <div class="input-group">
-
-                <input id="lodging_id" type="hidden" th:field="${lodgingDto.id}">
+                <!--            체크 폼에 같이 보낼 로징 id-->
+                <input id="lodging_id" type="hidden" name="lodging_id" th:value="${lodgingDto.id}">
+<!--                <input type="hidden" name="lodging_name" th:value="${lodging.name}">-->
                 <div class="input-group-prepend">
                     <span class="input-group-text">체크인 시간</span>
                 </div>
@@ -393,69 +396,71 @@ function roomRegistration() {
 <!--                                form="check"-->
 <!--                                th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
 <!--                                class="btn btn-primary my-2">예약하기</button>-->
-            <script>
-                // 현재 보고있는 숙소의 id값
-                  var lodging_id = document.querySelector("#lodging_id");
+<!--            <script>-->
+<!--                // 현재 보고있는 숙소의 id값-->
+<!--                  var lodging_id = document.querySelector("#lodging_id");-->
 
-                  // 서브밋 시 들고 나갈 checkIn, checkOut 날짜
-                  var check_in = document.querySelector("#checkIn");
-                  var check_out = document.querySelector("#checkOut");
-
-
-                  if(checkIn != null && checkOut != null){
-                      commentEditForm.addEventListener("submit", (e)=>{
-
-                            e.preventDefault();
-                            const lodgingId = lodging_id.value;
-                            const checkIn = check_in.value;
-                            const checkOut = check_out.value;
+<!--                  // 서브밋 시 들고 나갈 checkIn, checkOut 날짜-->
+<!--                  var check_in = document.querySelector("#checkIn");-->
+<!--                  var check_out = document.querySelector("#checkOut");-->
+<!--                  var checkForm = document.querySelector("#check");-->
 
 
-                            console.log("comment_id : "+ commentId);
-                            console.log("editComment : "+ editComment);
+<!--                  if(checkIn != null && checkOut != null){-->
+<!--                      checkForm.addEventListener("submit", (e)=>{-->
 
-                            const postChekDate = {
-                            lodgingId: lodgingId,
-                            checkIn: checkIn,
-                            checkOut: checkOut
-                            };
+<!--                            e.preventDefault();-->
+<!--                            const lodgingId = lodging_id.value;-->
+<!--                            const checkIn = check_in.value;-->
+<!--                            const checkOut = check_out.value;-->
 
-                        //수정 Rest APi 호출 - fetch()
-                        //주의 method : "post"
 
-                          var token = $("meta[name='_csrf']").attr("content");
-                          var header = $("meta[name='_csrf_header']").attr("content");
+<!--                            console.log("lodgingid : "+ lodgingId);-->
+<!--                            console.log("checkIn : "+ checkIn);-->
+<!--                            console.log("checkOut : "+ checkOut);-->
 
-                        // 넘길 데이터 json 형식
-                         var paramData = JSON.stringify(postCheckDate);
+<!--                            const postChekDate = {-->
+<!--                            lodgingId: lodgingId,-->
+<!--                            checkIn: checkIn,-->
+<!--                            checkOut: checkOut-->
+<!--                            };-->
 
-                        console.log(paramData);
+<!--                        //수정 Rest APi 호출 - fetch()-->
+<!--                        //주의 method : "post"-->
 
-                        // URL
-                        const url = `/reserv/lodgingReservContent/{lodging_id}`;
-                        console.log(url);
+<!--                          var token = $("meta[name='_csrf']").attr("content");-->
+<!--                          var header = $("meta[name='_csrf_header']").attr("content");-->
 
-                        $.ajax({
-                                    url      : url,
-                                    type     : "POST",
-                                    contentType : "application/json",
-                                    data     : paramData,
-                                    beforeSend : function(xhr){
-                                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                                        xhr.setRequestHeader(header, token);
-                                    },
-                                    dataType : "json",
-                                    cache   : false
-                                });
+<!--                        // 넘길 데이터 json 형식-->
+<!--                         var paramData = JSON.stringify(postCheckDate);-->
 
-                                      window.location.reload();
+<!--                        console.log(paramData);-->
 
-                        });
+<!--                        // URL-->
+<!--                        const url = `/reserv/lodgingReservContent/{lodging_id}`;-->
+<!--                        console.log(url);-->
 
-                      });
-                  }
+<!--                        $.ajax({-->
+<!--                                    url      : url,-->
+<!--                                    type     : "POST",-->
+<!--                                    contentType : "application/json",-->
+<!--                                    data     : paramData,-->
+<!--                                    beforeSend : function(xhr){-->
+<!--                                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */-->
+<!--                                        xhr.setRequestHeader(header, token);-->
+<!--                                    },-->
+<!--                                    dataType : "json",-->
+<!--                                    cache   : false-->
+<!--                                });-->
 
-            </script>
+<!--                                      window.location.reload();-->
+
+<!--                        });-->
+
+<!--                      });-->
+<!--                  }-->
+
+<!--            </script>-->
         </div>
 
 
