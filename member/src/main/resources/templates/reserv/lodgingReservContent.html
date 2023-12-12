@@ -90,6 +90,25 @@
         <p th:text="${roomSuccessMsg}">성공출력용</p>
     </div>
 
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">번호</th>
+            <th scope="col">숙소명</th>
+            <th scope="col">숙소상세내용</th>
+            <th scope="col">종류</th>
+            <th scope="col">위치</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="lodging : ${lodgingDto}">
+            <th th:text="${lodging.id}" >a</th>
+            <td th:text="${lodging.name}">a</td>
+            <td th:utext="${lodging.detail}"></td>
+<!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
+            <td th:text="${lodging.address}">a</td>
+            <!-- map에 필요한 숙소,주소-->
+            <input type="hidden" id="lodgingId" name="lodging_id" th:value="${lodging.id}">
          <div class="container-fluid mt-3">
              <div th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
                  <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
