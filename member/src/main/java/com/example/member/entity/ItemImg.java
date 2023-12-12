@@ -53,7 +53,7 @@ public class ItemImg {
         itemImg.setImgUrl(itemImgDto.getImgUrl());
         itemImg.setOriImgName(itemImgDto.getOriImgName());
         itemImg.setImgName(itemImgDto.getImgName());
-        itemImg.setRepimgYn(itemImgDto.getRepImgYn());
+        itemImg.setRepimgYn(itemImgDto.getRepimgYn());
         itemImg.setLodging(itemImgDto.getLodging());
         itemImg.setRoom(itemImgDto.getRoom());
 

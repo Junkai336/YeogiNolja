@@ -61,7 +61,7 @@ public class ReservSellerController {
             for (int l = 0; l < itemImgDtoList.size(); l++) {
                 ItemImgDto itemImgDto = itemImgDtoList.get(l);
 
-                if (itemImgDto.getRepImgYn().equals("Y") && itemImgDto.getLodging().getId().equals(lodgingDto.getId())) {
+                if (itemImgDto.getRepimgYn().equals("Y") && itemImgDto.getLodging().getId().equals(lodgingDto.getId())) {
                     lodgingDto.setImgUrl(itemImgDto.getImgUrl());
                 }
             }
@@ -82,7 +82,7 @@ public class ReservSellerController {
 
 
     @GetMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-    public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model) {
+    public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model) throws Exception {
 
         Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
@@ -93,6 +93,8 @@ public class ReservSellerController {
         Member member = lodging.getMember();
 
         lodgingDto.setMember(member);
+
+        List<ItemImg> lodgingItemImgList = itemImgService.findByLodgingId(lodgingId);
 
 
 
@@ -118,7 +120,7 @@ public class ReservSellerController {
             for (int l = 0; l < itemImgDtoList.size(); l++) {
                 ItemImgDto itemImgDto = itemImgDtoList.get(l);
 
-                if (itemImgDto.getRepImgYn().equals("Y") && itemImgDto.getRoom().getId().equals(roomDto.getId())) {
+                if (itemImgDto.getRepimgYn().equals("Y") && itemImgDto.getRoom().getId().equals(roomDto.getId())) {
                     roomDto.setImgUrl(itemImgDto.getImgUrl());
                 }
             }
@@ -133,6 +135,7 @@ public class ReservSellerController {
             model.addAttribute("lodgingDto", lodgingDto);
             model.addAttribute("checkForm", new ReservDto());
             model.addAttribute("roomDtoList", roomDtoList);
+            model.addAttribute("lodgingItemImgList", lodgingItemImgList);
 
 
         }

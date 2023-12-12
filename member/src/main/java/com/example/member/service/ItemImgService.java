@@ -152,4 +152,12 @@ public class ItemImgService {
         }
 
     }
+
+    public List<ItemImg> findByLodgingId(Long id) throws Exception {
+
+        List<ItemImg> itemImgList = itemImgRepository.findByLodgingId(id);
+
+        return itemImgList;
+
+    }
 }
