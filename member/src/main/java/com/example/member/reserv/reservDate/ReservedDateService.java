@@ -2,6 +2,7 @@ package com.example.member.reserv.reservDate;
 
 import com.example.member.entity.Room;
 import com.example.member.repository.RoomRepository;
+import com.example.member.reserv.ReservDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,6 +73,12 @@ public class ReservedDateService {
         }
         System.out.println("savedDateList : " + savedDateList.toString());
         return savedDateList;
+    }
+
+    public ReservDto addDateTime(ReservDto checkDateDto) {
+        System.out.println("reservDtoTestIn1 = "+ checkDateDto.getCheckIn());
+        System.out.println("reservDtoTestOut1 = "+ checkDateDto.getCheckOut());
+        return checkDateDto;
     }
 }
 

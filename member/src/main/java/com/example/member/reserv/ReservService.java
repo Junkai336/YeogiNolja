@@ -72,13 +72,6 @@ public class ReservService {
 
     // 예약 리스트 만들기
     public List<ReservDto> reservDtoList(Principal principal){
-//        List<Reserv> member = reservRepository.findReservs(principal.getName());
-        // principal 사용해서 래파지토리에서 findReservs 쓰기
-//        Member member = reserv.getMember();
-//        Long member_id = member.getId();
-//        List<Reserv> reservList = reservRepository.findAllByMemberId(member_id);
-//        List<ReservDto> reservDtoList = new ArrayList<>();
-
         String email = principal.getName();
         List<Reserv> reservList = reservRepository.findReservs(email);
         List<ReservDto> reservDtoList = new ArrayList<>();
@@ -90,17 +83,6 @@ public class ReservService {
         }
         return reservDtoList;
     }
-//    public List<ReservDto> reservDtoList(){
-//        List<Reserv> reservList = reservRepository.findAll();
-//        List<ReservDto> reservDtoList = new ArrayList<>();
-//
-//        for(Reserv reserv : reservList){
-//            ReservDto reservDto = ReservDto.toReservDto(reserv);
-//            reservDtoList.add(reservDto);
-//        }
-//        return reservDtoList;
-//    }
-
 
     // Controller로 부터 ReservId를 넘겨받아
     // 예약한 숙소의 상태를 변경 시키는 Reserv의 cancelReserv() 메서드 호출
@@ -120,25 +102,4 @@ public class ReservService {
         }
         return false;
     }
-
-
-
-
-//        // 숙소명, 방이름, 방디테일, 체크인아웃, 방가격,   예약자의 이름,전화전호
-//
-//
-//    // 주문 내역 조회 시 필요한 데이터
-//    // reservID,숙소네임,숙소 대표이미지, roomId,룸 네임 , memberId, reservName,
-//    // reservPN,방가격, 예약날짜, 상태, 체크인아웃, 인원(?),
-//
-//    // room
-//    // 숙소네임,숙소 대표이미지, roomId,룸 네임,방가격,상태, 체크인아웃, 인원(?)
-//
-//    // reserv
-//    // reservId, reservName, reservPN, 예약날짜
-//
-//    // member
-//    // memberId
-//
-//
 }
