@@ -68,7 +68,7 @@ public class UploadFileController {
         try {
 
         UploadFile uploadFile = uploadFileService.findById(fileName);
-        if(uploadFile.getArticle() != null) {
+        if(uploadFile.getArticle() != null || uploadFile.getLodging() != null || uploadFile.getRoom() != null) {
             uploadFileService.summernoteFileDelete(fileName, uploadFile);
         } else {
         // 해당 파일 삭제

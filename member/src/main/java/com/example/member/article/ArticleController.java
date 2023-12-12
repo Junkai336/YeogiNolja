@@ -8,9 +8,10 @@ import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,30 +35,18 @@ public class ArticleController {
 
     // 게시판 -> 게시글 리스트
     @GetMapping(value = {"/list", "/list/{page}"})
-    public String list(@PathVariable("page") Optional<Integer> page, Model model) {
+    public String list(@PathVariable("page")Optional<Integer> page, Model model) {
         try {
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
 
-//            List<ArticleDto> articleDtoList = articleService.articleDtoList();
+            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+            Page<ArticleDto> articleDtoList = articleService.getArticleList(pageable);
 
-            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 2);
-            Page<ArticleDto> articleList = articleService.findArticlePaging(pageable);
-
-
-
-
-            Long articleListSize = articleService.findArticleCount();
-
-
-            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList, pageable, articleListSize);
-
-            System.out.println("articleListSize, 페이지에 게시글이 나올 리스트 인듯 " + articleListSize);
-            System.out.println("articleDtoListPaging, 게시글 전체 리스트" + articleDtoListPaging);
-
-            model.addAttribute("articleDtoList", articleDtoListPaging);
+            model.addAttribute("articleDtoList", articleDtoList);
             model.addAttribute("page", pageable.getPageNumber());
-            model.addAttribute("maxPage", 15);
+            model.addAttribute("maxPage", 5);
+
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
@@ -80,7 +69,7 @@ public class ArticleController {
         if (articleDto.getId() != null) {
             Long article_id = articleDto.getId();
             try {
-                uploadFileService.havingIdArticleDelete(articleDto);
+                uploadFileService.havingIdDelete();
                 articleService.articleUpdate(articleDto);
 
                 model.addAttribute("articleDto", articleDto);

@@ -7,13 +7,11 @@ import com.example.member.repository.UploadFileRepository;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -113,12 +111,24 @@ public class ArticleService {
 
     }
 
-
-    public Long findArticleCount() {
-        return articleRepository.countArticle();
-    }
-
     @Transactional(readOnly = true)
-    public Page<ArticleDto> findArticlePaging(Pageable pageable) {
-        return new PageImpl<>(articleDtoList, pageable, articleListSize);
+    public Page<ArticleDto> getArticleList(Pageable pageable) {
+        List<Article> articleList = articleRepository.findArticles(pageable);
+        Long totalCount = articleRepository.countArticle();
+
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+
+        for(Article article : articleList) {
+            ArticleDto articleDto = ArticleDto.toArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+
+//        for(int i = articleList.size()-1; i > -1; i--) {
+//            ArticleDto articleDto = ArticleDto.toArticleDto(articleList.get(i));
+//            articleDtoList.add(articleDto);
+//        }
+
+
+        return new PageImpl<ArticleDto>(articleDtoList, pageable, totalCount);
+    }
 }

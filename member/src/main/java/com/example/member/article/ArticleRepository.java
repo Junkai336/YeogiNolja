@@ -20,12 +20,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "select * from article a where a.member_id= :member_id",nativeQuery = true)
     List<Article> findAllByMemberId(@Param("member_id")Long member_id);
 
-    @Query(value = "select * from Article a where a.id= :article_id",nativeQuery = true)
-    List<Article> findArticlePaging(Pageable pageable);
+    @Query(value = "select a from Article a")
+    List<Article> findArticles(Pageable pageable);
 
-    @Query(value = "select count(a) from Article a")
+    @Query("select count(a) from Article a")
     Long countArticle();
-
-
 }
 

@@ -34,6 +34,7 @@ public class ArticleDto{
     private LocalDateTime regTime;
 
     private List<CommentDto> commentDtoList = new ArrayList<>();
+
 //    // 조회수
 //    private Long views;
 //

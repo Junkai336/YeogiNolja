@@ -1,17 +1,12 @@
 package com.example.member.service;
 
+import com.example.member.article.Article;
 import com.example.member.constant.RoomExist;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
-import com.example.member.entity.ItemImg;
-import com.example.member.entity.Lodging;
+import com.example.member.entity.*;
 //import com.example.member.repository.ItemImgRepository;
-import com.example.member.entity.Member;
-import com.example.member.entity.Room;
-import com.example.member.repository.ItemImgRepository;
-import com.example.member.repository.LodgingRepository;
-import com.example.member.repository.MemberRepository;
-import com.example.member.repository.RoomRepository;
+import com.example.member.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +26,9 @@ public class LodgingService {
     private final MemberRepository memberRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
+    private final UploadFileService uploadFileService;
     private final FileService fileService;
+    private final UploadFileRepository uploadFileRepository;
 
 
 
@@ -45,6 +42,8 @@ public class LodgingService {
         lodging.setRoomExist(RoomExist.N);
 
         lodgingRepository.save(lodging);
+
+        uploadFileService.uploadFileGrantedLodgingId(lodging);
 
 //        이미지등록
         for(int i=0; i<itemImgFileList.size();i++ ){
@@ -101,6 +100,8 @@ public class LodgingService {
             itemImgIds.set(i, itemImgList.get(i).getId());
         }
 
+        uploadFileService.uploadFileGrantedLodgingId(lodging);
+
         // 이미지의 id 리스트를  가져와서 itemImgIds -> 이미지 업데이트나 관련작업(조회)
 
 // 이미지 등록
@@ -120,6 +121,17 @@ public class LodgingService {
     }
 
     public void deleteLodging(Long id, Lodging target, List<Room> targetRoom) throws Exception {
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        // 서머노트 이미지 삭제
+                for(UploadFile uploadFile : uploadFileList) {
+                    if (uploadFile.getLodging().getId().equals(target.getId())) {
+                        System.out.println("hello");
+                        uploadFileRepository.delete(uploadFile);
+                        uploadFileService.fileDelete(uploadFile);
+                    }
+                }
 
         // 숙소 이미지 삭제
         List<ItemImg> targetLodgingItemImgList = itemImgRepository.findByLodgingId(id);
