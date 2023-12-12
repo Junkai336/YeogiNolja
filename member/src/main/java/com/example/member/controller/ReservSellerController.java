@@ -6,22 +6,27 @@ import com.example.member.dto.RoomDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
-import com.example.member.repository.MemberRepository;
-import com.example.member.repository.RoomRepository;
-import com.example.member.service.ItemImgService;
+import com.example.member.reserv.Reserv;
+import com.example.member.reserv.ReservDto;
+import com.example.member.reserv.ReservService;
+import com.example.member.reserv.reservDate.ReservedDateDto;
+import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
-import com.example.member.service.ReservSellerService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +37,7 @@ public class ReservSellerController {
     private final LodgingService lodgingService;
     private final LodgingRepository lodgingRepository;
     private final RoomService roomService;
-    private final RoomRepository roomRepository;
     private final ItemImgRepository itemImgRepository;
-    private final ItemImgService itemImgService;
-    private final ReservSellerService reservSellerService;
-    private final MemberRepository memberRepository;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
@@ -98,7 +99,8 @@ public class ReservSellerController {
 
 
         // ------------------------------------------------------------
-
+//        LocalDate defaultNow = LocalDate.now();
+//        LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
 
         for (int i = 0; i < roomDtoList.size(); i++) {
@@ -131,7 +133,7 @@ public class ReservSellerController {
             // -----------------------------------------------------------
 
             model.addAttribute("lodgingDto", lodgingDto);
-            model.addAttribute("roomForm", new RoomDto());
+            model.addAttribute("checkForm", new ReservDto());
             model.addAttribute("roomDtoList", roomDtoList);
             model.addAttribute("lodgingItemImgList", lodgingItemImgList);
 
@@ -142,17 +144,19 @@ public class ReservSellerController {
 
     }
 
-    //    @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-//    public String newCheckDate(ReservDto checkForm, RoomDto roomDto){ // 룸 디티오 말고
-//        ReservDto reservDto = new ReservDto();
-//        System.out.println("checkForm = "+ checkForm);
-//        ReservService.newCheckDateTime(checkForm,roomDto);
-//        reservDto.setCheckIn(checkForm.getCheckInTime());
-//        reservDto.setCheckOut(checkForm.getCheckOutTime());
+        @PostMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
 
-//        System.out.println("reservDto.getCheckIn = "+ reservDto.getCheckIn());
-//        System.out.println("reservDto.getCheckOut = "+ reservDto.getCheckOut());
-//        return "checkForm";
-//    }
+    public String newCheckDate(Reserv reserv, Room room,
+                               @RequestParam("checkIn") String checkIn,
+                               @RequestParam("checkOut") String checkOut){ // 룸 디티오 말고
+
+            System.out.println("paramCheckIn = " +checkIn);
+            System.out.println("paramCheckOut = " +checkOut);
+
+            reserv.setCheckIn(checkIn);
+            reserv.setCheckOut(checkOut);
+            return "/reserv/lodgingReservContent/{lodging_id}";
+
+    }
 
 }
