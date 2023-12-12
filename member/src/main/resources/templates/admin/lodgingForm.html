@@ -42,52 +42,6 @@
             });
         }
 
-        // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-                // csrf 라는 url 공격을 막기 위해 적는 것
-function roomRegistration() {
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-
-        var url = "/roomRegistration";
-        var paramData = {
-            roomId : $("#roomId").val(),
-            detail : $("#detail").val(),
-            price : $("#price").val(),
-            checkInTime : $("#checkInTime").val(),
-            checkOutTime : $("#checkOutTime").val()
-        };
-
-        var param = JSON.stringify(paramData);
-
-        $.ajax({
-            url      : url,
-            type     : "POST",
-            contentType : "application/json",
-            data     : param,
-            beforeSend : function(xhr){
-                /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                xhr.setRequestHeader(header, token);
-            },
-            dataType : "json",
-            cache   : false,
-            success  : function(result, status){
-                alert("객실 정보가 저장되었습니다.");
-                location.href='/';
-            },
-            error : function(jqXHR, status, error){
-
-                if(jqXHR.status == '401'){
-                    alert('로그인 후 이용해주세요');
-                    location.href='/members/login';
-                } else{
-                    alert(jqXHR.responseText);
-                }
-
-            }
-        });
-}
-
     </script>
 </th:block>
 
@@ -131,13 +85,6 @@ function roomRegistration() {
             </select>
         </div>
 
-        <!--       <div class="form-group">&ndash;&gt;-->
-        <!--            <select th:field="*{LodgingType}" class="custom-select">&ndash;&gt;-->
-        <!--                <option value="PENSION">펜션</option>-->
-        <!--                <option value="POOLVILLA">풀빌라</option>-->
-        <!--            </select>-->
-        <!--        </div>-->
-
         <div class="input-group mt-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">숙소명</span>
@@ -145,14 +92,6 @@ function roomRegistration() {
             <input type="text" th:field="*{name}" class="form-control" placeholder="숙소명을 입력해주세요">
         </div>
         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
-
-        <!--        <div class="input-group">-->
-        <!--            <div class="input-group-prepend">-->
-        <!--                <span class="input-group-text">숙소 위치</span>-->
-        <!--            </div>-->
-        <!--            <input type="text" th:field="*{location}" class="form-control" placeholder="숙소의 위치를 입력해주세요">-->
-        <!--        </div>-->
-        <!--        <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="fieldError">Incorrect data</p>-->
 
         <div class="input-group">
             <div class="input-group-prepend">

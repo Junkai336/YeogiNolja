@@ -41,6 +41,14 @@ public class UploadFile extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Article article;
 
+    @JoinColumn(name = "lodging_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Lodging lodging;
+
+    @JoinColumn(name = "room_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Room room;
+
 //    @Column
 //    private Long imgNumber;
 

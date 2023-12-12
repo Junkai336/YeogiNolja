@@ -177,4 +177,22 @@ public class LodgingService {
     }
 
 
+    public LodgingDto imageLoad(LodgingDto lodgingDto, Long lodgingId) throws Exception {
+
+        List<ItemImg> itemImgList = itemImgService.findByLodgingId(lodgingId);
+
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+        for(ItemImg itemImg : itemImgList) {
+            if(itemImg.getImgUrl() != null) {
+            ItemImgDto itemImgDto = ItemImgDto.toItemImgDto(itemImg);
+            itemImgDtoList.add(itemImgDto);
+            }
+        }
+
+        lodgingDto.setItemImgDtoList(itemImgDtoList);
+
+
+        return lodgingDto;
     }
+}
