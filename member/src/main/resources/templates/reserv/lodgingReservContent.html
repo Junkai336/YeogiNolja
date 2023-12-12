@@ -79,13 +79,6 @@
         <p th:text="${roomSuccessMsg}">성공출력용</p>
     </div>
 
-    <p>테스트용임
-    <form action="a">
-        <label for="eee"></label>
-    <input id="eee" type="time" class="timepicker" name="eee">
-</form>
-    </p>
-
          <div class="container-fluid mt-3">
              <div th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
                  <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
