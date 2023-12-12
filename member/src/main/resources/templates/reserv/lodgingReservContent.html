@@ -9,9 +9,11 @@
     <meta id="_csrf_header" name="_csrf_header"
           th:content="${_csrf.headerName}" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-<!--    <script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script type="text/javascript" src="/js/imgUpload.js"></script>
+    <script type="text/javascript" src="/js/timePicker.js"></script>
 
 </head>
 <!-- 사용자 CSS 추가 -->
@@ -31,6 +33,8 @@
 
 <!-- 사용자 스크립트 추가 -->
 <script th:inline="javascript">
+    $(document).ready(function () {
+
     $(document).ready(function(){
         var errorMessage = [[${errorMessage}]];
         if(errorMessage != null){
@@ -74,6 +78,13 @@
     <div th:if="${lodgingSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
         <p th:text="${roomSuccessMsg}">성공출력용</p>
     </div>
+
+    <p>테스트용임
+    <form action="a">
+        <label for="eee"></label>
+    <input id="eee" type="time" class="timepicker" name="eee">
+</form>
+    </p>
 
          <div class="container-fluid mt-3">
              <div th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
@@ -266,14 +277,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크인 시간</span>
                     </div>
-                    <input id="checkInTime" type="time" class="form-control" placeholder="체크인 시간을 입력해주세요">
+                    <input id="checkInTime" type="time" class="form-control timepicker" placeholder="체크인 시간을 입력해주세요">
                 </div>
 
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크아웃 시간</span>
                     </div>
-                    <input id="checkOutTime" type="time" class="form-control" placeholder="체크아웃 시간을 입력해주세요">
+                    <input id="checkOutTime" type="time" class="form-control timepicker" placeholder="체크아웃 시간을 입력해주세요">
                 </div>
 
                 <div class="input-group-prepend">
@@ -304,10 +315,18 @@
         var addBtn = document.querySelector('.addBtn');
         var editForm = document.querySelectorAll('.editForm');
         var editButton = document.querySelectorAll('.editButton');
+        var detail = document.querySelectorAll('.detail');
+        var addFormDetail = addForm.querySelector('.addDetail');
 
 
 addBtn.addEventListener('click', function (e) {
 e.preventDefault();
+
+  for (let k = 0; k < editForm.length; k++) {
+    editForm[k].classList.add('hide');
+    detail[k].removeAttribute('id');
+  }
+
 addForm.classList.toggle('hide');
 })
 
