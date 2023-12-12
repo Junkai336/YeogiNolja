@@ -90,15 +90,15 @@
         <nav th:with="start=${(articleDtoList.number/maxPage)*maxPage + 1}, end=(${(articleDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < articleDtoList.totalPages ? start + (maxPage - 1) : articleDtoList.totalPages)})" aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item" th:classappend="${articleDtoList.number eq 0}?'disabled':''">
-                    <a th:href="@{'/articleDtoList/' + ${articleDtoList.number-1}}" aria-label='Previous' class="page-link"></a>
+                    <a th:href="@{'/article/list/' + ${articleDtoList.number-1}}" aria-label='Previous' class="page-link">Prev</a>
                 </li>
 
                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${articleDtoList.number eq page-1}?'active':''">
-                    <a th:href="@{'/articleDtoList/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+                    <a th:href="@{'/article/list/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
                 </li>
 
                 <li class="page-item" th:classappend="${articleDtoList.number+1 ge articleDtoList.totalPages}?'disabled':''">
-                    <a th:href="@{'/articleDtoList/' + ${articleDtoList.number+1}}" aria-label='Next' class="page-link">
+                    <a th:href="@{'/article/list/' + ${articleDtoList.number+1}}" aria-label='Next' class="page-link">
                     <span aria-hidden='true'>Next</span>
                     </a>
                 </li>

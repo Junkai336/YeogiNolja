@@ -111,4 +111,7 @@ public class ArticleService {
     }
 
 
+    public Long findArticleCount() {
+        return articleRepository.countArticle();
+    }
 }

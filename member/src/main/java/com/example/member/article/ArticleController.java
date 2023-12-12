@@ -39,14 +39,16 @@ public class ArticleController {
             uploadFileService.backwardUploadFileCheck();
 
             List<ArticleDto> articleDtoList = articleService.articleDtoList();
-
+            Long articleListSize = articleService.findArticleCount();
             Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 2);
-            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList.subList(0, 2), pageable, articleDtoList.size());
-//            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList, pageable, articleDtoList.size());
+//            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList.subList(0, 2), pageable, articleDtoList.size());
+            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList, pageable, articleListSize);
+
+            System.out.println("");
 
             model.addAttribute("articleDtoList", articleDtoListPaging);
             model.addAttribute("page", pageable.getPageNumber());
-            model.addAttribute("maxPage", 5);
+            model.addAttribute("maxPage", 15);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
         }
