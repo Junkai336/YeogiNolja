@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,13 +39,21 @@ public class ArticleController {
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
 
-            List<ArticleDto> articleDtoList = articleService.articleDtoList();
-            Long articleListSize = articleService.findArticleCount();
+//            List<ArticleDto> articleDtoList = articleService.articleDtoList();
+
             Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 2);
-//            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList.subList(0, 2), pageable, articleDtoList.size());
+            Page<ArticleDto> articleList = articleService.findArticlePaging(pageable);
+
+
+
+
+            Long articleListSize = articleService.findArticleCount();
+
+
             Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList, pageable, articleListSize);
 
-            System.out.println("");
+            System.out.println("articleListSize, 페이지에 게시글이 나올 리스트 인듯 " + articleListSize);
+            System.out.println("articleDtoListPaging, 게시글 전체 리스트" + articleDtoListPaging);
 
             model.addAttribute("articleDtoList", articleDtoListPaging);
             model.addAttribute("page", pageable.getPageNumber());

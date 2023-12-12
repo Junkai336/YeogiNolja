@@ -7,10 +7,13 @@ import com.example.member.repository.UploadFileRepository;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -114,4 +117,8 @@ public class ArticleService {
     public Long findArticleCount() {
         return articleRepository.countArticle();
     }
+
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> findArticlePaging(Pageable pageable) {
+        return new PageImpl<>(articleDtoList, pageable, articleListSize);
 }
