@@ -3,6 +3,7 @@ package com.example.member.reserv;
 
 import com.example.member.repository.MemberRepository;
 import com.example.member.reserv.reservDate.ReservedDateDto;
+import com.example.member.reserv.reservDate.ReservedDateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,10 +27,17 @@ import java.util.Optional;
 @RequestMapping("/reserv")
 public class ReservController {
     private final ReservService reservService;
+    private final ReservedDateService reservedDateService;
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
     @GetMapping("/roomReservation/{room_id}") // roomId/reserv
-    public String newReserv (@PathVariable("room_id") Long roomId, Principal principal,Reserv reserv, Model model){
+    public String newReserv (@PathVariable("room_id") Long roomId, Principal principal,Reserv reserv, Model model,ReservDto check){
+        ReservDto checkDate = reservedDateService.addDateTime(check);
+
+        System.out.println("roomId = "+roomId);
+        System.out.println("checkDateIn = "+ checkDate.getCheckIn());
+        System.out.println("checkDateOut = "+ checkDate.getCheckOut());
+
         try {
             ReservDto reservDto = reservService.newReserv(roomId, principal,reserv);
             model.addAttribute("reservDto", reservDto);
@@ -97,5 +105,10 @@ public class ReservController {
         System.out.println("checkIn : " + reservDto.getCheckIn());
         System.out.println("checkOut: "+ reservDto.getCheckOut());
 
+        ReservDto checkDateDto = new ReservDto();
+        checkDateDto.setCheckIn(reservDto.getCheckIn());
+        checkDateDto.setCheckOut(reservDto.getCheckOut());
+
+        reservedDateService.addDateTime(checkDateDto);
     }
 }

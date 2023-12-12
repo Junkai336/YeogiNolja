@@ -20,25 +20,4 @@ public class ReservHistDto {
     private Reserv reserv;
     // 예약 내역 리스트
 
-
-
-// 주문 내역 조회 시 필요한 데이터
-    // reservID,숙소네임,숙소 대표이미지, roomId,룸 네임 , memberId, reservName,
-    // reservPN,방가격, 예약날짜, 상태, 체크인아웃, 인원(?),
-
-    // room
-    // 숙소네임,숙소 대표이미지, roomId,룸 네임,방가격,상태, 체크인아웃, 인원(?)
-
-    // reserv
-    // reservId, reservName, reservPN, 예약날짜
-
-    // member
-    // memberId
-
-
-
-
-
-
-
 }

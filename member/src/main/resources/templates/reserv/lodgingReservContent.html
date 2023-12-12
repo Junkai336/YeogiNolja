@@ -548,9 +548,13 @@ window.location.reload();
             <p  th:text="'입실: '+${roomDto.checkInTime}"></p>
             <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
 
-            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
+            <button type="button"
+                    id="dateBtn"
+                    th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}'|"
+                    sec:authorize="hasAnyAuthority('ROLE_USER')"
+                    class="btn btn-primary">예약하기</button>
+<!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
         </div>
-
 
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <button type="button" class="btn btn-primary editButton">수정</button>
