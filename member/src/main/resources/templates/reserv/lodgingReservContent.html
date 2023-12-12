@@ -8,18 +8,24 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
     <meta id="_csrf_header" name="_csrf_header"
           th:content="${_csrf.headerName}" />
+    <link rel="stylesheet"type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
     <script type="text/javascript" src="/js/imgUpload.js"></script>
 </head>
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
     </style>
 </th:block>
 
 <!-- 사용자 스크립트 추가 -->
 <script th:inline="javascript">
+
     $(document).ready(function(){
         var errorMessage = [[${errorMessage}]];
         if(errorMessage != null){
@@ -282,39 +288,48 @@ function roomRegistration() {
     </script>
 
     <!------------------------------------------------------------------------------------------------------->
-                <form th:action="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodgingDto.id})}"
-                  th:object="${checkForm}" role="form" method="post"
-                  id="check"
-                  sec:authorize="hasAnyAuthority('ROLE_USER')"
-                    target="form">
-            <div class="input-group">
-                <!--            체크 폼에 같이 보낼 로징 id-->
-<!--                <input id="lodging_id" type="hidden" name="lodging_id" form="check" th:value="${lodgingDto.id}">-->
-<!--                <input type="hidden" name="lodging_name" th:value="${lodging.name}">-->
-                <div class="input-group-prepend">
-                    <span class="input-group-text">체크인 시간</span>
-                </div>
-                <input id="checkIn" type="date" th:field="*{checkIn}" th:value="yyyy-MM-dd" class="form-control" placeholder="체크인 시간을 입력해주세요">
+    <div class="container">
+        <form id="dateForm">
+            <label for="txtDate"><i class="bi bi-calendar2"></i></label>
+            <input type="text" name="daterange" id="txtDate"/>
+            <button type="submit">일자 검색</button>
+        </form>
+    </div>
+    <script>
+       $("#txtDate").daterangepicker({
+        locale: {
+        "separator" : "~",   // 시작 일자와 종료 일자 구분자
+        "format" : "YYYY-MM-DD", // 일자 노출 포멧
+        "applyLabel" : "확인",    // 확인 버튼 텍스트
+        "cancelLabel" : "취소",   // 취소 버튼 텍스트
+        "daysOfWeek" : ["일", "월", "화", "수", "목", "금", "토"],
+        "monthNames" : ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+        },
+        showDropdowns: true,    // 년 월 수동 설정 여부
+        autoApply: true,    // 확인/취소 버튼 사용 여부
 
-            </div>
-        <!--    <p th:if="${#fields.hasErrors('room.checkInTime')}" th:errors="*{room.checkInTime}" class="fieldError">Incorrect data</p>-->
+       });
+        $("#txtDate").on('show.daterangepicker', function(ev, pricker){
+            $(".yearselect").css("float", "left");
+            $(".monthselect").css("float", "right");
+            $(".cancelBtn").css("float", "right");
+        });
 
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">체크아웃 시간</span>
-                </div>
 
-                <input id="checkOut" type="date" th:field="*{checkOut}" th:value="yyyy-MM-dd" class="form-control" placeholder="객실의 가격을 입력해주세요">
-            </div>
-        <!--    <p th:if="${#fields.hasErrors('room.checkOutTime')}" th:errors="*{room.checkOutTime}" class="fieldError">Incorrect data</p>-->
-                                        <button type="submit"
-                                                form="check"
-                                                class="btn btn-primary my-2">날짜조회</button>
-<!--                th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
+        var dateForm = document.querySelector("#dateForm");
+        var reservationDate = document.querySelector("#txtDate");
+        dateForm.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        var reserveDate =  reservationDate.value;
 
-            </form>
-<!--            form submit 페이지 이동 방지-->
-            <iframe name="form" style="display:none;"></iframe>
+
+
+
+
+        console.log(reserveDate);
+        });
+
+    </script>
     <!----------------------------------------------------------------------------------------------------->
 
     <!--  map div  -->
@@ -377,74 +392,6 @@ function roomRegistration() {
             <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
 
             <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>
-<!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
-<!--                        <button type="submit"-->
-<!--                                form="check"-->
-<!--                                th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})'|}"-->
-<!--                                class="btn btn-primary my-2">예약하기</button>-->
-<!--            <script>-->
-<!--                // 현재 보고있는 숙소의 id값-->
-<!--                  var lodging_id = document.querySelector("#lodging_id");-->
-
-<!--                  // 서브밋 시 들고 나갈 checkIn, checkOut 날짜-->
-<!--                  var check_in = document.querySelector("#checkIn");-->
-<!--                  var check_out = document.querySelector("#checkOut");-->
-
-
-
-
-<!--                      checkForm.addEventListener("click", (e)=>{-->
-
-<!--                            e.preventDefault();-->
-<!--                            const lodgingId = lodging_id.value;-->
-<!--                            const checkIn = check_in.value;-->
-<!--                            const checkOut = check_out.value;-->
-
-
-<!--                            console.log("lodgingid : "+ lodgingId);-->
-<!--                            console.log("checkIn : "+ checkIn);-->
-<!--                            console.log("checkOut : "+ checkOut);-->
-
-<!--                            const postChekDate = {-->
-<!--                            lodgingId: lodgingId,-->
-<!--                            checkIn: checkIn,-->
-<!--                            checkOut: checkOut-->
-<!--                            };-->
-
-<!--                        //수정 Rest APi 호출 - fetch()-->
-<!--                        //주의 method : "post"-->
-
-<!--                          var token = $("meta[name='_csrf']").attr("content");-->
-<!--                          var header = $("meta[name='_csrf_header']").attr("content");-->
-
-<!--                        // 넘길 데이터 json 형식-->
-<!--                         var paramData = JSON.stringify(postCheckDate);-->
-
-<!--                        console.log(paramData);-->
-
-<!--                        // URL-->
-<!--                        const url = `/reserv/lodgingReservContent/{lodging_id}`;-->
-<!--                        console.log(url);-->
-
-<!--                        $.ajax({-->
-<!--                                    url      : url,-->
-<!--                                    type     : "POST",-->
-<!--                                    contentType : "application/json",-->
-<!--                                    data     : paramData,-->
-<!--                                    beforeSend : function(xhr){-->
-<!--                                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */-->
-<!--                                        xhr.setRequestHeader(header, token);-->
-<!--                                    },-->
-<!--                                    dataType : "json",-->
-<!--                                    cache   : false-->
-<!--                                });-->
-
-<!--                                      window.location.reload();-->
-
-<!--                        });-->
-
-<!--                      });-->
-<!--            </script>-->
         </div>
 
 
@@ -794,5 +741,6 @@ function maps (mapContainer){
         maps(mapContainer2);
 
     </script>
+
 
 </div>
