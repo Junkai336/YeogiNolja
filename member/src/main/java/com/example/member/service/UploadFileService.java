@@ -67,9 +67,11 @@ public class UploadFileService {
         }
     }
 
-    public UploadFile load(Long fileId) throws Exception {
+    public UploadFile load(Long fileId) throws RuntimeException {
 
-        UploadFile uploadFile = uploadFileRepository.findById(fileId).get();
+        UploadFile uploadFile = uploadFileRepository.findById(fileId)
+                .orElseThrow(EntityNotFoundException::new);
+        //UploadFile uploadFile = uploadFileRepository.findById(fileId).orElse(null);
         return uploadFileRepository.saveAndFlush(uploadFile);
     }
 
@@ -205,5 +207,12 @@ public class UploadFileService {
 
             }
         }
+    }
+
+    public UploadFile findById(Long fileName) throws Exception {
+
+        UploadFile uploadFile = uploadFileRepository.findById(fileName).orElseThrow(EntityNotFoundException::new);
+
+        return uploadFile;
     }
 }
