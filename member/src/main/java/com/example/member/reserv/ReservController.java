@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -87,15 +86,5 @@ public class ReservController {
         // 예약 취소한 USER가 예약 요청한 USER가 맞을시 ReservService의 cancelReserv() 메서드 호출
         reservService.cancelReserv(reservId);
         return new ResponseEntity<Long>(reservId, HttpStatus.OK);
-    }
-
-
-    @PostMapping("/{lodgingId}/calender")
-    public void dateForm(@PathVariable("lodgingId") Long lodging_id
-    ,   @RequestBody ReservDto reservDto){
-        System.out.println("lodgingId :" + lodging_id);
-        System.out.println("checkIn : " + reservDto.getCheckIn());
-        System.out.println("checkOut: "+ reservDto.getCheckOut());
-
     }
 }
