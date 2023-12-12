@@ -14,6 +14,7 @@ import com.example.member.reserv.ReservDto;
 import com.example.member.reserv.ReservService;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
+import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,7 @@ public class ReservSellerController {
     private final LodgingRepository lodgingRepository;
     private final RoomService roomService;
     private final ItemImgRepository itemImgRepository;
+    private final ItemImgService itemImgService;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {

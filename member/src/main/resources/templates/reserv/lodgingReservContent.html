@@ -33,6 +33,13 @@
             display: none;
         }
 
+        input[type='time']::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    width: 10%;
+    left:35%;
+}
+
     </style>
 </th:block>
 
@@ -133,9 +140,9 @@
                                             <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
                                                  th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                                         </div>
-                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">>
                                             <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
-                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
                                         </div>
                                     </div>
 
@@ -179,15 +186,15 @@
          </tr>
          </thead>
          <tbody>
-         <tr th:each="lodging : ${lodgingDto}">
-             <th th:text="${lodging.id}">a</th>
-             <td th:text="${lodging.name}">a</td>
-             <td th:utext="${lodging.detail}"></td>
-<!--             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>-->
-             <td th:text="${lodging.address}">a</td>
+         <tr>
+             <th th:text="${lodgingDto.id}">a</th>
+             <td th:text="${lodgingDto.name}">a</td>
+             <td th:utext="${lodgingDto.detail}"></td>
+<!--             <td th:text="${lodgingDto.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>-->
+             <td th:text="${lodgingDto.address}">a</td>
              <!-- map에 필요한 숙소,주소-->
-            <input type="hidden" name="lodging_address" th:value="${lodging.address}">
-            <input type="hidden" name="lodging_name" th:value="${lodging.name}">
+            <input type="hidden" name="lodgingDto_address" th:value="${lodgingDto.address}">
+            <input type="hidden" name="lodgingDto_name" th:value="${lodgingDto.name}">
 
             <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
             <!--                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>-->
@@ -566,14 +573,14 @@ window.location.reload();
                             <div class="input-group-prepend">
                                 <span class="input-group-text">체크인 시간</span>
                             </div>
-                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime" placeholder="체크인 시간을 입력해주세요">
+                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime timepicker" placeholder="체크인 시간을 입력해주세요">
                         </div>
 
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">체크아웃 시간</span>
                             </div>
-                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime" placeholder="체크아웃 시간을 입력해주세요">
+                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime timepicker" placeholder="체크아웃 시간을 입력해주세요">
                         </div>
 
                         <div class="input-group-prepend">
