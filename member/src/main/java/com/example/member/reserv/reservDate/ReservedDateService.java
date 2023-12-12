@@ -1,5 +1,6 @@
 package com.example.member.reserv.reservDate;
 
+import com.example.member.dto.RoomDto;
 import com.example.member.entity.Room;
 import com.example.member.repository.RoomRepository;
 import com.example.member.reserv.ReservDto;
@@ -12,7 +13,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +83,46 @@ public class ReservedDateService {
         System.out.println("reservDtoTestIn1 = "+ checkDateDto.getCheckIn());
         System.out.println("reservDtoTestOut1 = "+ checkDateDto.getCheckOut());
         return checkDateDto;
+    }
+
+    public List<RoomDto> defaultValidation(List<RoomDto> roomDtoList) {
+        // 오늘 일자와 내일 일자를 불러온다
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        List<LocalDate> dateList = new ArrayList<>();
+        dateList.add(today);
+        dateList.add(tomorrow);
+        List<Long> reservRoomIdList = new ArrayList<>();
+        for(LocalDate date: dateList){
+            // 일자를 매개값으로 받아 해당 일자에 예약이 되어있는 방의 id를 모두 받아온다.
+            List<Long> findByDateList = reservedDateRepository.findAllByDate(today);
+            // 받아온 List를 하나에 List로 합친다.
+            reservRoomIdList.addAll(findByDateList);
+        }
+        // 중복제거 stream List
+        // 받은 일자 만큼의 반복된 List의 중복 값을 없애준다.
+       List<Long> findresult = reservRoomIdList.stream()
+               .distinct().collect(Collectors.toList());
+        // 찾은 id값으로 Room Entity List를 만든다.
+        List<Room> reservedRoomList = new ArrayList<>();
+        for(Long room_id: findresult){
+             Room room = roomRepository.findById(room_id)
+                     .orElseThrow(EntityNotFoundException::new);
+        reservedRoomList.add(room);
+        }
+//        전체 조회된 방List에서 인자를 꺼내어
+        for (RoomDto roomDto: roomDtoList){
+//            어제, 오늘 일자에 예약이 되어있는 방을 기존의 Dto List에서 제거한다.
+            for (Room room : reservedRoomList){
+                if (roomDto.getId().equals(room.getId())){
+                    roomDtoList.remove(roomDto);
+                }
+            }
+
+        }
+        // 전체 조회된 방List중 오늘 내일 예약이 되어있는방 제외
+        // 현재 예약 가능한 방들을 보여준다.
+        return roomDtoList;
     }
 }
 
