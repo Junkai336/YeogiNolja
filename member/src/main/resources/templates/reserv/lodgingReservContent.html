@@ -140,7 +140,7 @@
                                             <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
                                                  th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                                         </div>
-                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">>
+                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
                                             <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
                                                  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
                                         </div>
@@ -565,7 +565,7 @@ window.location.reload();
                                 <span class="input-group-text">객실 상세 내용</span>
                             </div>
                             <label th:for="summernote" class="form-label"></label>
-                            <textarea class="form-control detail detail2" name="summernote" th:text="*{detail}" aria-label="With textarea" rows="3"></textarea>
+                            <textarea class="form-control detail" name="summernote" th:text="*{detail}" aria-label="With textarea" rows="3"></textarea>
 <!--                            <textarea th:text="*{detail}" class="form-control detail" aria-label="With textarea"></textarea>-->
                         </div>
 

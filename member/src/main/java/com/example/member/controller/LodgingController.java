@@ -109,7 +109,6 @@ public class LodgingController {
 
         for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
             System.out.println(itemImgDto);
-            System.out.println("byeworld!");
         }
 
         lodgingService.emptyRoomGrantedLodgingId(id, lodgingEntity);

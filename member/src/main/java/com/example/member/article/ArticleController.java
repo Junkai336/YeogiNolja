@@ -27,7 +27,7 @@ public class ArticleController {
     private final UploadFileService uploadFileService;
 
     // 게시판 -> 게시글 리스트
-    @GetMapping(value = "/list")
+    @GetMapping(value = {"/list", "/list/{page}"})
     public String list(Model model) {
         try {
             uploadFileService.emptyUploadFileCheck();

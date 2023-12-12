@@ -92,6 +92,12 @@ public class ReservSellerController {
 
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
 
+        LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
+
+        for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
+            System.out.println(itemImgDto);
+        }
+
         Member member = lodging.getMember();
 
         lodgingDto.setMember(member);
@@ -134,7 +140,7 @@ public class ReservSellerController {
 
             // -----------------------------------------------------------
 
-            model.addAttribute("lodgingDto", lodgingDto);
+            model.addAttribute("lodgingDto", lodgingDtoContainImage);
             model.addAttribute("checkForm", new ReservDto());
             model.addAttribute("roomDtoList", roomDtoList);
             model.addAttribute("lodgingItemImgList", lodgingItemImgList);
