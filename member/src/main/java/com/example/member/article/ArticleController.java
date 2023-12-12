@@ -7,6 +7,10 @@ import com.example.member.repository.UploadFileRepository;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -28,13 +33,20 @@ public class ArticleController {
 
     // 게시판 -> 게시글 리스트
     @GetMapping(value = {"/list", "/list/{page}"})
-    public String list(Model model) {
+    public String list(@PathVariable("page") Optional<Integer> page, Model model) {
         try {
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
 
             List<ArticleDto> articleDtoList = articleService.articleDtoList();
-            model.addAttribute("articleDtoList", articleDtoList);
+
+            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 2);
+            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList.subList(0, 2), pageable, articleDtoList.size());
+//            Page<ArticleDto> articleDtoListPaging = new PageImpl<>(articleDtoList, pageable, articleDtoList.size());
+
+            model.addAttribute("articleDtoList", articleDtoListPaging);
+            model.addAttribute("page", pageable.getPageNumber());
+            model.addAttribute("maxPage", 5);
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
         }

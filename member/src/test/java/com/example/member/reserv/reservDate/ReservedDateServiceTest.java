@@ -24,9 +24,8 @@ private ReservedDateService reservedDateService;
     void 예약일자_저장() {
         Long room_id = 38L;
         Room room = createRoom(room_id);
-        String datestr = "2023-12-30 / 2024-01-03";
 
-        List<LocalDate> useDateList = reservedDateService.toLocalDate("2023-12-30", "2023-01-06");
+        List<LocalDate> useDateList = reservedDateService.toLocalDate("2023-12-30", "2024-01-06");
         System.out.println(useDateList.toString());
         try {
             reservedDateService.saveReservDate(room_id, useDateList);

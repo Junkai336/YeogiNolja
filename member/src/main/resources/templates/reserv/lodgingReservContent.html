@@ -282,14 +282,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크인 시간</span>
                     </div>
-                    <input id="checkInTime" type="time" class="form-control timepicker" placeholder="체크인 시간을 입력해주세요">
+                    <input id="checkInTime" type="time" class="form-control timepickerCheckIn" placeholder="체크인 시간을 입력해주세요">
                 </div>
 
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크아웃 시간</span>
                     </div>
-                    <input id="checkOutTime" type="time" class="form-control timepicker" placeholder="체크아웃 시간을 입력해주세요">
+                    <input id="checkOutTime" type="time" class="form-control timepickerCheckOut" placeholder="체크아웃 시간을 입력해주세요">
                 </div>
 
                 <div class="input-group-prepend">
@@ -391,7 +391,6 @@ window.location.reload();
 }
 
     </script>
-
     <!------------------------------------------------------------------------------------------------------->
     <div class="container">
         <form id="dateForm">
@@ -401,38 +400,72 @@ window.location.reload();
         </form>
     </div>
     <script>
-       $("#txtDate").daterangepicker({
-        locale: {
-        "separator" : "~",   // 시작 일자와 종료 일자 구분자
-        "format" : "YYYY-MM-DD", // 일자 노출 포멧
-        "applyLabel" : "확인",    // 확인 버튼 텍스트
-        "cancelLabel" : "취소",   // 취소 버튼 텍스트
-        "daysOfWeek" : ["일", "월", "화", "수", "목", "금", "토"],
-        "monthNames" : ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
-        },
-        showDropdowns: true,    // 년 월 수동 설정 여부
-        autoApply: true,    // 확인/취소 버튼 사용 여부
+        $("#txtDate").daterangepicker({
+         locale: {
+         "separator" : "~",   // 시작 일자와 종료 일자 구분자
+         "format" : "YYYY-MM-DD", // 일자 노출 포멧
+         "applyLabel" : "확인",    // 확인 버튼 텍스트
+         "cancelLabel" : "취소",   // 취소 버튼 텍스트
+         "daysOfWeek" : ["일", "월", "화", "수", "목", "금", "토"],
+         "monthNames" : ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+         },
+         showDropdowns: true,    // 년 월 수동 설정 여부
+         autoApply: true,    // 확인/취소 버튼 사용 여부
 
-       });
-        $("#txtDate").on('show.daterangepicker', function(ev, pricker){
-            $(".yearselect").css("float", "left");
-            $(".monthselect").css("float", "right");
-            $(".cancelBtn").css("float", "right");
         });
+         $("#txtDate").on('show.daterangepicker', function(ev, pricker){
+             $(".yearselect").css("float", "left");
+             $(".monthselect").css("float", "right");
+             $(".cancelBtn").css("float", "right");
+         });
 
 
-        var dateForm = document.querySelector("#dateForm");
-        var reservationDate = document.querySelector("#txtDate");
-        dateForm.addEventListener("submit", (e)=>{
-        e.preventDefault();
-        var reserveDate =  reservationDate.value;
+         var dateForm = document.querySelector("#dateForm");
+         var reservationDate = document.querySelector("#txtDate");
+
+         dateForm.addEventListener("submit", (e)=>{
+         e.preventDefault();
+         var reserveDate =  reservationDate.value;
+         var arr = reserveDate.split('~');
+         var startDate = arr[0];
+         var endDate = arr[1];
+         console.log(startDate+"////"+ endDate);
+
+         const data = {
+             checkIn: startDate,
+             checkOut: endDate
+         }
+
+         const lodgingId = document.querySelector("#lodgingId").value;
+         console.log(lodgingId);
+         const url = `/reserv/${lodgingId}/calender`;
+
+          var token = $("meta[name='_csrf']").attr("content");
+       var header = $("meta[name='_csrf_header']").attr("content");
+
+
+         $.ajax({
+                 url      : url,
+                 type     : "post",
+                 contentType : "application/json",
+                 data     : JSON.stringify(data),
+                 beforeSend : function(xhr){
+                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                     xhr.setRequestHeader(header, token);
+                 },
+                 dataType : "json",
+                 cache   : false,
+                 success  : function(result, status){
+                         alert("예약일자 등록이 완료 되었습니다.");
+                     },
+                     error : function(result, status){
+                         alert("오류가 발생하였습니다.");
+                     }
+                    });
 
 
 
-
-
-        console.log(reserveDate);
-        });
+         });
 
     </script>
     <!----------------------------------------------------------------------------------------------------->
@@ -573,14 +606,14 @@ window.location.reload();
                             <div class="input-group-prepend">
                                 <span class="input-group-text">체크인 시간</span>
                             </div>
-                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime timepicker" placeholder="체크인 시간을 입력해주세요">
+                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime timepickerCheckIn" placeholder="체크인 시간을 입력해주세요">
                         </div>
 
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">체크아웃 시간</span>
                             </div>
-                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime timepicker" placeholder="체크아웃 시간을 입력해주세요">
+                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime timepickerCheckOut" placeholder="체크아웃 시간을 입력해주세요">
                         </div>
 
                         <div class="input-group-prepend">
