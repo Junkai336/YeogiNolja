@@ -10,6 +10,7 @@ import com.example.member.entity.Room;
 import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.RoomRepository;
+import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
@@ -39,6 +40,7 @@ public class LodgingController {
     private final LodgingService lodgingService;
     private final RoomService roomService;
     private final ItemImgService itemImgService;
+    private final ReservedDateService reservedDateService;
 
     @GetMapping(value = "/registration")
     public String toRegistration(Model model) {
@@ -100,21 +102,26 @@ public class LodgingController {
 //        return "item/itemMng";
 //    }
 
-    @GetMapping(value = "/{id}")
-    public String show(@PathVariable Long id, Model model) throws Exception {
+    // 일자 등록없이 기본 값(오늘, 내일) 일자로하여 예약이 가능한 방을 보여준다.
+    @GetMapping(value = "/{lodging_id}")
+    public String show(@PathVariable Long lodging_id, Model model) throws Exception {
 
-        Lodging lodgingEntity = lodgingService.findById(id);
+        Lodging lodgingEntity = lodgingService.findById(lodging_id);
         LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
-        LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, id);
+        LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodging_id);
 
         for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
             System.out.println(itemImgDto);
         }
 
-        lodgingService.emptyRoomGrantedLodgingId(id, lodgingEntity);
+        lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
+        // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
+        List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+        // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
+        // 방들은 제외한 후 보여준다.
+        List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
 
-        List<RoomDto> roomDtoList = roomService.roomDtoList(id);
-        List<RoomDto> roomDtoListContainImage = roomService.imageLoad(roomDtoList);
+        List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
 
         model.addAttribute("lodgingDto", lodgingDtoContainImage);
         model.addAttribute("roomDtoList", roomDtoListContainImage);
