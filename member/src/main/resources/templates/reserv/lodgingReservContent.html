@@ -33,6 +33,13 @@
             display: none;
         }
 
+        input[type='time']::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    width: 10%;
+    left:35%;
+}
+
     </style>
 </th:block>
 
@@ -152,9 +159,9 @@
                                             <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
                                                  th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                                         </div>
-                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
                                             <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
-                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
+                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
                                         </div>
                                     </div>
 
@@ -198,15 +205,15 @@
          </tr>
          </thead>
          <tbody>
-         <tr th:each="lodging : ${lodgingDto}">
-             <th th:text="${lodging.id}">a</th>
-             <td th:text="${lodging.name}">a</td>
-             <td th:utext="${lodging.detail}"></td>
-<!--             <td th:text="${lodging.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>-->
-             <td th:text="${lodging.address}">a</td>
+         <tr>
+             <th th:text="${lodgingDto.id}">a</th>
+             <td th:text="${lodgingDto.name}">a</td>
+             <td th:utext="${lodgingDto.detail}"></td>
+<!--             <td th:text="${lodgingDto.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'">a</td>-->
+             <td th:text="${lodgingDto.address}">a</td>
              <!-- map에 필요한 숙소,주소-->
-            <input type="hidden" name="lodging_address" th:value="${lodging.address}">
-            <input type="hidden" name="lodging_name" th:value="${lodging.name}">
+            <input type="hidden" name="lodgingDto_address" th:value="${lodgingDto.address}">
+            <input type="hidden" name="lodgingDto_name" th:value="${lodgingDto.name}">
 
             <!--            <td sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
             <!--                <a th:href="@{/lodging/{id}/roomRegistration(id = ${lodgingDto.id})}" class="btn btn-primary">객실 추가(삭제 예정)</a>-->
@@ -294,14 +301,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크인 시간</span>
                     </div>
-                    <input id="checkInTime" type="time" class="form-control timepicker" placeholder="체크인 시간을 입력해주세요">
+                    <input id="checkInTime" type="time" class="form-control timepickerCheckIn" placeholder="체크인 시간을 입력해주세요">
                 </div>
 
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">체크아웃 시간</span>
                     </div>
-                    <input id="checkOutTime" type="time" class="form-control timepicker" placeholder="체크아웃 시간을 입력해주세요">
+                    <input id="checkOutTime" type="time" class="form-control timepickerCheckOut" placeholder="체크아웃 시간을 입력해주세요">
                 </div>
 
                 <div class="input-group-prepend">
@@ -403,7 +410,6 @@ window.location.reload();
 }
 
     </script>
-
     <!------------------------------------------------------------------------------------------------------->
     <div class="container">
         <form id="dateForm">
@@ -413,66 +419,72 @@ window.location.reload();
         </form>
     </div>
     <script>
-       $("#txtDate").daterangepicker({
-        locale: {
-        "separator" : "~",   // 시작 일자와 종료 일자 구분자
-        "format" : "YYYY-MM-DD", // 일자 노출 포멧
-        "applyLabel" : "확인",    // 확인 버튼 텍스트
-        "cancelLabel" : "취소",   // 취소 버튼 텍스트
-        "daysOfWeek" : ["일", "월", "화", "수", "목", "금", "토"],
-        "monthNames" : ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
-        },
-        showDropdowns: true,    // 년 월 수동 설정 여부
-        autoApply: true,    // 확인/취소 버튼 사용 여부
-
-       });
-        $("#txtDate").on('show.daterangepicker', function(ev, pricker){
-            $(".yearselect").css("float", "left");
-            $(".monthselect").css("float", "right");
-            $(".cancelBtn").css("float", "right");
-        });
-
-
-        var dateForm = document.querySelector("#dateForm");
-        var reservationDate = document.querySelector("#txtDate");
-
-        dateForm.addEventListener("submit", (e)=>{
-        e.preventDefault();
-        var reserveDate =  reservationDate.value;
-        var arr = reserveDate.split('~');
-        var startDate = arr[0];
-        var endDate = arr[1];
-        console.log(startDate+"////"+ endDate);
-
-        const data = {
-            checkIn: startDate,
-            checkOut: endDate
-        }
-
-        const lodgingId = document.querySelector("#lodgingId").value;
-        console.log(lodgingId);
-        const url = `/reserv/${lodgingId}/calender`;
-
-         var token = $("meta[name='_csrf']").attr("content");
-      var header = $("meta[name='_csrf_header']").attr("content");
-
-
-        $.ajax({
-                url      : url,
-                type     : "post",
-                contentType : "application/json",
-                data     : JSON.stringify(data),
-                beforeSend : function(xhr){
-                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                    xhr.setRequestHeader(header, token);
-                },
-                dataType : "json",
-                cache   : false
-                   });
-
-
+        $("#txtDate").daterangepicker({
+         locale: {
+         "separator" : "~",   // 시작 일자와 종료 일자 구분자
+         "format" : "YYYY-MM-DD", // 일자 노출 포멧
+         "applyLabel" : "확인",    // 확인 버튼 텍스트
+         "cancelLabel" : "취소",   // 취소 버튼 텍스트
+         "daysOfWeek" : ["일", "월", "화", "수", "목", "금", "토"],
+         "monthNames" : ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"]
+         },
+         showDropdowns: true,    // 년 월 수동 설정 여부
+         autoApply: true,    // 확인/취소 버튼 사용 여부
 
         });
+         $("#txtDate").on('show.daterangepicker', function(ev, pricker){
+             $(".yearselect").css("float", "left");
+             $(".monthselect").css("float", "right");
+             $(".cancelBtn").css("float", "right");
+         });
+
+
+         var dateForm = document.querySelector("#dateForm");
+         var reservationDate = document.querySelector("#txtDate");
+
+         dateForm.addEventListener("submit", (e)=>{
+         e.preventDefault();
+         var reserveDate =  reservationDate.value;
+         var arr = reserveDate.split('~');
+         var startDate = arr[0];
+         var endDate = arr[1];
+         console.log(startDate+"////"+ endDate);
+
+         const data = {
+             checkIn: startDate,
+             checkOut: endDate
+         }
+
+         const lodgingId = document.querySelector("#lodgingId").value;
+         console.log(lodgingId);
+         const url = `/reserv/${lodgingId}/calender`;
+
+          var token = $("meta[name='_csrf']").attr("content");
+       var header = $("meta[name='_csrf_header']").attr("content");
+
+
+         $.ajax({
+                 url      : url,
+                 type     : "post",
+                 contentType : "application/json",
+                 data     : JSON.stringify(data),
+                 beforeSend : function(xhr){
+                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                     xhr.setRequestHeader(header, token);
+                 },
+                 dataType : "json",
+                 cache   : false,
+                 success  : function(result, status){
+                         alert("예약일자 등록이 완료 되었습니다.");
+                     },
+                     error : function(result, status){
+                         alert("오류가 발생하였습니다.");
+                     }
+                    });
+
+
+
+         });
 
     </script>
     <!----------------------------------------------------------------------------------------------------->
@@ -605,7 +617,7 @@ window.location.reload();
                                 <span class="input-group-text">객실 상세 내용</span>
                             </div>
                             <label th:for="summernote" class="form-label"></label>
-                            <textarea class="form-control detail detail2" name="summernote" th:text="*{detail}" aria-label="With textarea" rows="3"></textarea>
+                            <textarea class="form-control detail" name="summernote" th:text="*{detail}" aria-label="With textarea" rows="3"></textarea>
 <!--                            <textarea th:text="*{detail}" class="form-control detail" aria-label="With textarea"></textarea>-->
                         </div>
 
@@ -613,14 +625,14 @@ window.location.reload();
                             <div class="input-group-prepend">
                                 <span class="input-group-text">체크인 시간</span>
                             </div>
-                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime" placeholder="체크인 시간을 입력해주세요">
+                            <input type="time" th:value="*{checkInTime}" class="form-control checkInTime timepickerCheckIn" placeholder="체크인 시간을 입력해주세요">
                         </div>
 
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">체크아웃 시간</span>
                             </div>
-                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime" placeholder="체크아웃 시간을 입력해주세요">
+                            <input type="time" th:value="*{checkOutTime}" class="form-control checkOutTime timepickerCheckOut" placeholder="체크아웃 시간을 입력해주세요">
                         </div>
 
                         <div class="input-group-prepend">
