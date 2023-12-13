@@ -1,9 +1,15 @@
 package com.example.member.reserv;
 
 
+import com.example.member.dto.ItemImgDto;
+import com.example.member.dto.LodgingDto;
+import com.example.member.dto.RoomDto;
+import com.example.member.entity.Lodging;
 import com.example.member.repository.MemberRepository;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
+import com.example.member.service.LodgingService;
+import com.example.member.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +34,9 @@ import java.util.Optional;
 public class ReservController {
     private final ReservService reservService;
     private final ReservedDateService reservedDateService;
+    private final LodgingService lodgingService;
+    private final RoomService roomService;
+
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
     @GetMapping("/roomReservation/{room_id}") // roomId/reserv
@@ -98,17 +107,43 @@ public class ReservController {
     }
 
 
-    @PostMapping("/{lodgingId}/calender")
-    public void dateForm(@PathVariable("lodgingId") Long lodging_id
-    ,   @RequestBody ReservDto reservDto){
-        System.out.println("lodgingId :" + lodging_id);
-        System.out.println("checkIn : " + reservDto.getCheckIn());
-        System.out.println("checkOut: "+ reservDto.getCheckOut());
-
+    @GetMapping("/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
+    public String dateForm(@PathVariable("lodgingId") Long lodging_id,
+                         @PathVariable("checkIn") String checkIn,
+    @PathVariable("checkOut") String checkOut, Model model){
         ReservDto checkDateDto = new ReservDto();
-        checkDateDto.setCheckIn(reservDto.getCheckIn());
-        checkDateDto.setCheckOut(reservDto.getCheckOut());
-
+        checkDateDto.setCheckIn(checkIn);
+        checkDateDto.setCheckOut(checkOut);
         reservedDateService.addDateTime(checkDateDto);
+        try{
+            Lodging lodgingEntity = lodgingService.findById(lodging_id);
+            LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
+            LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodging_id);
+
+            for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
+                System.out.println(itemImgDto);
+            }
+
+            lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
+            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
+            List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
+            // 방들은 제외한 후 보여준다.
+            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
+
+            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+
+            model.addAttribute("lodgingDto", lodgingDtoContainImage);
+            model.addAttribute("roomDtoList", roomDtoListContainImage);
+            model.addAttribute("prevPage", "LodgingController");
+            model.addAttribute("checkIn", checkIn);
+            model.addAttribute("checkOut", checkOut);
+        }catch (Exception e){
+            model.addAttribute("lodgingErrorMsg", e.getMessage());
+        }
+
+        System.out.println("checkIn = "+checkIn+ "//"+"checkOut = "+ checkOut);
+
+        return "reserv/lodgingReservContent";
     }
 }

@@ -54,6 +54,10 @@
     //상품등고시 실패 메세지를 받아서 상품등록페이지 재 진입시 alert() 실패사유
         bindDomEvent();
 
+
+
+
+
     });
 // c:\images\셔츠.jpg
     function bindDomEvent(){
@@ -69,19 +73,18 @@
 
             $(this).siblings(".custom-file-label").html(fileName);
         });
+
     }
 
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
             // csrf 라는 url 공격을 막기 위해 적는 것
 
-
 </script>
 
 </th:block>
 
 <div layout:fragment="content">
-
     <div th:if="${lodgingErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">
         <p th:text="${lodgingErrorMsg}">에러출력용</p>
     </div>
@@ -376,14 +379,15 @@ window.location.reload();
     </script>
     <!------------------------------------------------------------------------------------------------------->
     <div class="d-inline-block">
-        <form id="dateForm">
+        <div id="dateForm">
             <label for="txtDate"><i class="bi bi-calendar2"></i></label>
             <input type="text" name="daterange" id="txtDate"/>
-            <button type="submit">일자 검색</button>
-        </form>
+            <button id="txtDateBtn" type="button">일자 검색</button>
+        </div>
     </div>
     <script>
-        $("#txtDate").daterangepicker({
+
+ $("#txtDate").daterangepicker({
          locale: {
          "separator" : "~",   // 시작 일자와 종료 일자 구분자
          "format" : "YYYY-MM-DD", // 일자 노출 포멧
@@ -400,8 +404,6 @@ window.location.reload();
 
         });
 
-
-
          $("#txtDate").on('show.daterangepicker', function(ev, pricker){
              $(".yearselect").css("float", "left");
              $(".monthselect").css("float", "right");
@@ -409,10 +411,10 @@ window.location.reload();
          });
 
 
-         var dateForm = document.querySelector("#dateForm");
+         var dateBtn = document.querySelector("#txtDateBtn");
          var reservationDate = document.querySelector("#txtDate");
 
-         dateForm.addEventListener("submit", (e)=>{
+         dateBtn.addEventListener("click", (e)=>{
          e.preventDefault();
          var reserveDate =  reservationDate.value;
          var arr = reserveDate.split('~');
@@ -420,41 +422,24 @@ window.location.reload();
          var endDate = arr[1];
          console.log(startDate+"////"+ endDate);
 
-         const data = {
-             checkIn: startDate,
-             checkOut: endDate
-         }
 
          const lodgingId = document.querySelector("#lodgingId").value;
          console.log(lodgingId);
-         const url = `/reserv/${lodgingId}/calender`;
 
-          var token = $("meta[name='_csrf']").attr("content");
-       var header = $("meta[name='_csrf_header']").attr("content");
-
-
-         $.ajax({
-                 url      : url,
-                 type     : "post",
-                 contentType : "application/json",
-                 data     : JSON.stringify(data),
-                 beforeSend : function(xhr){
-                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                     xhr.setRequestHeader(header, token);
-                 },
-                 dataType : "json",
-                 cache   : false,
-                 success  : function(result, status){
-                         alert("예약일자 등록이 완료 되었습니다.");
-                     },
-                     error : function(result, status){
-                         alert("오류가 발생하였습니다.");
-                     }
-                    });
-
+         var check_date = reserveDate;
+         sessionStorage.setItem("date", check_date);
+         location.href = `/reserv/${lodgingId}/checkIn=${startDate}/checkOut=${endDate}`;
 
 
          });
+        var reservationDate = document.querySelector("#txtDate");
+        var sessionDate = sessionStorage.getItem("date");
+        if(sessionDate != null){
+        console.log(sessionDate);
+        reservationDate.value = sessionDate;
+        }
+
+
 
     </script>
     <!----------------------------------------------------------------------------------------------------->
@@ -843,10 +828,6 @@ window.location.reload();
             const mapContainer1 = document.getElementById('map1'); // 지도를 표시할 div
             const mapContainer2 = document.getElementById('map2'); // 지도를 표시할 div
 
-
-
-
-
     function maps (mapContainer){
              mapOption = {
                     center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -891,9 +872,10 @@ window.location.reload();
 
             }   // maps
 
-
             maps(mapContainer1);
             maps(mapContainer2);
 
         </script>
 </div>
+</div>
+</html>
