@@ -9,7 +9,9 @@ import com.example.member.entity.Room;
 import com.example.member.repository.LodgingRepository;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
+import com.example.member.reserv.reservDate.ReservedDate;
 import com.example.member.reserv.reservDate.ReservedDateDto;
+import com.example.member.reserv.reservDate.ReservedDateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -34,13 +36,22 @@ public class ReservService {
     private final ReservRepository reservRepository;
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
+    private final ReservedDateRepository reservedDateRepository;
 
-    public void saveReserv(ReservDto reservDto){
+    public void saveReserv(ReservDto reservDto, List<LocalDate> dateList){
         Room room = reservDto.getRoom();
         Lodging lodging = room.getLodging();
         Reserv reserv = Reserv.createReserv(reservDto, lodging);
         validateDuplicateMember(reserv);
         reservRepository.save(reserv);
+        for(LocalDate date : dateList){
+            ReservedDate reservedDate = new ReservedDate();
+            reservedDate.setReserved_date(date);
+            reservedDate.setRoom(reservDto.getRoom());
+            reservedDateRepository.save(reservedDate);
+        }
+
+
     }
 
     // 예약하려는 방의 상태를 가져와 예약 가능인지 검증
@@ -55,27 +66,19 @@ public class ReservService {
 
     public ReservDto newReserv(Long roomId, Principal principal,Reserv reserv,String date) throws Exception{
         ReservDto reservDto = new ReservDto();
-
         String[] checkDate = date.split("~");
-//        System.out.println("checkDate[0] = "+checkDate[0]);
-//        System.out.println("checkDate[1] = "+checkDate[1]);
 
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(principal.getName())
                 .orElseThrow(EntityNotFoundException::new);
 
-        String checkDateTimeIn = checkDate[0]+room.getCheckInTime();
-        String checkDateTimeOut = checkDate[1]+room.getCheckOutTime();
-//        System.out.println("checkDateTimeIn = "+checkDateTimeIn);
-//        System.out.println("checkDateTimeOut = "+checkDateTimeOut);
-
         reservDto.setReservPN(ReservDto.phoneNumber(member));
         reservDto.setReservName(member.getName());
         reservDto.setRoom(room); // room id
         reservDto.setMember(member); // member email
-        reservDto.setCheckIn(checkDateTimeIn);
-        reservDto.setCheckOut(checkDateTimeOut);
+        reservDto.setCheckIn(checkDate[0]);
+        reservDto.setCheckOut(checkDate[1]);
         return reservDto;
     }
 
