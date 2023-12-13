@@ -518,15 +518,20 @@ window.location.reload();
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
             <button type="button" onclick="roomEditPage()" class="btn btn-success">대표이미지 변경</button>
         </div>
+
+
         <div class="editForm hide">
+
             <!--            가려져 있는 수정 폼-->
             <div class = "container w-100">
                 <div class= "d-flex justify-content-center w-50">
                     <form role="form" method="post" enctype="multipart/form-data" th:object="${roomDto}">
+                        <div class="d-flex">
                         <p class="h2">
                             객실 수정
                         </p>
-
+                            <button type="button" class="closeEditFormBtn btn btn-close ms-auto"></button>
+                        </div>
                         <input type="hidden" class="id" th:value="*{id}">
                         <input type="hidden" class="reservationStatus" th:value="*{reservationStatus}">
 
@@ -624,96 +629,93 @@ window.location.reload();
                 var detail = document.querySelectorAll('.detail');
                 var addFormDetail = addForm.querySelector('.addDetail');
 
+        // ======================================================================
+        //  수정 사항 수정 버튼 클릭시 index[0] 인식 classList ("hide") 해제 X
+        // ======================================================================
 
-  for (let i = 0; i < editButton.length; i++) {
-    editButton[i].addEventListener('click', function (e) {
-    e.preventDefault();
+              $('.editButton').click(function(){
+            let x = $('.editButton').index(this);
+            // 클릭한 객체의 index값을 구한다.
+            // 구한 index값 번째의 form이 'hide' class 를 가지고 있으면 hide 클래스를 추가하고 detail의 id값을 지운다.
+            if($('.editForm').eq(x).hasClass("hide") === false){
+                $('.editForm').eq(x).addClass('hide');
+                $('.detail').eq(x).removeAttr("id");
+            }
+                        $('.editForm').addClass('hide');
+                      $('.detail').removeAttr("id");
+                      $('.editForm').eq(x).removeClass('hide');
+                      $('.detail').eq(x).attr("id", "summernote");
+                 $('.editButton').eq(x).addClass('hide');
+                window.summernoteCall();
+          });
 
-  // 일괄 hide 처리 및 서머노트 아이디 제거
-  // detail 하나에 editform 하나
-  addForm.classList.add('hide');
-  addFormDetail.removeAttribute('id');
-  for (let k = 0; k < editForm.length; k++) {
-  if(editForm[k] != editForm[i]) {
-    editForm[k].classList.add('hide');
-    detail[k].removeAttribute('id');
-  }
-  }
+          $('.closeEditFormBtn').click(function(){
+           let y = $('.closeEditFormBtn').index(this);
 
-    editForm[i].classList.toggle('hide');
-
-      if (editForm[i].classList.contains('hide')) {
-      } else {
-        detail[i].id = 'summernote';
-        window.summernoteCall();
-
-        console.log(detail[i].id);
-        console.log(editForm[i]);
-
-      }
-    })
-  }
-// }
+            $('.editForm').addClass('hide');
+            $('.detail').removeAttr("id");
+            $('.editButton').eq(y).removeClass('hide');
+          });
 
 
 
-function roomEdit() {
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
+        function roomEdit() {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-var url = `/room/editRoom`;
+        var url = `/room/editRoom`;
 
-var paramData = {
-id: $(".id").eq(1).val(),
-name: $(".name").eq(1).val(),
-detail: $(".detail").eq(1).val(),
-price: $(".price").eq(1).val(),
-adult: $(".adult").eq(1).val(),
-children: $(".children").eq(1).val(),
-checkInTime: $(".checkInTime").eq(1).val(),
-checkOutTime: $(".checkOutTime").eq(1).val(),
-reservationStatus: $(".reservationStatus").eq(1).val()
-};
+        var paramData = {
+        id: $(".id").eq(1).val(),
+        name: $(".name").eq(1).val(),
+        detail: $(".detail").eq(1).val(),
+        price: $(".price").eq(1).val(),
+        adult: $(".adult").eq(1).val(),
+        children: $(".children").eq(1).val(),
+        checkInTime: $(".checkInTime").eq(1).val(),
+        checkOutTime: $(".checkOutTime").eq(1).val(),
+        reservationStatus: $(".reservationStatus").eq(1).val()
+        };
 
-let formData = new FormData();
+        let formData = new FormData();
 
-var fileInput = $('.fileInputEditRoom');
+        var fileInput = $('.fileInputEditRoom');
 
-for (var i = 0; i < fileInput.length; i++) {
-if (fileInput[i].files.length > 0) {
-for (var j = 0; j < fileInput[i].files.length; j++) {
-console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+        for (var i = 0; i < fileInput.length; i++) {
+        if (fileInput[i].files.length > 0) {
+        for (var j = 0; j < fileInput[i].files.length; j++) {
+        console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
 
-// formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
-formData.append('img', $('.fileInputEditRoom')[i].files[j]);
-}
-}
-}
-// formData.append('img', $('.fileInputEditRoom')[0].files[0]);
+        // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+        formData.append('img', $('.fileInputEditRoom')[i].files[j]);
+        }
+        }
+        }
+        // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
 
-formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
+        formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
 
-$.ajax({
-url: url,
-type: "POST",
-enctype: 'multipart/form-data',
-data: formData,
-contentType: false,
-processData: false,
-cache: false,
+        $.ajax({
+        url: url,
+        type: "POST",
+        enctype: 'multipart/form-data',
+        data: formData,
+        contentType: false,
+        processData: false,
+        cache: false,
 
-beforeSend: function (xhr) {
-/* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-xhr.setRequestHeader(header, token);
-},
+        beforeSend: function (xhr) {
+        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+        xhr.setRequestHeader(header, token);
+        },
 
-success: function (result, status) {
-console.log(paramData);
-alert("객실 정보가 수정되었습니다.");
-window.location.reload();
-}
-});
-}
+        success: function (result, status) {
+        console.log(paramData);
+        alert("객실 정보가 수정되었습니다.");
+        window.location.reload();
+        }
+        });
+        }
 
             </script>
             <!--            // 가려져 있는 수정 폼 -->
