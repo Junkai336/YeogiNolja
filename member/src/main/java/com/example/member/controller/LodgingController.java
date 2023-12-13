@@ -1,5 +1,6 @@
 package com.example.member.controller;
 
+import com.example.member.article.ArticleDto;
 import com.example.member.constant.ReservationStatus;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
@@ -16,6 +17,9 @@ import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -31,6 +35,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 //@Transactional
@@ -80,12 +85,17 @@ public class LodgingController {
     }
 
     @GetMapping(value = {"/list", "/list/{page}"})
-    public String LodgingManage(Model model) {
+    public String LodgingManage(@PathVariable("page") Optional<Integer> page, Model model) {
         try {
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
-        List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
+
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+        Page<LodgingDto> lodgingDtoList = lodgingService.getLodgingList(pageable);
+
         model.addAttribute("lodgingDtoList", lodgingDtoList);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
 
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -93,24 +103,6 @@ public class LodgingController {
         return "admin/lodgingList";
 
     }
-
-//    public String itemManage(ItemSearchDto itemSearchDto,
-//                             @PathVariable("page") Optional<Integer> page, Model model){
-//        Pageable pageble  = PageRequest.of(page.isPresent() ? page.get() : 0,3);
-//        //  PageRequest - Data jpa 에서 사용하는 페이지 요청객체
-//        // of()메서드를 사용하여 페이지 번호와 페이지당 항목수 지정하여 페이지 요청 정보생성
-//        //0 는 url 경로에서 받아온 페이지 번호를 확인하고, 값이 없으면 0
-//        //3 은 한 페이지당 보여줄 항목수
-//
-//        Page<Lodging> items = lodgingService.getAdminItemPage(itemSearchDto, pageble);
-//        // itemSearchDto를 사용하여 페이지 네이션 된 데이터를 조회
-//        model.addAttribute("items",items); //조회도니 페이지 네이션된 데이터 모델 추가
-//        model.addAttribute("itemSearchDto", itemSearchDto);// 검색조건 모델에 추가
-//        model.addAttribute("maxPage", 5);
-//        //한번에 표시할 최대 페이지수를 모델에 추가
-//        //이값을 템플릿에서 사용하여 페이지 네이션 UI를 그릴때(렌더링) 활용
-//        return "item/itemMng";
-//    }
 
     // 일자 등록없이 기본 값(오늘, 내일) 일자로하여 예약이 가능한 방을 보여준다.
     @GetMapping(value = "/{lodging_id}")

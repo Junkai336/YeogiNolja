@@ -123,12 +123,6 @@ public class ArticleService {
             articleDtoList.add(articleDto);
         }
 
-//        for(int i = articleList.size()-1; i > -1; i--) {
-//            ArticleDto articleDto = ArticleDto.toArticleDto(articleList.get(i));
-//            articleDtoList.add(articleDto);
-//        }
-
-
         return new PageImpl<ArticleDto>(articleDtoList, pageable, totalCount);
     }
 }
