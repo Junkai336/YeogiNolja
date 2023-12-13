@@ -711,7 +711,8 @@ window.location.reload();
                 window.summernoteCall();
           });
 
-          $('.closeEditFormBtn').click(function(){
+          $('.closeEditFormBtn').click(function(e){
+          e.preventEvent();
            let y = $('.closeEditFormBtn').index(this);
 
             $('.editForm').addClass('hide');
@@ -781,6 +782,18 @@ window.location.reload();
 
 
         });
+
+// ！ 새로고침, 뒤로가기, 링크타기 방지 (그러나 확인 질문이 뜬다)
+// window.addEventListener('beforeunload', (event) => {
+//  for (let t = 0; t < editButton.length; t++) {
+//    if (editForm[t].classList.contains('hide')) {
+
+//    } else {
+//      event.preventDefault();
+//      return event.returnValue = '';
+//    }
+//  }
+//})
 
         // function roomEdit() {
         // var token = $("meta[name='_csrf']").attr("content");

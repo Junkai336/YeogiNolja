@@ -13,6 +13,7 @@ import com.example.member.repository.RoomRepository;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
+import com.example.member.service.UploadFileService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class RoomController {
     private final LodgingService lodgingService;
     private final RoomService roomService;
     private final ItemImgService itemImgService;
+    private final UploadFileService uploadFileService;
 
     @GetMapping(value = "lodging/{id}/roomRegistration")
     public String fromLodgingDetailToRoomCreation(@PathVariable Long id, Model model, Principal principal) {
@@ -145,8 +147,8 @@ public class RoomController {
             try {
                 roomService.validation(lodgingId, email);
                 roomService.deleteRoom(lodgingId, roomId);
-            } catch (IllegalArgumentException e){
-                model.addAttribute("error", e.getMessage());
+            } catch (Exception e){
+                model.addAttribute("errorMessage", e.getMessage());
             }
 
             return "redirect:/lodging/"+lodgingId;
@@ -160,25 +162,6 @@ public class RoomController {
         }
     }
 
-//    @PostMapping(value = "/editRoom")
-//    @ResponseBody
-//    public void editRoom(@RequestBody Room room) {
-//        Room target = roomService.findById(room.getId());
-//
-//        target.setName(room.getName());
-//        target.setPrice(room.getPrice());
-//        target.setDetail(room.getDetail());
-//        target.setAdult(room.getAdult());
-//        target.setChildren(room.getChildren());
-//        target.setCheckInTime(room.getCheckInTime());
-//        target.setCheckOutTime(room.getCheckOutTime());
-//
-//        roomService.saveRoomJS(target);
-//    }
-//
-//
-//}
-
     @RequestMapping(value = "/room/editRoom", method = {RequestMethod.POST})
     @ResponseBody
     public void editRoom(@RequestPart(value = "paramData") Room room,
@@ -188,6 +171,7 @@ public class RoomController {
         Room roomOriginal = roomService.findById(room.getId());
 
         roomService.saveRoomJS(room);
+        uploadFileService.havingIdDelete();
 
         try {
             itemImgService.deleteImg(roomOriginal);

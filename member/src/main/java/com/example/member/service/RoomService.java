@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class RoomService {
 
@@ -32,6 +32,7 @@ public class RoomService {
     private final LodgingRepository lodgingRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
+    private final UploadFileService uploadFileService;
 
     // 매개변수 숙소 id를 제공받고 그 숙소 id의 room을 전부 선택한다.
     // 그 room들을 roomList 받고 roomDtoList로 바꾸기
@@ -62,6 +63,8 @@ public class RoomService {
     public void saveRoom(LodgingDto lodgingDto, Long lodgingId, List<MultipartFile> itemImgFileList) throws Exception {
 
         Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
+        System.out.println("hello");
+        System.out.println(lodgingEntity);
         // 엔티티에 담기 전 RoomDto를 가져온다.
         RoomDto roomDto = new RoomDto();
         // roomDto에 lodgingDto 정보를 넣는다.
@@ -76,6 +79,7 @@ public class RoomService {
 //        roomDto.setLodging(Lodging.toLodging(lodgingDto.getMember(),lodgingDto));
 
         Room room = Room.toRoom(roomDto, lodgingEntity);
+        System.out.println(roomDto);
 
         // ***
         lodgingEntity.getRoom().add(room);
@@ -83,92 +87,10 @@ public class RoomService {
         // 이건 되는데 위에꺼가 안됨
         lodgingEntity.setRoomExist(RoomExist.Y);
 
-// =====================================================================================================================
-////            System.out.println("savedReserv CheckIn:"+ savedReserv.getRoom().getCheckInTime());
-
-//        // checkIn
-//        String checkIn = room.getCheckInTime();
-//        String[] checkInSplit =checkIn.split("T");
-//
-////            int strsplit11 = Integer.parseInt(strsplit[0]);
-////            int strsplit22 = Integer.parseInt(strsplit[1]);
-////            int strsplit33 = Integer.parseInt(strsplit[2]);
-////            LocalDate localDate = LocalDate.of(strsplit11, strsplit22, strsplit33); // of는 int
-//
-//        LocalDate localDate1 = LocalDate.parse(checkInSplit[0]); // parse는 string
-//        DayOfWeek dayOfWeek1 = localDate1.getDayOfWeek();
-//
-//        int dayOfWeekNumber1 = dayOfWeek1.getValue();
-//        String day1 ="";
-//        switch (dayOfWeekNumber1){
-//            case 1:
-//                day1= "월";
-//                break;
-//            case 2:
-//                day1= "화";
-//                break;
-//            case 3:
-//                day1= "수";
-//                break;
-//            case 4:
-//                day1= "목";
-//                break;
-//            case 5:
-//                day1= "금";
-//                break;
-//            case 6:
-//                day1= "토";
-//                break;
-//            case 7:
-//                day1= "일";
-//                break;
-//        }
-//        String checkInTime = checkInSplit[0].replaceAll("-","\\.");
-//        String totalDateIn = checkInTime+"("+day1+")"+" "+checkInSplit[1];
-//
-//        room.setCheckInTime(totalDateIn);
-//
-//        // checkOut
-//        String checkOut = room.getCheckOutTime();
-//        String[] checkOutSplit =checkOut.split("T");
-//
-//        LocalDate localDate2 = LocalDate.parse(checkOutSplit[0]); // parse는 string
-//        DayOfWeek dayOfWeek2 = localDate2.getDayOfWeek();
-//
-//        int dayOfWeekNumber2 = dayOfWeek2.getValue();
-//        String day2 ="";
-//        switch (dayOfWeekNumber2){
-//            case 1:
-//                day2= "월";
-//                break;
-//            case 2:
-//                day2= "화";
-//                break;
-//            case 3:
-//                day2= "수";
-//                break;
-//            case 4:
-//                day2= "목";
-//                break;
-//            case 5:
-//                day2= "금";
-//                break;
-//            case 6:
-//                day2= "토";
-//                break;
-//            case 7:
-//                day2= "일";
-//                break;
-//        }
-//        String checkOutTime = checkOutSplit[0].replaceAll("-","\\.");
-//        String totalDateOut = checkOutTime+"("+day2+")"+" "+checkOutSplit[1];
-//
-//        room.setCheckOutTime(totalDateOut);
-
-// =====================================================================================================================
-
-
         roomRepository.save(room);
+
+
+
 
         //        이미지등록
         for(int i=0; i<itemImgFileList.size();i++ ){
@@ -210,8 +132,10 @@ public class RoomService {
 
         Lodging lodgingEntity = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
-        List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomId);
-        itemImgRepository.deleteAll(targetRoomItemImgList);
+        List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(room.getId());
+        if(!targetRoomItemImgList.isEmpty()){
+            itemImgRepository.deleteAll(targetRoomItemImgList);
+        }
 
         roomRepository.delete(room);
 

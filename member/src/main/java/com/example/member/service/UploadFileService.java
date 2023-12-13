@@ -5,6 +5,7 @@ import com.example.member.article.ArticleDto;
 import com.example.member.constant.EditingExceptionConsideration;
 import com.example.member.dto.LodgingDto;
 import com.example.member.entity.Lodging;
+import com.example.member.entity.Room;
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.UploadFileRepository;
 import lombok.AllArgsConstructor;
@@ -187,8 +188,8 @@ public class UploadFileService {
     public void backwardUploadFileCheck(Long id) {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
-        for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getArticle() != null && uploadFile.getArticle().getId().equals(id)) {
+        for (UploadFile uploadFile : uploadFileList) {
+            if (uploadFile.getArticle() != null && uploadFile.getArticle().getId().equals(id)) {
                 uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
             }
         }
@@ -197,8 +198,8 @@ public class UploadFileService {
     public void backwardUploadFileCheck() {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
-        for(UploadFile uploadFile : uploadFileList) {
-                uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
+        for (UploadFile uploadFile : uploadFileList) {
+            uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
         }
 
     }
@@ -206,8 +207,8 @@ public class UploadFileService {
     public void refreshUploadFileCheck(Long id) {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
-        for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
+        for (UploadFile uploadFile : uploadFileList) {
+            if (uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
                 uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
                 // 숙소 이미지 이넘타입이 바로 안바뀌어서 추가
                 uploadFileRepository.saveAndFlush(uploadFile);
@@ -218,8 +219,8 @@ public class UploadFileService {
     public void refreshUploadFileCheck() {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
-        for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
+        for (UploadFile uploadFile : uploadFileList) {
+            if (uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
                 uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
             }
         }
@@ -229,8 +230,8 @@ public class UploadFileService {
 
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
-        for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getArticle() == null && uploadFile.getLodging() == null && uploadFile.getRoom() == null) {
+        for (UploadFile uploadFile : uploadFileList) {
+            if (uploadFile.getArticle() == null && uploadFile.getLodging() == null && uploadFile.getRoom() == null) {
                 uploadFileRepository.delete(uploadFile);
                 fileDelete(uploadFile);
             }
@@ -240,8 +241,8 @@ public class UploadFileService {
     public void havingIdDelete() {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
-        for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
+        for (UploadFile uploadFile : uploadFileList) {
+            if (uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
                 uploadFileRepository.delete(uploadFile);
                 fileDelete(uploadFile);
 
@@ -254,5 +255,31 @@ public class UploadFileService {
         UploadFile uploadFile = uploadFileRepository.findById(fileName).orElseThrow(EntityNotFoundException::new);
 
         return uploadFile;
+    }
+
+    public void uploadFileGrantedRoomId(Room room) {
+        List<Long> longList = new ArrayList<>();
+        String[] imgNumber = room.getDetail().split("\"|\\\"");
+
+        for (int i = 0; i < imgNumber.length; i++) {
+            if (imgNumber[i].contains("/image/")) {
+                String helloNumber = imgNumber[i].replaceAll("/image/", "");
+
+                Long helloLong = Long.parseLong(helloNumber);
+
+                longList.add(helloLong);
+            }
+        }
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for (int i = 0; i < uploadFileList.size(); i++) {
+            for (int l = 0; l < longList.size(); l++) {
+                if (uploadFileList.get(i).getId().equals(longList.get(l))) {
+                    uploadFileList.get(i).setRoom(room);
+                }
+            }
+        }
+
     }
 }

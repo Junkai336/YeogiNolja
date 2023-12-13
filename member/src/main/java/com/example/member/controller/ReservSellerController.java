@@ -17,6 +17,7 @@ import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
+import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -40,11 +41,14 @@ public class ReservSellerController {
     private final RoomService roomService;
     private final ItemImgRepository itemImgRepository;
     private final ItemImgService itemImgService;
+    private final UploadFileService uploadFileService;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
 
         List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
+        uploadFileService.emptyUploadFileCheck();
+        uploadFileService.backwardUploadFileCheck();
 
         for (int i = 0; i < lodgingDtoList.size(); i++) {
             // 숙소 DTO i번쨰 꺼내오기
@@ -85,6 +89,8 @@ public class ReservSellerController {
 
     @GetMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
     public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model) throws Exception {
+
+        uploadFileService.refreshUploadFileCheck();
 
         Lodging lodging = lodgingRepository.findById(lodgingId).orElseThrow(EntityNotFoundException::new);
 
