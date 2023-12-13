@@ -16,7 +16,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Override
     List<Article> findAll();
 
-
     @Query(value = "select * from article a where a.member_id= :member_id",nativeQuery = true)
     List<Article> findAllByMemberId(@Param("member_id")Long member_id);
 
