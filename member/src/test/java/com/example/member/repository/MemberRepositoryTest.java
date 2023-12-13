@@ -1,6 +1,7 @@
 package com.example.member.repository;
 
 import com.example.member.constant.UserRole;
+import com.example.member.entity.ItemImg;
 import com.example.member.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +20,18 @@ class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
     PasswordEncoder passwordEncoder;
+    @Autowired
+    ItemImgRepository itemImgRepository;
+
+    @Test
+    public void imgoutPut(){
+        Long roomId = 38L;
+        List<ItemImg> roomImgList= itemImgRepository.findByRoomId(roomId);
+        for(ItemImg itemImg : roomImgList){
+            System.out.println(itemImg.getImgUrl());
+        }
+
+    }
 
 
 //    @Test

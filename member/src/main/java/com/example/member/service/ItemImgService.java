@@ -145,7 +145,6 @@ public class ItemImgService {
 
     public void deleteImg(Room roomOriginal) throws Exception {
         List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomOriginal.getId());
-
         for(ItemImg itemImg : targetRoomItemImgList) {
             deleteFile(itemImg);
         itemImgRepository.delete(itemImg);
