@@ -1,6 +1,7 @@
 package com.example.member.reserv;
 
 
+import com.example.member.article.ArticleDto;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
@@ -80,12 +81,12 @@ public class ReservController {
     // 예약 내역
     @GetMapping({"/reservs","/reservs/{page}"})
     public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
-//        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
-        List<ReservDto> reservDtoList = reservService.reservDtoList(principal);
-        // principal.getName() 현재 로그인된  사용자의 이메일
-
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+        Page<ReservDto> reservDtoList = reservService.getReservList(principal.getName(), pageable);
 
         model.addAttribute("reservDtoList", reservDtoList);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
 
         return "reserv/reservHist";
     }

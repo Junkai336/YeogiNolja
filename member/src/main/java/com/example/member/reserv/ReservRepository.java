@@ -28,5 +28,10 @@ public interface ReservRepository extends JpaRepository<Reserv,Long> {
 
     // 현재 로그인한 회원의 예약 개수가 몇 개인지 조회
 
+    @Query(value = "select r from Reserv r "+
+            "where r.member.email = :email "+
+            "order by r.regTime desc")
+    List<Reserv> findReservsPaging(@Param("email") String email, Pageable pageable);
+
 
 }

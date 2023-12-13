@@ -1,5 +1,7 @@
 package com.example.member.reserv;
 
+import com.example.member.article.Article;
+import com.example.member.article.ArticleDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
@@ -9,6 +11,9 @@ import com.example.member.repository.MemberRepository;
 import com.example.member.repository.RoomRepository;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -101,5 +106,19 @@ public class ReservService {
             return true;
         }
         return false;
+    }
+    @Transactional(readOnly = true)
+    public Page<ReservDto> getReservList(String email, Pageable pageable) {
+        List<Reserv> reservList = reservRepository.findReservsPaging(email, pageable);
+        Long totalCount = reservRepository.countReserv(email);
+
+        List<ReservDto> reservDtoList = new ArrayList<>();
+
+        for(Reserv reserv : reservList) {
+            ReservDto reservDto = ReservDto.toReservDto(reserv);
+            reservDtoList.add(reservDto);
+        }
+
+        return new PageImpl<ReservDto>(reservDtoList, pageable, totalCount);
     }
 }

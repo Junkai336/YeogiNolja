@@ -18,17 +18,39 @@
         <tbody>
         <tr th:each="memberDto: ${memberDtoList}">
 
+            <td th:text="${memberDto.name}"></td>
             <td>
                 <a th:href="'/members/detail/' + ${memberDto.id}">
                     <span th:text="${memberDto.email}"></span>
                 </a>
             </td>
-            </a>
-
             <td th:text="${memberDto.address}"></td>
         </tr>
         </tbody>
     </table>
+
+    <!-- 페이지네이션 영역 -->
+    <div th:with="start=${(memberDtoList.number/maxPage)*maxPage + 1}, end=(${(memberDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < memberDtoList.totalPages ? start + (maxPage - 1) : memberDtoList.totalPages)})" >
+        <ul class="pagination justify-content-center mt-3">
+
+            <li class="page-item" th:classappend="${memberDtoList.number eq 0}?'disabled':''">
+                <a th:href="@{'/members/list/' + ${memberDtoList.number-1}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${memberDtoList.number eq page-1}?'active':''">
+                <a th:href="@{'/members/list/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${memberDtoList.number+1 ge memberDtoList.totalPages}?'disabled':''">
+                <a th:href="@{'/members/list/' + ${memberDtoList.number+1}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
 
 
 </div>
