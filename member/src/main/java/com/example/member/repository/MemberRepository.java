@@ -1,7 +1,9 @@
 package com.example.member.repository;
 
+import com.example.member.article.Article;
 import com.example.member.constant.UserRole;
 import com.example.member.entity.Member;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -20,4 +22,10 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     //    nativeQuery=true : sql문법 사용
     @Query(value = "select * from member where member.user_role='USER'", nativeQuery = true)
     List<Member> findAllByUser();
+
+    @Query(value = "select m from Member m where member.user_role='USER' order by id desc")
+    List<Member> findMembersUserForPaging(Pageable pageable);
+
+    @Query("select count(m) from Member m where member.user_role='USER'")
+    Long countMemberUser();
 }

@@ -1,6 +1,7 @@
 package com.example.member.service;
 
 import com.example.member.article.Article;
+import com.example.member.article.ArticleDto;
 import com.example.member.constant.RoomExist;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
@@ -8,6 +9,9 @@ import com.example.member.entity.*;
 //import com.example.member.repository.ItemImgRepository;
 import com.example.member.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -206,5 +210,21 @@ public class LodgingService {
 
 
         return lodgingDto;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<LodgingDto> getLodgingList(Pageable pageable) {
+        //        List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
+        List<Lodging> lodgingList = lodgingRepository.findLodgings(pageable);
+        Long totalCount = lodgingRepository.countLodging();
+
+        List<LodgingDto> lodgingDtoList = new ArrayList<>();
+
+        for(Lodging lodging : lodgingList) {
+            LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
+            lodgingDtoList.add(lodgingDto);
+        }
+
+        return new PageImpl<LodgingDto>(lodgingDtoList, pageable, totalCount);
     }
 }
