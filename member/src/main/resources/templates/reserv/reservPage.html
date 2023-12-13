@@ -40,8 +40,8 @@
             <p th:text="*{room.name}">방이름</p>
             <p th:text="*{room.detail}">방디테일</p>
 
-            <p th:text="*{checkIn}">체크인</p>
-            <p th:text="*{checkOut}">체크아웃</p>
+            <p th:text="*{checkIn}+' '+*{room.checkInTime}">체크인</p>
+            <p th:text="*{checkOut}+' '+*{room.checkOutTime}">체크아웃</p>
 
             <p th:text="*{room.price}">방가격</p>
 

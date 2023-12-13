@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +58,7 @@ public class ReservController {
 
         return "reserv/reservPage";
     }
-
+// 여기서부터 저장 시작****************************************************************
     @PostMapping("/roomReservation/{room_id}")
     public String saveReserv(@Valid ReservDto reservDto, BindingResult result,Model model
      ,Principal principal){
@@ -66,12 +67,12 @@ public class ReservController {
            return "reserv/reservPage";
         }
 //        System.out.println("reserDto = "+ reservDto);
-//        System.out.println("reservDto.getCheckIn() = "+reservDto.getCheckIn());
-//        System.out.println("reservDto.getCheckOut() = "+reservDto.getCheckOut());
+        System.out.println("reservDto.getCheckIn() = "+reservDto.getCheckIn());
+        System.out.println("reservDto.getCheckOut() = "+reservDto.getCheckOut());
         try {
-//           List<ReservDto> reservDtoList =
-                   reservService.saveReserv(reservDto);
-//           model.addAttribute("reservDtoList",reservDtoList);
+            List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
+                   reservService.saveReserv(reservDto, reservDateList);
+
 
         } catch (IllegalStateException e){
             model.addAttribute("errorMessage", e.getMessage());
