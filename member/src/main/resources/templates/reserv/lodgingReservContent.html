@@ -310,7 +310,7 @@
                         <span class="input-group-text">객실 상세 내용</span>
                     </div>
                     <label th:for="summernote" class="form-label"></label>
-                    <textarea id="summernote" class="form-control addDetail" name="summernote" aria-label="With textarea" rows="3"></textarea>
+                    <textarea class="form-control addDetail" name="summernote" aria-label="With textarea" rows="3"></textarea>
                 </div>
 
                 <div class="input-group">
@@ -360,12 +360,12 @@
 
 
 addBtn.addEventListener('click', function (e) {
+    $(".editForm").addClass("hide");
+     $('.detail').removeAttr("id");
+    $(".addDetail").attr('id', "summernote");
+    window.summernoteCall();
 e.preventDefault();
 
-  for (let k = 0; k < editForm.length; k++) {
-    editForm[k].classList.add('hide');
-    detail[k].removeAttribute('id');
-  }
 
 addForm.classList.toggle('hide');
 })
@@ -493,8 +493,6 @@ window.location.reload();
     </script>
     <!----------------------------------------------------------------------------------------------------->
 
-    <!--  map div  -->
-    <div id="map1" style="width:300px;height:200px;"></div>
 
 
     <p class="h4 text-center mt-3">
@@ -503,6 +501,7 @@ window.location.reload();
 
 
     <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
+        <input class="room_id" th:value="${roomDto.id}" type="hidden" />
         <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail"
              th:alt="${roomDto.name}">
         <div class="d-flex">
@@ -553,13 +552,23 @@ window.location.reload();
             <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
 
             <button type="button"
-                    id="dateBtn"
-                    th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}'|"
                     sec:authorize="hasAnyAuthority('ROLE_USER')"
-                    class="btn btn-primary">예약하기</button>
+                    class="btn btn-primary reservBtn">예약하기</button>
 <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
         </div>
+        <script>
+            const reservBtn = document.querySelectorAll(".reservBtn");
+            var sessionDate = sessionStorage.getItem("date");   // ex) 2023-12-13~2023-12-15
+            const roomIdList = document.querySelectorAll(".room_id");
 
+            for(let i = 0; i< roomIdList.length;i++){
+            reservBtn[i].addEventListener("click", ()=>{
+            var room_id = roomIdList[i].value;
+            location.href= `/reserv/roomReservation/${room_id}/${sessionDate}`;
+
+            });
+            }
+        </script>
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <button type="button" class="btn btn-primary editButton">수정</button>
 <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
@@ -567,15 +576,20 @@ window.location.reload();
             <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-danger">삭제</a>
             <button type="button" onclick="roomEditPage()" class="btn btn-success">대표이미지 변경</button>
         </div>
+
+
         <div class="editForm hide">
+
             <!--            가려져 있는 수정 폼-->
             <div class = "container w-100">
                 <div class= "d-flex justify-content-center w-50">
                     <form role="form" method="post" enctype="multipart/form-data" th:object="${roomDto}">
+                        <div class="d-flex">
                         <p class="h2">
                             객실 수정
                         </p>
-
+                            <button type="button" class="closeEditFormBtn btn btn-close ms-auto"></button>
+                        </div>
                         <input type="hidden" class="id" th:value="*{id}">
                         <input type="hidden" class="reservationStatus" th:value="*{reservationStatus}">
 
@@ -658,7 +672,7 @@ window.location.reload();
                         </div>
 
                         <div>
-                            <button type="button" onclick="roomEdit()" class="btn btn-primary mt-1">객실 수정</button>
+                            <button type="button" onclick="roomEdit()" class="roomEditSubmitBtn btn btn-primary mt-1">객실 수정</button>
                         </div>
 
                     </form>
@@ -673,96 +687,158 @@ window.location.reload();
                 var detail = document.querySelectorAll('.detail');
                 var addFormDetail = addForm.querySelector('.addDetail');
 
+        // ======================================================================
+        //  수정 사항 수정 버튼 클릭시 index[0] 인식 classList ("hide") 해제 X
+        // ======================================================================
 
-  for (let i = 0; i < editButton.length; i++) {
-    editButton[i].addEventListener('click', function (e) {
-    e.preventDefault();
+              $('.editButton').click(function(){
+            let x = $('.editButton').index(this);
+            $(".editButton").removeClass('hide');
+            // 클릭한 객체의 index값을 구한다.
+            // 구한 index값 번째의 form이 'hide' class 를 가지고 있으면 hide 클래스를 추가하고 detail의 id값을 지운다.
+                $(".addDetail").removeAttr("id");
+                if($('.editForm').eq(x).hasClass("hide") === false){
+                $('.editForm').eq(x).addClass('hide');
+                $('.detail').eq(x).removeAttr("id");
+                }
+                
+                $('.editForm').addClass('hide');
+                $('.detail').removeAttr("id");
+                $('.editForm').eq(x).removeClass('hide');
+                $('.detail').eq(x).attr("id", "summernote");
+                $('.editButton').eq(x).addClass('hide');
+            
+                window.summernoteCall();
+          });
 
-  // 일괄 hide 처리 및 서머노트 아이디 제거
-  // detail 하나에 editform 하나
-  addForm.classList.add('hide');
-  addFormDetail.removeAttribute('id');
-  for (let k = 0; k < editForm.length; k++) {
-  if(editForm[k] != editForm[i]) {
-    editForm[k].classList.add('hide');
-    detail[k].removeAttribute('id');
-  }
-  }
+          $('.closeEditFormBtn').click(function(){
+           let y = $('.closeEditFormBtn').index(this);
 
-    editForm[i].classList.toggle('hide');
+            $('.editForm').addClass('hide');
+            $('.detail').removeAttr("id");
+            $('.editButton').eq(y).removeClass('hide');
+          });
 
-      if (editForm[i].classList.contains('hide')) {
-      } else {
-        detail[i].id = 'summernote';
-        window.summernoteCall();
+        $('.roomEditSubmitBtn').click(function(){
+            let x = $('.roomEditSubmitBtn').index(this);
 
-        console.log(detail[i].id);
-        console.log(editForm[i]);
+            var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-      }
-    })
-  }
-// }
+        var url = `/room/editRoom`;
+
+        var paramData = {
+        id: $(".id").eq(x).val(),
+        name: $(".name").eq(x).val(),
+        detail: $(".detail").eq(x).val(),
+        price: $(".price").eq(x).val(),
+        adult: $(".adult").eq(x).val(),
+        children: $(".children").eq(x).val(),
+        checkInTime: $(".checkInTime").eq(x).val(),
+        checkOutTime: $(".checkOutTime").eq(x).val(),
+        reservationStatus: $(".reservationStatus").eq(x).val()
+        };
+
+        let formData = new FormData();
+
+        var fileInput = $('.fileInputEditRoom');
+
+        for (var i = 0; i < fileInput.length; i++) {
+        if (fileInput[i].files.length > 0) {
+        for (var j = 0; j < fileInput[i].files.length; j++) {
+        console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+
+        // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+        formData.append('img', $('.fileInputEditRoom')[i].files[j]);
+        }
+        }
+        }
+        // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
+
+        formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
+
+        $.ajax({
+        url: url,
+        type: "POST",
+        enctype: 'multipart/form-data',
+        data: formData,
+        contentType: false,
+        processData: false,
+        cache: false,
+
+        beforeSend: function (xhr) {
+        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+        xhr.setRequestHeader(header, token);
+        },
+
+        success: function (result, status) {
+        console.log(paramData);
+        alert("객실 정보가 수정되었습니다.");
+        window.location.reload();
+        }
+        });
 
 
 
-function roomEdit() {
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
+        });
 
-var url = `/room/editRoom`;
+        // function roomEdit() {
+        // var token = $("meta[name='_csrf']").attr("content");
+        // var header = $("meta[name='_csrf_header']").attr("content");
 
-var paramData = {
-id: $(".id").eq(1).val(),
-name: $(".name").eq(1).val(),
-detail: $(".detail").eq(1).val(),
-price: $(".price").eq(1).val(),
-adult: $(".adult").eq(1).val(),
-children: $(".children").eq(1).val(),
-checkInTime: $(".checkInTime").eq(1).val(),
-checkOutTime: $(".checkOutTime").eq(1).val(),
-reservationStatus: $(".reservationStatus").eq(1).val()
-};
+        // var url = `/room/editRoom`;
 
-let formData = new FormData();
+        // var paramData = {
+        // id: $(".id").eq(1).val(),
+        // name: $(".name").eq(1).val(),
+        // detail: $(".detail").eq(1).val(),
+        // price: $(".price").eq(1).val(),
+        // adult: $(".adult").eq(1).val(),
+        // children: $(".children").eq(1).val(),
+        // checkInTime: $(".checkInTime").eq(1).val(),
+        // checkOutTime: $(".checkOutTime").eq(1).val(),
+        // reservationStatus: $(".reservationStatus").eq(1).val()
+        // };
 
-var fileInput = $('.fileInputEditRoom');
+        // let formData = new FormData();
 
-for (var i = 0; i < fileInput.length; i++) {
-if (fileInput[i].files.length > 0) {
-for (var j = 0; j < fileInput[i].files.length; j++) {
-console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+        // var fileInput = $('.fileInputEditRoom');
 
-// formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
-formData.append('img', $('.fileInputEditRoom')[i].files[j]);
-}
-}
-}
-// formData.append('img', $('.fileInputEditRoom')[0].files[0]);
+        // for (var i = 0; i < fileInput.length; i++) {
+        // if (fileInput[i].files.length > 0) {
+        // for (var j = 0; j < fileInput[i].files.length; j++) {
+        // console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
 
-formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
+        // // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+        // formData.append('img', $('.fileInputEditRoom')[i].files[j]);
+        // }
+        // }
+        // }
+        // // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
 
-$.ajax({
-url: url,
-type: "POST",
-enctype: 'multipart/form-data',
-data: formData,
-contentType: false,
-processData: false,
-cache: false,
+        // formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
 
-beforeSend: function (xhr) {
-/* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-xhr.setRequestHeader(header, token);
-},
+        // $.ajax({
+        // url: url,
+        // type: "POST",
+        // enctype: 'multipart/form-data',
+        // data: formData,
+        // contentType: false,
+        // processData: false,
+        // cache: false,
 
-success: function (result, status) {
-console.log(paramData);
-alert("객실 정보가 수정되었습니다.");
-window.location.reload();
-}
-});
-}
+        // beforeSend: function (xhr) {
+        // /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+        // xhr.setRequestHeader(header, token);
+        // },
+
+        // success: function (result, status) {
+        // console.log(paramData);
+        // alert("객실 정보가 수정되었습니다.");
+        // window.location.reload();
+        // }
+        // });
+        // }
 
             </script>
             <!--            // 가려져 있는 수정 폼 -->

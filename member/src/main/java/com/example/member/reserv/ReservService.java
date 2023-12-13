@@ -35,14 +35,6 @@ public class ReservService {
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
 
-        public static void newCheckDateTime(ReservDto checkForm, Room room) {
-        String newCheckDateTime1 = checkForm.getCheckIn()+room.getCheckInTime();
-        String newCheckDateTime2 = checkForm.getCheckOut()+room.getCheckOutTime();
-        checkForm.setCheckIn(newCheckDateTime1);
-        checkForm.setCheckOut(newCheckDateTime2);
-        System.out.println("checkFormEx = "+checkForm);
-    }
-
     public void saveReserv(ReservDto reservDto){
         Room room = reservDto.getRoom();
         Lodging lodging = room.getLodging();
@@ -61,17 +53,29 @@ public class ReservService {
         }
     }
 
-    public ReservDto newReserv(Long roomId, Principal principal,Reserv reserv) throws Exception{
+    public ReservDto newReserv(Long roomId, Principal principal,Reserv reserv,String date) throws Exception{
         ReservDto reservDto = new ReservDto();
+
+        String[] checkDate = date.split("~");
+//        System.out.println("checkDate[0] = "+checkDate[0]);
+//        System.out.println("checkDate[1] = "+checkDate[1]);
+
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException::new);
         Member member = memberRepository.findByEmail(principal.getName())
                 .orElseThrow(EntityNotFoundException::new);
+
+        String checkDateTimeIn = checkDate[0]+room.getCheckInTime();
+        String checkDateTimeOut = checkDate[1]+room.getCheckOutTime();
+//        System.out.println("checkDateTimeIn = "+checkDateTimeIn);
+//        System.out.println("checkDateTimeOut = "+checkDateTimeOut);
+
         reservDto.setReservPN(ReservDto.phoneNumber(member));
         reservDto.setReservName(member.getName());
         reservDto.setRoom(room); // room id
         reservDto.setMember(member); // member email
-        reservDto.setCheckIn(reserv.getCheckIn());
+        reservDto.setCheckIn(checkDateTimeIn);
+        reservDto.setCheckOut(checkDateTimeOut);
         return reservDto;
     }
 
@@ -83,7 +87,7 @@ public class ReservService {
 
         for(Reserv savedReserv : reservList){
             ReservDto reservDto = ReservDto.toReservDto(savedReserv);
-            System.out.println(reservDto.getReservationStatus());
+//            System.out.println(reservDto.getReservationStatus());
             reservDtoList.add(reservDto);
         }
         return reservDtoList;

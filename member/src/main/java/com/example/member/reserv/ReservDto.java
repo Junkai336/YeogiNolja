@@ -49,6 +49,8 @@ public class ReservDto {
         reservDto.setReservName(reserv.getReservName());
         reservDto.setReservPN(reserv.getReservPN());
         reservDto.setReservationStatus(reserv.getReservationStatus());
+        reservDto.setCheckIn(reserv.getCheckIn());
+        reservDto.setCheckOut(reserv.getCheckOut());
 
 
         return reservDto;

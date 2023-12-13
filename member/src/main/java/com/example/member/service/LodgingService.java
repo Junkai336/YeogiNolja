@@ -204,8 +204,9 @@ public class LodgingService {
             ItemImgDto itemImgDto = ItemImgDto.toItemImgDto(itemImg);
             itemImgDtoList.add(itemImgDto);
             }
-        }
 
+        }
+        System.out.println(itemImgDtoList);
         lodgingDto.setItemImgDtoList(itemImgDtoList);
 
 
