@@ -112,6 +112,69 @@
                  </a>
              </div>
         </div>
+    <!--    //////////////////////////////////////////////////////////////-->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #lodging_container{
+            display: flex;
+            width: 1200px;
+        }
+        #regImg{
+            width: 600px;
+            height: 600px;
+            border: 1px solid black;
+            margin-right: 30px;
+        }
+        #subImgBox{
+        padding: 5px;
+        width: 600px;
+        height: 600px;
+        }
+        #subImgBox >li{
+        margin: 1% 0.5%;
+            display: inline-block;
+            width: 48%;
+            height: 48%;
+            border: 1px solid black;
+        }
+
+
+    </style>
+
+    <div class="container mt-5" th:object="${lodgingDto}">
+        <div id="lodging_container" >
+            <div id="regImg" class="d-inline-block">
+                대표 이미지 자리
+            </div>
+            <ul id="subImgBox">
+                <li>서브 이미지1</li>
+                <li>서브 이미지2</li>
+                <li>서브 이미지3</li>
+                <li>서브 이미지4</li>
+
+            </ul>
+        </div>
+
+        <div>
+            <span class="d-block" th:text="*{lodgingType}" >a</span>
+            <h2 class="d-inline" th:text="*{name}">a</h2>
+            <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
+
+            <div class="d-inline-block  ms-auto"><!--  map div  -->
+                <div id="map1" style="width:300px;height:200px;"></div>
+                <span th:text="*{address}">a</span>
+            </div>
+            <!-- map에 필요한 숙소,주소-->
+            <input type="hidden" id="lodgingId" name="lodging_id" th:value="*{id}">
+        </div>
+    </div>
+<!--    //////////////////////////////////////////////////////////////-->
+
 
     <div class="d-flex">
         <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel"

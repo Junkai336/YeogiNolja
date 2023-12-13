@@ -1,5 +1,7 @@
 package com.example.member.article;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,9 +20,10 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "select * from article a where a.member_id= :member_id",nativeQuery = true)
     List<Article> findAllByMemberId(@Param("member_id")Long member_id);
 
-    @Query(value = "select count(a) from Article a where a.id= :article_id")
-    Long countArticleId(@Param("article_id") Long article_id);
+    @Query(value = "select a from Article a")
+    List<Article> findArticles(Pageable pageable);
 
-
+    @Query("select count(a) from Article a")
+    Long countArticle();
 }
 

@@ -3,6 +3,8 @@ package com.example.member.service;
 import com.example.member.article.Article;
 import com.example.member.article.ArticleDto;
 import com.example.member.constant.EditingExceptionConsideration;
+import com.example.member.dto.LodgingDto;
+import com.example.member.entity.Lodging;
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.UploadFileRepository;
 import lombok.AllArgsConstructor;
@@ -154,6 +156,33 @@ public class UploadFileService {
 
     }
 
+    public void uploadFileGrantedLodgingId(Lodging lodging) {
+
+        List<Long> longList = new ArrayList<>();
+        String[] imgNumber = lodging.getDetail().split("\"|\\\"");
+
+        for (int i = 0; i < imgNumber.length; i++) {
+            if (imgNumber[i].contains("/image/")) {
+                String helloNumber = imgNumber[i].replaceAll("/image/", "");
+
+                Long helloLong = Long.parseLong(helloNumber);
+
+                longList.add(helloLong);
+            }
+        }
+
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for (int i = 0; i < uploadFileList.size(); i++) {
+            for (int l = 0; l < longList.size(); l++) {
+                if (uploadFileList.get(i).getId().equals(longList.get(l))) {
+                    uploadFileList.get(i).setLodging(lodging);
+                }
+            }
+        }
+
+    }
+
     // nullpointerException 에러 (이미지 지우고 새로운 이미지 넣고 뒤로가기)
     public void backwardUploadFileCheck(Long id) {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
@@ -180,6 +209,18 @@ public class UploadFileService {
         for(UploadFile uploadFile : uploadFileList) {
             if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
                 uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
+                // 숙소 이미지 이넘타입이 바로 안바뀌어서 추가
+                uploadFileRepository.saveAndFlush(uploadFile);
+            }
+        }
+    }
+
+    public void refreshUploadFileCheck() {
+        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+
+        for(UploadFile uploadFile : uploadFileList) {
+            if(uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
+                uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
             }
         }
     }
@@ -189,15 +230,14 @@ public class UploadFileService {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
         for(UploadFile uploadFile : uploadFileList) {
-            if(uploadFile.getArticle() == null) {
+            if(uploadFile.getArticle() == null && uploadFile.getLodging() == null && uploadFile.getRoom() == null) {
                 uploadFileRepository.delete(uploadFile);
                 fileDelete(uploadFile);
-
             }
         }
     }
 
-    public void havingIdArticleDelete(ArticleDto articleDto) {
+    public void havingIdDelete() {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
 
         for(UploadFile uploadFile : uploadFileList) {

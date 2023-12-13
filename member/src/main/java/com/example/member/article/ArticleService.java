@@ -7,6 +7,7 @@ import com.example.member.repository.UploadFileRepository;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,5 +111,24 @@ public class ArticleService {
 
     }
 
+    @Transactional(readOnly = true)
+    public Page<ArticleDto> getArticleList(Pageable pageable) {
+        List<Article> articleList = articleRepository.findArticles(pageable);
+        Long totalCount = articleRepository.countArticle();
 
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+
+        for(Article article : articleList) {
+            ArticleDto articleDto = ArticleDto.toArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+
+//        for(int i = articleList.size()-1; i > -1; i--) {
+//            ArticleDto articleDto = ArticleDto.toArticleDto(articleList.get(i));
+//            articleDtoList.add(articleDto);
+//        }
+
+
+        return new PageImpl<ArticleDto>(articleDtoList, pageable, totalCount);
+    }
 }

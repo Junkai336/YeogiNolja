@@ -14,6 +14,7 @@ import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
+import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,10 +41,12 @@ public class LodgingController {
     private final LodgingService lodgingService;
     private final RoomService roomService;
     private final ItemImgService itemImgService;
+    private final UploadFileService uploadFileService;
     private final ReservedDateService reservedDateService;
 
     @GetMapping(value = "/registration")
     public String toRegistration(Model model) {
+        uploadFileService.refreshUploadFileCheck();
         LodgingDto lodgingDto = new LodgingDto();
         model.addAttribute("lodgingDto", lodgingDto);
 
@@ -78,10 +81,17 @@ public class LodgingController {
 
     @GetMapping(value = {"/list", "/list/{page}"})
     public String LodgingManage(Model model) {
+        try {
+            uploadFileService.emptyUploadFileCheck();
+            uploadFileService.backwardUploadFileCheck();
         List<LodgingDto> lodgingDtoList = lodgingService.lodgingDtos();
         model.addAttribute("lodgingDtoList", lodgingDtoList);
 
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+        }
         return "admin/lodgingList";
+
     }
 
 //    public String itemManage(ItemSearchDto itemSearchDto,
@@ -139,9 +149,14 @@ public class LodgingController {
         LodgingDto lodgingDto = lodgingService.findLodging(id);
 
         if (email.equals(lodgingEntity.getCreatedBy())) {
-
+            try {
             lodgingDto = lodgingService.getLodgingDtl(id);
+            uploadFileService.refreshUploadFileCheck(id);
             model.addAttribute("lodgingDto", lodgingDto);
+
+            } catch (Exception e) {
+                model.addAttribute("errorMessage", e.getMessage());
+            }
 
             return "admin/lodgingForm";
 
@@ -170,6 +185,7 @@ public class LodgingController {
         }
 
         try {
+            uploadFileService.havingIdDelete();
             lodgingService.lodgingUpdate(lodgingDto, itemImgFileList);
 //            lodgingService.saveItem(lodgingDto, email, itemImgFileList);
             rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 수정이 완료되었습니다.");
@@ -190,9 +206,15 @@ public class LodgingController {
 
         if (email.equals(target.getCreatedBy())) {
 
+//            try {
             lodgingService.deleteLodging(id, target, targetRoom);
-
             rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 삭제가 완료되었습니다.");
+
+//            } catch (Exception e) {
+//                model.addAttribute("errorMessage", e.getMessage());
+//            }
+
+
 
             return "redirect:/lodging/list";
         } else {
