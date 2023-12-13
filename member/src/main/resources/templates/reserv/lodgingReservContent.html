@@ -507,8 +507,6 @@ window.location.reload();
     </script>
     <!----------------------------------------------------------------------------------------------------->
 
-    <!--  map div  -->
-    <div id="map1" style="width:300px;height:200px;"></div>
 
 
     <p class="h4 text-center mt-3">
@@ -517,6 +515,7 @@ window.location.reload();
 
 
     <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
+        <input class="room_id" th:value="${roomDto.id}" type="hidden" />
         <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail"
              th:alt="${roomDto.name}">
         <div class="d-flex">
@@ -567,13 +566,23 @@ window.location.reload();
             <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
 
             <button type="button"
-                    id="dateBtn"
-                    th:onclick="|location.href='@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}'|"
                     sec:authorize="hasAnyAuthority('ROLE_USER')"
-                    class="btn btn-primary">예약하기</button>
+                    class="btn btn-primary reservBtn">예약하기</button>
 <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
         </div>
+        <script>
+            const reservBtn = document.querySelectorAll(".reservBtn");
+            var sessionDate = sessionStorage.getItem("date");   // ex) 2023-12-13~2023-12-15
+            const roomIdList = document.querySelectorAll(".room_id");
 
+            for(let i = 0; i< roomIdList.length;i++){
+            reservBtn[i].addEventListener("click", ()=>{
+            var room_id = roomIdList[i].value;
+            location.href= `/reserv/roomReservation/${room_id}/${sessionDate}`;
+
+            });
+            }
+        </script>
         <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
             <button type="button" class="btn btn-primary editButton">수정</button>
 <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->

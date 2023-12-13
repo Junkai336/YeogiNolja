@@ -79,11 +79,6 @@ public class ReservedDateService {
         return savedDateList;
     }
 
-    public ReservDto addDateTime(ReservDto checkDateDto) {
-        System.out.println("reservDtoTestIn1 = "+ checkDateDto.getCheckIn());
-        System.out.println("reservDtoTestOut1 = "+ checkDateDto.getCheckOut());
-        return checkDateDto;
-    }
     // 예약 일자 default
     public List<RoomDto> defaultValidation(List<RoomDto> roomDtoList) {
         // 오늘 일자와 내일 일자를 불러온다

@@ -155,8 +155,8 @@
                 <p th:text="${reserv.room.lodging.name}" class="fs24 font-weight-bold">숙소이름</p>
                 <p th:text="${reserv.room.name}">방 이름</p>
                 <p th:text="${reserv.room.detail}">방 디테일</p>
-                <p th:text="${reserv.room.checkInTime}">방 체크인</p>
-                <p th:text="${reserv.room.checkOutTime}">방 체크아웃</p>
+                <p th:text="${reserv.checkIn}">방 체크인</p>
+                <p th:text="${reserv.checkOut}">방 체크아웃</p>
                 <!--                    <span th:text="${reserv.room.}">방 인원</span>-->
                 <div class="ml-3">
                     <th:block th:if="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">

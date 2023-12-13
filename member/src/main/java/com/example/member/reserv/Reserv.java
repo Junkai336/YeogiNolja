@@ -48,7 +48,6 @@ public class Reserv extends BaseEntity {
     @Column
     private String checkOut;
 
-
     // 예약 생성
     public static Reserv createReserv(ReservDto reservDto, Lodging lodging){
         Reserv reserv = new Reserv();
@@ -59,6 +58,9 @@ public class Reserv extends BaseEntity {
         reserv.setReservName(reservDto.getReservName());
         reserv.setReservPN(reservDto.getReservPN());
         reserv.setReservationStatus(ReservationStatus.RESERVED);
+        reserv.setCheckIn(reservDto.getCheckIn());
+        reserv.setCheckOut(reservDto.getCheckOut());
+
         return reserv;
     }
 

@@ -26,7 +26,4 @@ public interface ReservRepository extends JpaRepository<Reserv,Long> {
     @Query(value = "select * from Reserv r where r.member.id= :member_id", nativeQuery = true)
     List<Reserv> findAllByMemberId(@Param("member_id") Long memberId);
 
-    // 현재 로그인한 회원의 예약 개수가 몇 개인지 조회
-
-
 }

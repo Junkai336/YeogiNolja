@@ -15,7 +15,7 @@ public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
         List<ItemImg> findByRoomIdOrderByIdAsc(Long roomId);
 
 //    ItemImg findByItemIdAndRepimgYn(Long itemId, String repimgYn);
-        ItemImg findByLodgingIdAndRepimgYn(Long itemId, String repimgYn);
+        ItemImg findByLodgingIdAndRepimgYn(Long lodgingId, String repimgYn);
         ItemImg findByRoomIdAndRepimgYn(Long itemId, String repimgYn);
 
     // findBy 뒤에 조건을 붙이면 , 이를 해석하여 데이터베이스 조회 조건 자동 생성

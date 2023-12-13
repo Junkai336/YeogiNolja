@@ -23,9 +23,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query(value = "select * from member where member.user_role='USER'", nativeQuery = true)
     List<Member> findAllByUser();
 
-    @Query(value = "select m from Member m where member.user_role='USER' order by id desc")
+    @Query(value = "select m from Member m where member.user_role='USER' order by id desc", nativeQuery = true)
     List<Member> findMembersUserForPaging(Pageable pageable);
 
-    @Query("select count(m) from Member m where member.user_role='USER'")
+    @Query(value = "select count(m) from Member m where member.user_role='USER'", nativeQuery = true)
     Long countMemberUser();
 }
