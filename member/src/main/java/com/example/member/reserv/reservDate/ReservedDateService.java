@@ -84,7 +84,7 @@ public class ReservedDateService {
         System.out.println("reservDtoTestOut1 = "+ checkDateDto.getCheckOut());
         return checkDateDto;
     }
-
+    // 예약 일자 default
     public List<RoomDto> defaultValidation(List<RoomDto> roomDtoList) {
         // 오늘 일자와 내일 일자를 불러온다
         LocalDate today = LocalDate.now();
@@ -109,6 +109,43 @@ public class ReservedDateService {
              Room room = roomRepository.findById(room_id)
                      .orElseThrow(EntityNotFoundException::new);
         reservedRoomList.add(room);
+        }
+//        전체 조회된 방List에서 인자를 꺼내어
+        for (RoomDto roomDto: roomDtoList){
+//            어제, 오늘 일자에 예약이 되어있는 방을 기존의 Dto List에서 제거한다.
+            for (Room room : reservedRoomList){
+                if (roomDto.getId().equals(room.getId())){
+                    roomDtoList.remove(roomDto);
+                }
+            }
+
+        }
+        // 전체 조회된 방List중 오늘 내일 예약이 되어있는방 제외
+        // 현재 예약 가능한 방들을 보여준다.
+        return roomDtoList;
+    }
+
+    // 예약일정 설정 시
+    public List<RoomDto> defaultValidation(List<RoomDto> roomDtoList, String checkIn, String checkOut) {
+        // 오늘 일자와 내일 일자를 불러온다
+        List<LocalDate> checkDateList = toLocalDate(checkIn, checkOut);
+        List<Long> room_idList = new ArrayList<>();
+        for(LocalDate date: checkDateList){
+            // 일자를 매개값으로 받아 해당 일자에 예약이 되어있는 방의 id를 모두 받아온다.
+            List<Long> findByDateList = reservedDateRepository.findAllByDate(date);
+            // 받아온 List를 하나에 List로 합친다.
+            room_idList.addAll(findByDateList);
+        }
+        // 중복제거 stream List
+        // 받은 일자 만큼의 반복된 List의 중복 값을 없애준다.
+        List<Long> findresult = room_idList.stream()
+                .distinct().collect(Collectors.toList());
+        // 찾은 id값으로 Room Entity List를 만든다.
+        List<Room> reservedRoomList = new ArrayList<>();
+        for(Long room_id: findresult){
+            Room room = roomRepository.findById(room_id)
+                    .orElseThrow(EntityNotFoundException::new);
+            reservedRoomList.add(room);
         }
 //        전체 조회된 방List에서 인자를 꺼내어
         for (RoomDto roomDto: roomDtoList){
