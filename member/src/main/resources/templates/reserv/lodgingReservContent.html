@@ -614,7 +614,7 @@ window.location.reload();
                         </div>
 
                         <div>
-                            <button type="button" onclick="roomEdit()" class="btn btn-primary mt-1">객실 수정</button>
+                            <button type="button" onclick="roomEdit()" class="roomEditSubmitBtn btn btn-primary mt-1">객실 수정</button>
                         </div>
 
                     </form>
@@ -657,24 +657,25 @@ window.location.reload();
             $('.editButton').eq(y).removeClass('hide');
           });
 
+        $('.roomEditSubmitBtn').click(function(){
+            let x = $('.roomEditSubmitBtn').index(this);
 
 
-        function roomEdit() {
-        var token = $("meta[name='_csrf']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
 
         var url = `/room/editRoom`;
 
         var paramData = {
-        id: $(".id").eq(1).val(),
-        name: $(".name").eq(1).val(),
-        detail: $(".detail").eq(1).val(),
-        price: $(".price").eq(1).val(),
-        adult: $(".adult").eq(1).val(),
-        children: $(".children").eq(1).val(),
-        checkInTime: $(".checkInTime").eq(1).val(),
-        checkOutTime: $(".checkOutTime").eq(1).val(),
-        reservationStatus: $(".reservationStatus").eq(1).val()
+        id: $(".id").eq(x).val(),
+        name: $(".name").eq(x).val(),
+        detail: $(".detail").eq(x).val(),
+        price: $(".price").eq(x).val(),
+        adult: $(".adult").eq(x).val(),
+        children: $(".children").eq(x).val(),
+        checkInTime: $(".checkInTime").eq(x).val(),
+        checkOutTime: $(".checkOutTime").eq(x).val(),
+        reservationStatus: $(".reservationStatus").eq(x).val()
         };
 
         let formData = new FormData();
@@ -715,7 +716,68 @@ window.location.reload();
         window.location.reload();
         }
         });
-        }
+
+
+
+        });
+
+        // function roomEdit() {
+        // var token = $("meta[name='_csrf']").attr("content");
+        // var header = $("meta[name='_csrf_header']").attr("content");
+
+        // var url = `/room/editRoom`;
+
+        // var paramData = {
+        // id: $(".id").eq(1).val(),
+        // name: $(".name").eq(1).val(),
+        // detail: $(".detail").eq(1).val(),
+        // price: $(".price").eq(1).val(),
+        // adult: $(".adult").eq(1).val(),
+        // children: $(".children").eq(1).val(),
+        // checkInTime: $(".checkInTime").eq(1).val(),
+        // checkOutTime: $(".checkOutTime").eq(1).val(),
+        // reservationStatus: $(".reservationStatus").eq(1).val()
+        // };
+
+        // let formData = new FormData();
+
+        // var fileInput = $('.fileInputEditRoom');
+
+        // for (var i = 0; i < fileInput.length; i++) {
+        // if (fileInput[i].files.length > 0) {
+        // for (var j = 0; j < fileInput[i].files.length; j++) {
+        // console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+
+        // // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+        // formData.append('img', $('.fileInputEditRoom')[i].files[j]);
+        // }
+        // }
+        // }
+        // // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
+
+        // formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
+
+        // $.ajax({
+        // url: url,
+        // type: "POST",
+        // enctype: 'multipart/form-data',
+        // data: formData,
+        // contentType: false,
+        // processData: false,
+        // cache: false,
+
+        // beforeSend: function (xhr) {
+        // /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+        // xhr.setRequestHeader(header, token);
+        // },
+
+        // success: function (result, status) {
+        // console.log(paramData);
+        // alert("객실 정보가 수정되었습니다.");
+        // window.location.reload();
+        // }
+        // });
+        // }
 
             </script>
             <!--            // 가려져 있는 수정 폼 -->
