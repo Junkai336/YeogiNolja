@@ -1,11 +1,15 @@
 package com.example.member.controller;
 
+import com.example.member.article.ArticleDto;
 import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
 import com.example.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -100,10 +105,15 @@ public class MemberController {
 
         return "redirect:/";
     }
-    @GetMapping(value = "/list")
-    public String management(Model model){
-        List<MemberFormDto> memberDtoList = memberService.memberList();
-        model.addAttribute("memberDtoList" ,memberDtoList);
+    @GetMapping(value = {"/list", "/list/{page}"})
+    public String management(@PathVariable("page") Optional<Integer> page, Model model){
+
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+        Page<MemberFormDto> memberDtoList = memberService.getMemberList(pageable);
+
+        model.addAttribute("memberDtoList" , memberDtoList);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
 
         return "/admin/members";
 
