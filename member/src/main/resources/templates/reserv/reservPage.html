@@ -33,13 +33,15 @@
             <input type="hidden" th:field="*{room.id}" name="room" id="room">
             <input type="hidden" th:field="*{room.lodging.id}" name="lodging" id="lodging">
             <input type="hidden" th:field="*{member.id}" name="member" id="member">
+            <input type="hidden" th:field="*{checkIn}" name="checkIn" id="checkIn">
+            <input type="hidden" th:field="*{checkOut}" name="checkOut" id="checkOut">
             <p th:text="*{room.lodging.name}">숙소명</p>
 
             <p th:text="*{room.name}">방이름</p>
             <p th:text="*{room.detail}">방디테일</p>
 
-            <p th:text="|*{checkIn}*{room.checkInTime}|">체크인</p>
-            <p th:text="*{room.checkOutTime}">체크아웃</p>
+            <p th:text="*{checkIn}">체크인</p>
+            <p th:text="*{checkOut}">체크아웃</p>
 
             <p th:text="*{room.price}">방가격</p>
 

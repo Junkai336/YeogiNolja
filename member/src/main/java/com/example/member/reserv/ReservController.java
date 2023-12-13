@@ -38,16 +38,17 @@ public class ReservController {
 
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
-    @GetMapping("/roomReservation/{room_id}") // roomId/reserv
-    public String newReserv (@PathVariable("room_id") Long roomId, Principal principal,Reserv reserv, Model model,ReservDto check){
-        ReservDto checkDate = reservedDateService.addDateTime(check);
+    @GetMapping("/roomReservation/{room_id}/{sessionDate}") // roomId/reserv
+    public String newReserv (@PathVariable("room_id") Long roomId,
+                             @PathVariable("sessionDate") String date,
+                             Principal principal,
+                             Reserv reserv, Model model){
 
-        System.out.println("roomId = "+roomId);
-        System.out.println("checkDateIn = "+ checkDate.getCheckIn());
-        System.out.println("checkDateOut = "+ checkDate.getCheckOut());
+//        System.out.println("roomId = "+roomId);
+//        System.out.println("Date = "+date);
 
         try {
-            ReservDto reservDto = reservService.newReserv(roomId, principal,reserv);
+            ReservDto reservDto = reservService.newReserv(roomId, principal,reserv,date);
             model.addAttribute("reservDto", reservDto);
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -63,6 +64,9 @@ public class ReservController {
         if(result.hasErrors()){
            return "reserv/reservPage";
         }
+//        System.out.println("reserDto = "+ reservDto);
+//        System.out.println("reservDto.getCheckIn() = "+reservDto.getCheckIn());
+//        System.out.println("reservDto.getCheckOut() = "+reservDto.getCheckOut());
         try {
 //           List<ReservDto> reservDtoList =
                    reservService.saveReserv(reservDto);
@@ -110,10 +114,7 @@ public class ReservController {
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
                          @PathVariable("checkIn") String checkIn,
     @PathVariable("checkOut") String checkOut, Model model){
-        ReservDto checkDateDto = new ReservDto();
-        checkDateDto.setCheckIn(checkIn);
-        checkDateDto.setCheckOut(checkOut);
-        reservedDateService.addDateTime(checkDateDto);
+
         try{
             Lodging lodgingEntity = lodgingService.findById(lodging_id);
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
