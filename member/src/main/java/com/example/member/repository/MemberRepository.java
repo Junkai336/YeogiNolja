@@ -28,6 +28,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     List<Member> findMembersUserForPaging(Pageable pageable);
 
     @Query(value = "select count(m) from Member m where member.user_role='USER'",nativeQuery = true)
-    
+
     Long countMemberUser();
 }
