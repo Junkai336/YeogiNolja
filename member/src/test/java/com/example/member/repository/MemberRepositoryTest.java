@@ -25,11 +25,11 @@ class MemberRepositoryTest {
 
     @Test
     public void imgoutPut(){
-        Long roomId = 38L;
-        List<ItemImg> roomImgList= itemImgRepository.findByRoomId(roomId);
-        for(ItemImg itemImg : roomImgList){
-            System.out.println(itemImg.getImgUrl());
-        }
+//     for(int i = 0; i< 50; i++){
+//         System.out.println(
+//                 "INSERT INTO cscart_orders (payment_id, order_id) VALUES ("+i+", "+i+"데이터"+");"
+//         );
+//     }
 
     }
 
