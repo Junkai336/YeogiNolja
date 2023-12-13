@@ -324,7 +324,7 @@
                         <span class="input-group-text">객실 상세 내용</span>
                     </div>
                     <label th:for="summernote" class="form-label"></label>
-                    <textarea id="summernote" class="form-control addDetail" name="summernote" aria-label="With textarea" rows="3"></textarea>
+                    <textarea class="form-control addDetail" name="summernote" aria-label="With textarea" rows="3"></textarea>
                 </div>
 
                 <div class="input-group">
@@ -374,12 +374,12 @@
 
 
 addBtn.addEventListener('click', function (e) {
+    $(".editForm").addClass("hide");
+     $('.detail').removeAttr("id");
+    $(".addDetail").attr('id', "summernote");
+    window.summernoteCall();
 e.preventDefault();
 
-  for (let k = 0; k < editForm.length; k++) {
-    editForm[k].classList.add('hide');
-    detail[k].removeAttribute('id');
-  }
 
 addForm.classList.toggle('hide');
 })
@@ -707,17 +707,21 @@ window.location.reload();
 
               $('.editButton').click(function(){
             let x = $('.editButton').index(this);
+            $(".editButton").removeClass('hide');
             // 클릭한 객체의 index값을 구한다.
             // 구한 index값 번째의 form이 'hide' class 를 가지고 있으면 hide 클래스를 추가하고 detail의 id값을 지운다.
-            if($('.editForm').eq(x).hasClass("hide") === false){
+                $(".addDetail").removeAttr("id");
+                if($('.editForm').eq(x).hasClass("hide") === false){
                 $('.editForm').eq(x).addClass('hide');
                 $('.detail').eq(x).removeAttr("id");
-            }
-                        $('.editForm').addClass('hide');
-                      $('.detail').removeAttr("id");
-                      $('.editForm').eq(x).removeClass('hide');
-                      $('.detail').eq(x).attr("id", "summernote");
-                 $('.editButton').eq(x).addClass('hide');
+                }
+                
+                $('.editForm').addClass('hide');
+                $('.detail').removeAttr("id");
+                $('.editForm').eq(x).removeClass('hide');
+                $('.detail').eq(x).attr("id", "summernote");
+                $('.editButton').eq(x).addClass('hide');
+            
                 window.summernoteCall();
           });
 
@@ -731,7 +735,6 @@ window.location.reload();
 
         $('.roomEditSubmitBtn').click(function(){
             let x = $('.roomEditSubmitBtn').index(this);
-
 
             var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
