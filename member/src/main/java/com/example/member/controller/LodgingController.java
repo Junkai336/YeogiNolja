@@ -116,6 +116,7 @@ public class LodgingController {
             System.out.println(itemImgDto);
         }
 
+        uploadFileService.refreshUploadFileCheck(lodging_id);
         lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
         // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
         List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
@@ -223,14 +224,16 @@ public class LodgingController {
     @PostMapping(value = "/addRoom")
     @ResponseBody
     public void addRoom(@RequestPart(value = "paramData") Room room,
-                        @RequestPart(value = "img", required = false) List<MultipartFile> file
+                        @RequestPart(value = "img", required = false) List<MultipartFile> file,
+                        Model model
     ) throws IOException {
         room.setReservationStatus(ReservationStatus.AVAILABLE);
         roomService.saveRoomJS(room);
-
+        uploadFileService.uploadFileGrantedRoomId(room);
         try {
         itemImgService.saveItemImg(file, room);
             } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
         }
 
     }
