@@ -1,10 +1,15 @@
 package com.example.member.service;
 
 
+import com.example.member.article.Article;
+import com.example.member.article.ArticleDto;
 import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -87,8 +92,20 @@ public class MemberService implements UserDetailsService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Page<MemberFormDto> getMemberList(Pageable pageable) {
+            List<Member> memberList = memberRepository.findMembersUserForPaging(pageable);
+            Long totalCount = memberRepository.countMemberUser();
 
+            List<MemberFormDto> memberDtoList = new ArrayList<>();
 
+            for(Member member : memberList) {
+                MemberFormDto memberFormDto = MemberFormDto.toMemberFormDto(member);
+                memberDtoList.add(memberFormDto);
+            }
+
+            return new PageImpl<MemberFormDto>(memberDtoList, pageable, totalCount);
+    }
 }
 
 

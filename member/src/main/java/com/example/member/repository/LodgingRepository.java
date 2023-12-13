@@ -21,6 +21,6 @@ public interface LodgingRepository extends JpaRepository<Lodging, Long> {
     @Query(value = "select l from Lodging l order by id desc")
     List<Lodging> findLodgings(Pageable pageable);
 
-    @Query("select count(l) from Lodging l")
+    @Query(value = "select count(l) from Lodging l")
     Long countLodging();
 }

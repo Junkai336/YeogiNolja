@@ -121,26 +121,6 @@
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-<!--    <div th:with="start=${(reservs.number/maxPage)*maxPage + 1}, end=(${(reservs.totalPages == 0) ? 1 : (start + (maxPage - 1) < reservs.totalPages ? start + (maxPage - 1) : reservs.totalPages)})" >-->
-<!--        <ul class="pagination justify-content-center">-->
-
-<!--            <li class="page-item" th:classappend="${reservs.number eq 0}?'disabled':''">-->
-<!--                <a th:href="@{'/reservs/' + ${reservs.number-1}}" aria-label='Previous' class="page-link">-->
-<!--                    <span aria-hidden='true'>Previous</span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${reservs.number eq page-1}?'active':''">-->
-<!--                <a th:href="@{'/reservs/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>-->
-<!--            </li>-->
-
-<!--            <li class="page-item" th:classappend="${reservs.number+1 ge reservs.totalPages}?'disabled':''">-->
-<!--                <a th:href="@{'/reservs/' + ${reservs.number+1}}" aria-label='Next' class="page-link">-->
-<!--                    <span aria-hidden='true'>Next</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
 
 <!--    테스트-->
     <div class="card d-flex">
@@ -169,6 +149,29 @@
 
             </div>
         </div>
+    </div>
+
+    <!-- 페이지네이션 영역 -->
+    <div th:with="start=${(reservDtoList.number/maxPage)*maxPage + 1}, end=(${(reservDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reservDtoList.totalPages ? start + (maxPage - 1) : reservDtoList.totalPages)})" >
+        <ul class="pagination justify-content-center mt-3">
+
+            <li class="page-item" th:classappend="${reservDtoList.number eq 0}?'disabled':''">
+                <a th:href="@{'/reserv/reservs/' + ${reservDtoList.number-1}}" aria-label='Previous' class="page-link">
+                    <span aria-hidden='true'>Previous</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${reservDtoList.number eq page-1}?'active':''">
+                <a th:href="@{'/reserv/reservs/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+            </li>
+
+            <li class="page-item" th:classappend="${reservDtoList.number+1 ge reservDtoList.totalPages}?'disabled':''">
+                <a th:href="@{'/reserv/reservs/' + ${reservDtoList.number+1}}" aria-label='Next' class="page-link">
+                    <span aria-hidden='true'>Next</span>
+                </a>
+            </li>
+
+        </ul>
     </div>
 
 
