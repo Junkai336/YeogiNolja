@@ -148,6 +148,14 @@
         <input type="hidden" id="lodging_name" name="lodging_name" th:value="*{name}">
         <input type="hidden" id="lodging_address" name="lodging_address" th:value="*{address}">
 
+        <div th:unless="${#strings.equals(prevPage, 'LodgingController')}" class="container mt-3">
+            <a href="/reserv/lodgingReservList" class="btn btn-sm btn-outline-dark">숙소 목록</a>
+        </div>
+
+        <div th:if="${#strings.equals(prevPage, 'LodgingController')}" class="container mt-3">
+            <a href="/lodging/list" class="btn btn-sm btn-outline-dark">숙소 목록</a>
+        </div>
+
     <div class="container mt-5 image_box" th:object="${lodgingDto}">
         <div id="lodging_container">
             <div id="regImg" class="d-inline-block" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
@@ -326,14 +334,6 @@
     <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
         <a th:href="@{/lodging/{id}/lodgingForm(id = ${lodgingDto.id})}" class="btn btn-primary w-10 mx-2">수정</a>
         <a th:href="@{/lodging/{id}/lodgingDelete(id = ${lodgingDto.id})}" class="btn btn-danger w-10 mx-2">삭제</a>
-    </div>
-
-    <div th:unless="${#strings.equals(prevPage, 'LodgingController')}">
-        <a href="/reserv/lodgingReservList" class="d-flex justify-content-center">숙소 목록</a>
-    </div>
-
-    <div th:if="${#strings.equals(prevPage, 'LodgingController')}">
-        <a href="/lodging/list" class="d-flex justify-content-center">숙소 목록</a>
     </div>
 
     <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">

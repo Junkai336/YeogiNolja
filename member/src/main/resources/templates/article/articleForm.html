@@ -55,14 +55,14 @@
     <form class="container" action="/article/articleForm" method="post" th:object="${articleDto}">
         <input type="hidden" th:field="*{id}">
         <input type="hidden" th:field="*{member.id}">
-        <div class="mb-3 form-group">
+        <div class="mb-3 mt-5 form-group">
             <select th:field="*{categoryStatus}" class="custom-select">
                 <option value="NOTICE">공지사항</option>
                 <option value="FREE">자유게시판</option>
             </select>
         </div>
 
-        <div class="mb-3 form-group">
+        <div class="mb-3 mt-3 form-group">
             <label th:for="title" class="form-label">제목</label>
             <input type="text" th:field="*{title}" id="title" class="form-control" name="title">
         </div>
@@ -73,10 +73,9 @@
         </div>
 
         <button type="submit" class="btn btn-primary">작성하기</button>
+        <a href="/article/list" class="btn btn-outline-danger">취소</a>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
-
-    <a href="/article/list">게시글 목록</a>
 
 </div>
 
