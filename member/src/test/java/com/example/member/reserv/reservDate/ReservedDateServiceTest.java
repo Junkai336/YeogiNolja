@@ -28,7 +28,7 @@ private ReservedDateService reservedDateService;
         List<LocalDate> useDateList = reservedDateService.toLocalDate("2023-12-30", "2024-01-06");
         System.out.println(useDateList.toString());
         try {
-            reservedDateService.saveReservDate(room_id, useDateList);
+            reservedDateService.saveReservDate(room, useDateList);
         }catch (RuntimeException e){
             System.out.println(e.getMessage());
         }

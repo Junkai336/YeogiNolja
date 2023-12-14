@@ -48,12 +48,10 @@ public class ReservedDateService {
         return reservDate;
     }
 
-    public void saveReservDate(Long room_id, List<LocalDate> dateList)throws RuntimeException {
+    public void saveReservDate(Room room, List<LocalDate> dateList)throws RuntimeException {
 
-        Room room = roomRepository.findById(room_id)
-                .orElseThrow(EntityNotFoundException::new);
 
-        List<LocalDate> savedDateList = savedDateList(room_id);
+        List<LocalDate> savedDateList = savedDateList(room);
         // 방의 id를 입력받아 신규로 입력받은 예약일자와 겹치는 방은 저장 시 에러코드 표출
         for (LocalDate date : dateList) {
             ReservedDate reservedDate = new ReservedDate();
@@ -69,9 +67,9 @@ public class ReservedDateService {
         }
     }
     // 방 id를 매개변수로 예약되어있는 일자를 List 로 반환받는다.
-    public List<LocalDate> savedDateList(Long room_id){
+    public List<LocalDate> savedDateList(Room room){
         List<LocalDate> savedDateList = new ArrayList<>();
-        List<ReservedDate> reservedDateList = reservedDateRepository.findByRoomId(room_id);
+        List<ReservedDate> reservedDateList = reservedDateRepository.findByRoomId(room.getId());
         for(ReservedDate reservedDate: reservedDateList){
             savedDateList.add(reservedDate.getReserved_date());
         }
