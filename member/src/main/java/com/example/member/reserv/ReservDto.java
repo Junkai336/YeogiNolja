@@ -45,6 +45,7 @@ public class ReservDto {
         reservDto.setMember(member);
         reservDto.setReservPN(reservDto.phoneNumber(member));
         reservDto.setRoom(reserv.getRoom());
+        reservDto.setLodging(reserv.getLodging());
         reservDto.setReservDate(reserv.getRegTime());
         reservDto.setReservName(reserv.getReservName());
         reservDto.setReservPN(reserv.getReservPN());

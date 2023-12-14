@@ -69,12 +69,18 @@
         object-fit: cover;
         }
 
-        .carousel_footer li {
+        .carousel-indicators {
         width: 100px;
         height: 100px;
         }
 
-        .carousel_footer li img {
+        .indi {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+
+        .indi img {
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -171,94 +177,141 @@
                 <div id="map1" style="width:300px;height:200px;"></div>
                 <span th:text="*{address}">a</span>
             </div>
-            <!-- map에 필요한 숙소,주소-->
-            <input type="hidden" id="lodgingId" name="lodging_id" th:value="*{id}">
         </div>
     </div>
 
-    <div class="d-flex">
-        <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel"
-             tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
+        <div class="d-flex">
+            <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel"
+                 tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="lodgingModalToggleLabel">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="allTab" data-bs-toggle="tab" data-bs-target="#allTab-pane"
-                                            type="button" role="tab" aria-controls="allTab-pane" aria-selected="true">전체</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="roomTab" data-bs-toggle="tab" data-bs-target="#roomTab-pane" type="button"
-                                            role="tab" aria-controls="roomTab-pane" aria-selected="false">객실</button>
-                                </li>
-                            </ul>
-                            <span class="text-center" th:text="*{name}"></span>
+                        <div class="modal-header border-bottom">
+                            <h5 class="modal-title" id="lodgingModalToggleLabel">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="lodgingTab" data-bs-toggle="tab" data-bs-target="#lodgingTab-pane"
+                                                type="button" role="tab" aria-controls="lodgingTab-pane" aria-selected="true">숙소</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="roomTab" data-bs-toggle="tab" data-bs-target="#roomTab-pane" type="button"
+                                                role="tab" aria-controls="roomTab-pane" aria-selected="false">객실</button>
+                                    </li>
+                                </ul>
+                                <span class="text-center" th:text="*{name}"></span>
 
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
 
-                    <div class="modal-body">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="allTab-pane" role="tabpanel" aria-labelledby="allTab"
-                                 tabindex="0">
+                        <div class="modal-body">
+                            <div class="tab-content" id="myTabContent">
 
-                                <!-- Carousel -->
-                                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                                <div class="tab-pane fade show active" id="lodgingTab-pane" role="tabpanel" aria-labelledby="lodgingTab"
+                                     tabindex="0">
 
-                                    <!-- The slideshow/carousel -->
-                                    <div class="carousel-inner" style="height:500px;">
-                                        <div class="carousel-item active w-100" th:each="lodgingImg : *{itemImgDtoList}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
-                                            <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                    <!-- Carousel -->
+                                    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+                                        <!-- The slideshow/carousel -->
+                                        <div class="carousel-inner border-bottom" style="height:500px;">
+                                            <div class="carousel-item active w-100 mx-2" th:each="lodgingImg : *{itemImgDtoList}"
                                                  th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
-                                        </div>
-                                        <div class="carousel-item w-100" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
-                                            <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
+                                            </div>
+                                            <div class="carousel-item w-100 mx-2" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"
                                                  th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
+                                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
+                                            </div>
+
+                                            <!-- Left and right controls/icons -->
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon text-muted">prev</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon text-muted">next</span>
+                                            </button>
                                         </div>
                                     </div>
 
-                                    <!-- Left and right controls/icons -->
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon text-muted">prev</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon text-muted">next</span>
-                                    </button>
+                                    <div class="modal-footer carousel_footer mt-1">
+                                        <div class="d-flex ms-auto container-sm justify-content-center">
+                                            <div class="active indi rounded mx-1" th:each="lodgingImg : *{itemImgDtoList}"
+                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
+                                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100 rounded" th:alt="${lodgingImg.imgName}"
+                                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}"
+                                                     data-bs-target="#demo" th:data-bs-slide-to="${lodgingImgStat.index}" aria-current="true">
+                                            </div>
+                                            <div class="indi rounded mx-1" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"
+                                                 th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
+                                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100 rounded" th:alt="${lodgingImg.imgName}"
+                                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}"
+                                                     data-bs-target="#demo" th:data-bs-slide-to="${lodgingImgStat.index}" aria-label="Slide 2">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="tab-pane fade" id="roomTab-pane" role="tabpanel" aria-labelledby="roomTab" tabindex="0">
+                                <div class="tab-pane fade" id="roomTab-pane" role="tabpanel" aria-labelledby="roomTab" tabindex="0">
 
+<!--                                    객실 전용 탭 메뉴 hello!!-->
+                                    <ul class="nav nav-tabs d-flex flex-row " id="mytab2" role="tablist">
+                                        <li class="nav-item mx-1" role="presentation" th:each="roomDto : ${roomDtoList}">
+                                            <span th:text="${roomDto.name}" class="rounded-pill border border-secondary bg-light call" th:id="${roomDto.name + roomDtoStat.index}"></span>
+<!--                                            <button class="nav-link active" id="lodgingTab" data-bs-toggle="tab" data-bs-target="#lodgingTab-pane"-->
+<!--                                                    type="button" role="tab" aria-controls="lodgingTab-pane" aria-selected="true">숙소</button>-->
+                                        </li>
+                                    </ul>
+
+                                    <!-- Carousel -->
+                                    <div id="demo2" class="carousel slide" data-bs-ride="carousel">
+
+                                        <!-- The slideshow/carousel -->
+                                        <div class="carousel-inner border-bottom" style="height:500px;">
+                                            <div th:each="roomDto : ${roomDtoList}">
+
+                                        <div class="carousel-item active w-100 mx-2" th:each="roomImg : ${roomDto.itemImgDtoList}">
+                                             <img th:src="${roomImg.imgUrl}" class="d-block w-100" th:alt="${roomImg.imgName}">
+                                        </div>
+
+                                            </div>
+
+                                            <!-- Left and right controls/icons -->
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#demo2" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon text-muted">prev</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#demo2" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon text-muted">next</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer carousel_footer mt-1">
+                                            <div class="d-flex ms-auto container-sm justify-content-center">
+
+                                                <div th:each="roomDto : ${roomDtoList}">
+                                                    <div class="d-flex flex-row mx-1" >
+                                                         <div class="active indi rounded mx-1" th:each="roomImg : ${roomDto.itemImgDtoList}">
+                                                              <img th:src="${roomImg.imgUrl}" class="d-block w-100 rounded" th:alt="${roomImg.imgName}"
+                                                                   data-bs-target="#demo2" th:data-bs-slide-to="${roomImgStat.index + roomDtoStat.index}" aria-current="true">
+                                                          </div>
+                                                    </div>
+                                                </div>
+
+                                        </div>
+                                    </div>
+                                </div>
 
 
                             </div>
                         </div>
                     </div>
 
-                    <div class="modal-footer carousel_footer">
-                        <ul class="d-flex ms-auto container-sm">
-                            <li th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
-                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
-                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
-                            </li>
-                            <li th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
-                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
-                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
-                            </li>
-                            <li th:each="room : ${roomDtoList}">
-                                <img th:src="${roomImg.imgUrl}" class="d-block w-100" th:alt="${roomImg.imgName}"
-                                     th:if="${#strings.equals(roomImg.repimgYn, 'N')} and ${#strings.contains(roomImg.imgUrl, 'images')}" th:each="roomImg : ${room.itemImgDtoList}">
-                            </li>
-                        </ul>
-                    </div>
-
                 </div>
             </div>
         </div>
-    </div>
 
 
 

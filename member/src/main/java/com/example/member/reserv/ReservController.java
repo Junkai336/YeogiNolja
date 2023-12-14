@@ -44,13 +44,13 @@ public class ReservController {
     public String newReserv (@PathVariable("room_id") Long roomId,
                              @PathVariable("sessionDate") String date,
                              Principal principal,
-                             Reserv reserv, Model model){
+                             Model model){
 
 //        System.out.println("roomId = "+roomId);
 //        System.out.println("Date = "+date);
 
         try {
-            ReservDto reservDto = reservService.newReserv(roomId, principal,reserv,date);
+            ReservDto reservDto = reservService.newReserv(roomId, principal,date);
             model.addAttribute("reservDto", reservDto);
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -115,6 +115,8 @@ public class ReservController {
                          @PathVariable("checkIn") String checkIn,
     @PathVariable("checkOut") String checkOut, Model model){
 
+
+
         try{
             Lodging lodgingEntity = lodgingService.findById(lodging_id);
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
@@ -125,19 +127,23 @@ public class ReservController {
             }
 
             lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
+
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
             List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+
             // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
             // 방들은 제외한 후 보여준다.
             List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
+
+            System.out.println("이 이상 도달하지 못함");
 
             List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
 
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
             model.addAttribute("roomDtoList", roomDtoListContainImage);
             model.addAttribute("prevPage", "LodgingController");
-            model.addAttribute("checkIn", checkIn);
-            model.addAttribute("checkOut", checkOut);
+//            model.addAttribute("checkIn", checkIn);
+//            model.addAttribute("checkOut", checkOut);
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
         }

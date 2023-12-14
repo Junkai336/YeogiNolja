@@ -61,7 +61,7 @@ public class ReservService {
         }
     }
 
-    public ReservDto newReserv(Long roomId, Principal principal,Reserv reserv,String date) throws Exception{
+    public ReservDto newReserv(Long roomId, Principal principal,String date) throws Exception{
         ReservDto reservDto = new ReservDto();
         String[] checkDate = date.split("~");
 
