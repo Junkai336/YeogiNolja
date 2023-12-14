@@ -69,6 +69,17 @@
         object-fit: cover;
         }
 
+        .carousel_footer li {
+        width: 100px;
+        height: 100px;
+        }
+
+        .carousel_footer li img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        }
+
 
     </style>
 </th:block>
@@ -184,6 +195,7 @@
                                 </li>
                             </ul>
                             <span class="text-center" th:text="*{name}"></span>
+
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
@@ -226,8 +238,21 @@
                         </div>
                     </div>
 
-                    <div class="modal-footer">
-                        <p>내용</p>
+                    <div class="modal-footer carousel_footer">
+                        <ul class="d-flex ms-auto container-sm">
+                            <li th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
+                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
+                            </li>
+                            <li th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}">
+                                <img th:src="${lodgingImg.imgUrl}" class="d-block w-100" th:alt="${lodgingImg.imgName}"
+                                     th:if="${#strings.equals(lodgingImg.repimgYn, 'N')} and ${#strings.contains(lodgingImg.imgUrl, 'images')}">
+                            </li>
+                            <li th:each="room : ${roomDtoList}">
+                                <img th:src="${roomImg.imgUrl}" class="d-block w-100" th:alt="${roomImg.imgName}"
+                                     th:if="${#strings.equals(roomImg.repimgYn, 'N')} and ${#strings.contains(roomImg.imgUrl, 'images')}" th:each="roomImg : ${room.itemImgDtoList}">
+                            </li>
+                        </ul>
                     </div>
 
                 </div>
