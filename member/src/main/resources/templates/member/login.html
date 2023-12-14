@@ -19,8 +19,8 @@
 <div layout:fragment="content">
 
 
-    <div class="dropdown">
-        <form action="/members/login" method="post" role="form" class="px-4 py-3">
+    <div class="dropdown container col-5">
+        <form action="/members/login" method="post" role="form" class="px-4 py-3 mt-5">
 
             <div class="form-group mb-3">
                 <label th:for="email" class="form-label">이메일주소</label>
@@ -49,10 +49,10 @@
 
         </form>
 
-        <div class="container">
-        <a class="btn btn-success" href="/members/join">회원가입</a>
-        <a class="btn btn-primary" href="#">아이디 찾기</a>
-        <a class="btn btn-primary" href="#">비밀번호 찾기</a>
+        <div class="container ms-2">
+        <a class="btn btn-sm btn-success" href="/members/join">회원가입</a>
+        <a class="btn btn-sm btn-primary" href="#">아이디 찾기</a>
+        <a class="btn btn-sm btn-primary" href="#">비밀번호 찾기</a>
         </div>
     </div>
 
