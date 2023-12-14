@@ -119,7 +119,8 @@ public class LodgingService {
     }
 
     public Lodging findById(Long id) {
-        Lodging lodgingEntity = lodgingRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Lodging lodgingEntity = lodgingRepository.findById(id).
+                orElseThrow(EntityNotFoundException::new);
 
         return lodgingEntity;
     }
