@@ -39,7 +39,7 @@ public class ReservService {
     private final LodgingRepository lodgingRepository;
     private final ReservedDateService reservedDateService;
 
-    public void saveReserv(ReservDto reservDto, List<LocalDate> dateList){
+    public void saveReserv(ReservDto reservDto, List<LocalDate> dateList)throws Exception{
         Room room = reservDto.getRoom();
         Lodging lodging = room.getLodging();
         Reserv reserv = Reserv.createReserv(reservDto, lodging);
@@ -57,19 +57,23 @@ public class ReservService {
                 .orElseThrow(EntityNotFoundException::new);
 
         if(reservRoom.getReservationStatus().equals("RESERV")){
-            throw new IllegalStateException("이미 예약된 숙소입니다");
+            throw new RuntimeException("이미 예약된 숙소입니다");
         }
     }
 
-    public ReservDto newReserv(Long roomId, Principal principal,Reserv reserv,String date) throws Exception{
+    public ReservDto newReserv(Long roomId, Principal principal,String date) throws Exception{
+    public ReservDto newReservDto(Long roomId, Principal principal,String date) throws Exception{
         ReservDto reservDto = new ReservDto();
         String[] checkDate = date.split("~");
 
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(EntityNotFoundException::new);
+
         Member member = memberRepository.findByEmail(principal.getName())
                 .orElseThrow(EntityNotFoundException::new);
-
+        Lodging lodging = lodgingRepository.findById(room.getLodging().getId())
+                .orElseThrow(EntityNotFoundException::new);
+        reservDto.setLodging(lodging);
         reservDto.setReservPN(ReservDto.phoneNumber(member));
         reservDto.setReservName(member.getName());
         reservDto.setRoom(room); // room id
