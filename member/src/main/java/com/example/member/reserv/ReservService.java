@@ -12,6 +12,7 @@ import com.example.member.repository.RoomRepository;
 import com.example.member.reserv.reservDate.ReservedDate;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateRepository;
+import com.example.member.reserv.reservDate.ReservedDateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,7 +37,7 @@ public class ReservService {
     private final ReservRepository reservRepository;
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
-    private final ReservedDateRepository reservedDateRepository;
+    private final ReservedDateService reservedDateService;
 
     public void saveReserv(ReservDto reservDto, List<LocalDate> dateList){
         Room room = reservDto.getRoom();
@@ -44,12 +45,8 @@ public class ReservService {
         Reserv reserv = Reserv.createReserv(reservDto, lodging);
         validateDuplicateMember(reserv);
         reservRepository.save(reserv);
-        for(LocalDate date : dateList){
-            ReservedDate reservedDate = new ReservedDate();
-            reservedDate.setReserved_date(date);
-            reservedDate.setRoom(reservDto.getRoom());
-            reservedDateRepository.save(reservedDate);
-        }
+
+        reservedDateService.saveReservDate(room, dateList);
 
 
     }
