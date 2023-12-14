@@ -133,17 +133,23 @@ public class ReservController {
                          @PathVariable("checkIn") String checkIn,
     @PathVariable("checkOut") String checkOut, Model model){
 
+
+
         try{
             Lodging lodgingEntity = lodgingService.findById(lodging_id);
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
             LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodging_id);
 
             lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
+
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
             List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+
             // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
             // 방들은 제외한 후 보여준다.
             List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
+
+            System.out.println("이 이상 도달하지 못함");
 
             List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
 
