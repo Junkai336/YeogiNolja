@@ -11,10 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name="lodging")
-@AllArgsConstructor
 @NoArgsConstructor
-//@Builder
-@ToString
 @Getter
 @Setter
 public class Lodging extends BaseEntity {
@@ -24,10 +21,6 @@ public class Lodging extends BaseEntity {
     @Column(name="lodging_id")
     private Long id;
 
-//    @JoinColumn(name = "room_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Room room;
-//    private List<Room> room = new ArrayList<>();
 
     @OneToMany(mappedBy = "lodging", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Room> room = new ArrayList<>();
@@ -36,8 +29,6 @@ public class Lodging extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-//    @Column
-//    private Review review;
 
     @Column
     private String name;

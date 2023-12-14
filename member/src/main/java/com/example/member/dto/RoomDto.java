@@ -70,12 +70,10 @@ public class RoomDto {
 
     public static List<RoomDto> toRoomDtoList(List<Room> roomList) {
         List<RoomDto> roomDtoList = new ArrayList<>();
-
         for (Room room : roomList) {
             RoomDto roomDto = toRoomDto(room);
             roomDtoList.add(roomDto);
         }
-
         return roomDtoList;
 
     }
