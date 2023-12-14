@@ -67,11 +67,9 @@ public class ReservController {
            return "reserv/reservPage";
         }
 //        System.out.println("reserDto = "+ reservDto);
-        System.out.println("reservDto.getCheckIn() = "+reservDto.getCheckIn());
-        System.out.println("reservDto.getCheckOut() = "+reservDto.getCheckOut());
         try {
             List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
-                   reservService.saveReserv(reservDto, reservDateList);
+            reservService.saveReserv(reservDto, reservDateList);
 
 
         } catch (IllegalStateException e){
