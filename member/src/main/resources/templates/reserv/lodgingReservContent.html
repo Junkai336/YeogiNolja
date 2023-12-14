@@ -141,11 +141,9 @@
     </div>
 
     <div class="table" th:object="${lodgingDto}">
-            <h3 th:text="*{name}">a</h3>
-            <span th:utext="*{lodgingType}"></span>
-<!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
-            <span th:text="*{address}">a</span>
 
+            <!-- map에 필요한 숙소,주소-->
+            <input type="hidden" id="lodgingId" name="lodging_id" th:value="*{id}">
         <input type="hidden" id="lodging_name" name="lodging_name" th:value="*{name}">
         <input type="hidden" id="lodging_address" name="lodging_address" th:value="*{address}">
 
@@ -166,18 +164,27 @@
                 </li>
             </ul>
         </div>
-
-        <div>
-            <span class="d-block" th:text="*{lodgingType}" >a</span>
-            <h2 class="d-inline" th:text="*{name}">a</h2>
-            <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
-
-            <div class="d-inline-block  ms-auto"><!--  map div  -->
-                <div id="map1" style="width:300px;height:200px;"></div>
-                <span th:text="*{address}">a</span>
+    <div>
+        <div class="d-inline-block">
+            <div id="dateForm">
+                <label for="txtDate"><i class="bi bi-calendar2"></i></label>
+                <input type="text" name="daterange" id="txtDate"/>
+                <button id="txtDateBtn" type="button" class="btn btn-secondary btn-sm">일자 검색</button>
             </div>
         </div>
-    </div>
+
+        <div class="d-flex justify-content-between" style="border:1px solid black;">
+            <div>
+                <h3 th:text="*{name}">a</h3>
+                <span class="d-block" th:text="*{lodgingType}" >a</span>
+    <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
+                <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
+            </div>
+            <div class="border border-radius" style="height:250px;"><!--  map div  -->
+                <div id="map1" style="width:300px;height:200px;"></div>
+                <span th:text="*{address}" class="d-flex align-items-center">a</span>
+            </div>
+        </div>
 
         <div class="d-flex">
             <div class="modal fade modal-lg" id="lodgingModalToggle" aria-hidden="true" aria-labelledby="lodgingModalToggleLabel"
@@ -504,15 +511,9 @@ window.location.reload();
 
     </script>
     <!------------------------------------------------------------------------------------------------------->
-    <div class="d-inline-block">
-        <div id="dateForm">
-            <label for="txtDate"><i class="bi bi-calendar2"></i></label>
-            <input type="text" name="daterange" id="txtDate"/>
-            <button id="txtDateBtn" type="button">일자 검색</button>
-        </div>
-    </div>
-    <script>
 
+    <script>
+    // 일자 검색
  $("#txtDate").daterangepicker({
          locale: {
          "separator" : "~",   // 시작 일자와 종료 일자 구분자
@@ -577,12 +578,16 @@ window.location.reload();
     </p>
 
 
-    <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
+    <div th:each="roomDto : ${roomDtoList}" class="container mt-3 d-flex" style="border:1px solid black">
         <input class="room_id" th:value="${roomDto.id}" type="hidden" />
-        <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail"
-             th:alt="${roomDto.name}">
-        <div class="d-flex">
-        <h4 th:text="'객실명: '+${roomDto.name}"></h4>
+        <div class="w-50 p-3">
+            <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail img-fluid"
+                 th:alt="${roomDto.name}" style="width:auto;height:auto;">
+        </div>
+        <div class="w-100 p-3">
+        <div class="d-flex w-100 p-3 justify-content-between" style="border:1px solid black">
+<!--            룸 리스트 네임-->
+        <h4 th:text="${roomDto.name}"></h4>
 
             <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
@@ -618,21 +623,27 @@ window.location.reload();
                     </div>
                 </div>
             </div>
-            <a class="btn btn-primary ms-auto" data-bs-toggle="modal" href="#exampleModalToggle" role="button">방 상세 보기</a>
+            <a class="btn btn-link btn-sm" data-bs-toggle="modal" href="#exampleModalToggle" role="button">방 상세 보기</a>
 
         </div>
 
-        <p th:text="'객실가격: '+${roomDto.price}"></p>
-
-        <div class="d-flex">
-            <p  th:text="'입실: '+${roomDto.checkInTime}"></p>
-            <p class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></p>
-
+        <div class="d-flex justify-content-between align-items-center mt-5" style="border:1px solid black">
+            <div>
+                <span  th:text="'입실: '+${roomDto.checkInTime}"></span>
+                <span class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></span>
+            </div>
+            <div class="mt-5">
+    <!--        룸리스트 가격-->
+            <span th:text="${roomDto.price}+'원'"></span>
+            </div>
+        </div>
+            <div class="d-flex justify-content-end">
             <button type="button"
                     sec:authorize="hasAnyAuthority('ROLE_USER')"
                     class="btn btn-primary reservBtn">예약하기</button>
 <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
-        </div>
+            </div>
+    </div>
         <script>
             const txtDate = document.querySelector('#txtDate').value;
             const reservBtn = document.querySelectorAll(".reservBtn");
@@ -1031,7 +1042,7 @@ window.location.reload();
             <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
             <hr>
             <div id="map2" class="mt-3" style="width:100%;height:500px;"></div>
-
+    </div><!--149번째줄 일자검색 부터 하단 큰 맵 까지-->
         <!--    map script-->
         <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
         <script>
