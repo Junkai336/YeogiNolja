@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-//@Transactional
+@Transactional
 @RequiredArgsConstructor
 public class RoomService {
 
@@ -40,11 +40,9 @@ public class RoomService {
         //        LocalDate defaultNow = LocalDate.now();
 //        LocalDate tomorrow = LocalDate.now().plusDays(1);
         List<Room> roomList = roomRepository.findAllByLodgingId(lodging_id);
-
+        System.out.println("roomList : "+roomList);
         List<RoomDto> roomDtoList = RoomDto.toRoomDtoList(roomList);
-//        for (CommentDto commentDto : commentDtoList){
-//            System.out.println(commentDto.toString());
-//        }
+
         return roomDtoList;
 
     }

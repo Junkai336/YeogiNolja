@@ -132,9 +132,7 @@ public class ReservController {
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
                          @PathVariable("checkIn") String checkIn,
     @PathVariable("checkOut") String checkOut, Model model){
-
-
-
+        System.out.println("예약 일자 등록 시 숙소 id 값 : "+lodging_id);
         try{
             Lodging lodgingEntity = lodgingService.findById(lodging_id);
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);

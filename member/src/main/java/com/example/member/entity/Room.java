@@ -5,18 +5,10 @@ import com.example.member.dto.RoomDto;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name="room")
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@ToString
 @Getter
 @Setter
 public class Room extends BaseEntity {
@@ -29,10 +21,6 @@ public class Room extends BaseEntity {
     @JoinColumn(name = "lodging_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Lodging lodging;
-
-//    @JoinColumn(name = "member_id")
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Member member;
 
     @Enumerated(EnumType.STRING)
     private ReservationStatus reservationStatus;
