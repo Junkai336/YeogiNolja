@@ -50,7 +50,7 @@ public class ReservController {
 
 
         try {
-            ReservDto reservDto = reservService.newReservDto(roomId, principal,date);
+            ReservDto reservDto = reservService.newReserv(roomId, principal,date);
             reservDto.setLodging(lodgingService.findById(lodgingId));
 
             model.addAttribute("reservDto", reservDto);
