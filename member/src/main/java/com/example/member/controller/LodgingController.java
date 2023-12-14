@@ -1,16 +1,10 @@
 package com.example.member.controller;
 
-import com.example.member.article.ArticleDto;
 import com.example.member.constant.ReservationStatus;
-import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.RoomDto;
-import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Room;
-import com.example.member.repository.ItemImgRepository;
-import com.example.member.repository.LodgingRepository;
-import com.example.member.repository.RoomRepository;
 import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.ItemImgService;
 import com.example.member.service.LodgingService;
@@ -21,19 +15,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,31 +96,29 @@ public class LodgingController {
 
     // 일자 등록없이 기본 값(오늘, 내일) 일자로하여 예약이 가능한 방을 보여준다.
     @GetMapping(value = "/{lodging_id}")
-    public String show(@PathVariable Long lodging_id, Model model) throws Exception {
+    public String show(@PathVariable Long lodging_id, Model model){
+        try {
 
-        Lodging lodgingEntity = lodgingService.findById(lodging_id);
-        LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
-        LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodging_id);
 
-        for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
-            System.out.println(itemImgDto);
+            Lodging lodgingEntity = lodgingService.findById(lodging_id);
+            LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
+            LodgingDto lodgingDtoContainImage = lodgingService.imageLoad(lodgingDto, lodging_id);
+
+            uploadFileService.refreshUploadFileCheck(lodging_id);
+            lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
+            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
+            List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
+            // 방들은 제외한 후 보여준다.
+            List<RoomDto> resultRoomDtoList = reservedDateService.defaultValidation(roomDtoList);
+            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+
+            model.addAttribute("lodgingDto", lodgingDtoContainImage);
+            model.addAttribute("roomDtoList", roomDtoListContainImage);
+            model.addAttribute("prevPage", "LodgingController");
+        }catch (Exception e){
+            model.addAttribute("errorMessage", e.getMessage());
         }
-
-        uploadFileService.refreshUploadFileCheck(lodging_id);
-        lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
-        // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-        List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
-        // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
-        // 방들은 제외한 후 보여준다.
-        List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
-
-        List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
-
-        model.addAttribute("lodgingDto", lodgingDtoContainImage);
-        model.addAttribute("roomDtoList", roomDtoListContainImage);
-        model.addAttribute("prevPage", "LodgingController");
-
-
         return "reserv/lodgingReservContent";
     }
 

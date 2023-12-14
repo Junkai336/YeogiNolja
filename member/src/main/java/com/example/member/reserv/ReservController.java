@@ -11,6 +11,7 @@ import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.RoomService;
+import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -37,20 +38,21 @@ public class ReservController {
     private final ReservedDateService reservedDateService;
     private final LodgingService lodgingService;
     private final RoomService roomService;
+    private final UploadFileService uploadFileService;
 
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
-    @GetMapping("/roomReservation/{room_id}/{sessionDate}") // roomId/reserv
+    @GetMapping("/roomReservation/{lodgingId}/{room_id}/{sessionDate}") // roomId/reserv
     public String newReserv (@PathVariable("room_id") Long roomId,
+                             @PathVariable("lodgingId") Long lodgingId,
                              @PathVariable("sessionDate") String date,
-                             Principal principal,
-                             Model model){
+                             Principal principal, Model model){
 
-//        System.out.println("roomId = "+roomId);
-//        System.out.println("Date = "+date);
 
         try {
-            ReservDto reservDto = reservService.newReserv(roomId, principal,date);
+            ReservDto reservDto = reservService.newReservDto(roomId, principal,date);
+            reservDto.setLodging(lodgingService.findById(lodgingId));
+
             model.addAttribute("reservDto", reservDto);
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -59,22 +61,38 @@ public class ReservController {
         return "reserv/reservPage";
     }
 // 여기서부터 저장 시작****************************************************************
-    @PostMapping("/roomReservation/{room_id}")
+    @PostMapping("/roomReservation/saveReserv")
     public String saveReserv(@Valid ReservDto reservDto, BindingResult result,Model model
      ,Principal principal){
         String email = principal.getName();
+        Long lodgingId = reservDto.getRoom().getLodging().getId();
+        System.out.println("LodgingId : "+ lodgingId);
         if(result.hasErrors()){
            return "reserv/reservPage";
         }
-//        System.out.println("reserDto = "+ reservDto);
         try {
             List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
             reservService.saveReserv(reservDto, reservDateList);
 
 
-        } catch (IllegalStateException e){
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            LodgingDto lodgingDto = lodgingService.findLodging(lodgingId);
+            LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
+            uploadFileService.refreshUploadFileCheck(lodgingId);
+            lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingService.findById(lodgingId));
+            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
+            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
+            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
+            // 방들은 제외한 후 보여준다.
+            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
+            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+
             model.addAttribute("errorMessage", e.getMessage());
-            return "reserv/reservPage";
+            model.addAttribute("lodgingDto", lodgingDtoContainImage);
+            model.addAttribute("roomDtoList", roomDtoListContainImage);
+            model.addAttribute("prevPage", "LodgingController");
+            return "reserv/lodgingReservContent";
         }
 
         return "redirect:/reserv/reservs";
@@ -122,10 +140,6 @@ public class ReservController {
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
             LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodging_id);
 
-            for(ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
-                System.out.println(itemImgDto);
-            }
-
             lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
 
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
@@ -142,8 +156,6 @@ public class ReservController {
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
             model.addAttribute("roomDtoList", roomDtoListContainImage);
             model.addAttribute("prevPage", "LodgingController");
-//            model.addAttribute("checkIn", checkIn);
-//            model.addAttribute("checkOut", checkOut);
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
         }

@@ -145,8 +145,7 @@
             <span th:utext="*{lodgingType}"></span>
 <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
             <span th:text="*{address}">a</span>
-            <!-- map에 필요한 숙소,주소-->
-            <input type="hidden" id="lodgingId" name="lodging_id" th:value="*{id}">
+
         <input type="hidden" id="lodging_name" name="lodging_name" th:value="*{name}">
         <input type="hidden" id="lodging_address" name="lodging_address" th:value="*{address}">
 
@@ -635,14 +634,15 @@ window.location.reload();
 <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
         </div>
         <script>
+            const txtDate = document.querySelector('#txtDate').value;
             const reservBtn = document.querySelectorAll(".reservBtn");
             var sessionDate = sessionStorage.getItem("date");   // ex) 2023-12-13~2023-12-15
             const roomIdList = document.querySelectorAll(".room_id");
-
+            const lodgingId = document.querySelector("#lodgingId").value;
             for(let i = 0; i< roomIdList.length;i++){
             reservBtn[i].addEventListener("click", ()=>{
             var room_id = roomIdList[i].value;
-            location.href= `/reserv/roomReservation/${room_id}/${sessionDate}`;
+            location.href= `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
 
             });
             }
@@ -908,7 +908,6 @@ window.location.reload();
         // // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
 
         // formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
-
         // $.ajax({
         // url: url,
         // type: "POST",

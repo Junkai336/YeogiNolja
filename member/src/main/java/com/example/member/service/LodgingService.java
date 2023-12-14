@@ -193,7 +193,7 @@ public class LodgingService {
     }
 
 
-    public LodgingDto imageLoad(LodgingDto lodgingDto, Long lodgingId) throws Exception {
+    public LodgingDto imageLoad(LodgingDto lodgingDto, Long lodgingId){
 
         List<ItemImg> itemImgList = itemImgService.findByLodgingId(lodgingId);
 
