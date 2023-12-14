@@ -22,23 +22,29 @@
                 alert(errorMessage);
             }
         });
+
+        const lodgingId = document.querySelector('#lodging');
+        const lodgingId2 = document.querySelector('#lodging2');
+
+        console.log(lodgingId);
+        console.log(lodgingId2);
     </script>
 
 </th:block>
 
 <div layout:fragment="content" >
     <div class="container mt-3" th:object="${reservDto}">
-    <form action="/reserv/roomReservation/*{room.id}" role="form" method="post">
+    <form action="/reserv/roomReservation/saveReserv" role="form" method="post">
         <div class="form-group">
             <input type="hidden" th:field="*{room.id}" name="room" id="room">
             <input type="hidden" th:field="*{room.lodging.id}" name="lodging" id="lodging">
+            <input type="hidden" th:field="*{lodging.id}" name="lodging.id" id="lodging2">
             <input type="hidden" th:field="*{member.id}" name="member" id="member">
             <input type="hidden" th:field="*{checkIn}" name="checkIn" id="checkIn">
             <input type="hidden" th:field="*{checkOut}" name="checkOut" id="checkOut">
             <p th:text="*{room.lodging.name}">숙소명</p>
 
             <p th:text="*{room.name}">방이름</p>
-            <p th:text="*{room.detail}">방디테일</p>
 
             <p th:text="*{checkIn}+' '+*{room.checkInTime}">체크인</p>
             <p th:text="*{checkOut}+' '+*{room.checkOutTime}">체크아웃</p>

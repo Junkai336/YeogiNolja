@@ -88,7 +88,7 @@ public class ReservedDateService {
         List<Long> reservRoomIdList = new ArrayList<>();
         for(LocalDate date: dateList){
             // 일자를 매개값으로 받아 해당 일자에 예약이 되어있는 방의 id를 모두 받아온다.
-            List<Long> findByDateList = reservedDateRepository.findAllByDate(today);
+            List<Long> findByDateList = reservedDateRepository.findAllByDate(date);
             // 받아온 List를 하나에 List로 합친다.
             reservRoomIdList.addAll(findByDateList);
         }
@@ -115,6 +115,7 @@ public class ReservedDateService {
         }
         // 전체 조회된 방List중 오늘 내일 예약이 되어있는방 제외
         // 현재 예약 가능한 방들을 보여준다.
+        System.out.println("roomDtoList : "+ roomDtoList);
         return roomDtoList;
     }
 

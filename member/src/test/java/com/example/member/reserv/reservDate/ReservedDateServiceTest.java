@@ -1,16 +1,20 @@
 package com.example.member.reserv.reservDate;
 
+import com.example.member.dto.RoomDto;
 import com.example.member.entity.Room;
+import com.example.member.repository.RoomRepository;
 import com.example.member.reserv.ReservDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class ReservedDateServiceTest {
@@ -18,6 +22,9 @@ class ReservedDateServiceTest {
 
 @Autowired
 private ReservedDateService reservedDateService;
+
+@Autowired
+    private RoomRepository roomRepository;
     @Autowired
     private ReservedDateRepository reservedDateRepository;
     @Test
@@ -77,6 +84,4 @@ private ReservedDateService reservedDateService;
 
         return  room;
     }
-
-
 }

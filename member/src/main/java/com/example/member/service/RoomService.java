@@ -178,6 +178,7 @@ public class RoomService {
             // 다시 숙소 DTO에 저장
             roomDtoList.set(i, roomDto);
         }
+        System.out.println("roomDtoListContainImage : "+ roomDtoList);
         return roomDtoList;
     }
 
