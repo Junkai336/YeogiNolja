@@ -18,6 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script type="text/javascript" src="/js/imgUpload.js"></script>
     <script type="text/javascript" src="/js/timePicker.js"></script>
+    <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
 
 </head>
 <!-- 사용자 CSS 추가 -->
@@ -776,9 +777,6 @@ window.location.reload();
                 var detail = document.querySelectorAll('.detail');
                 var addFormDetail = addForm.querySelector('.addDetail');
 
-        // ======================================================================
-        //  수정 사항 수정 버튼 클릭시 index[0] 인식 classList ("hide") 해제 X
-        // ======================================================================
 
               $('.editButton').click(function(){
             let x = $('.editButton').index(this);
@@ -868,78 +866,7 @@ window.location.reload();
         }
         });
 
-
-
         });
-
-// ！ 새로고침, 뒤로가기, 링크타기 방지 (그러나 확인 질문이 뜬다)
-// window.addEventListener('beforeunload', (event) => {
-//  for (let t = 0; t < editButton.length; t++) {
-//    if (editForm[t].classList.contains('hide')) {
-
-//    } else {
-//      event.preventDefault();
-//      return event.returnValue = '';
-//    }
-//  }
-//})
-
-        // function roomEdit() {
-        // var token = $("meta[name='_csrf']").attr("content");
-        // var header = $("meta[name='_csrf_header']").attr("content");
-
-        // var url = `/room/editRoom`;
-
-        // var paramData = {
-        // id: $(".id").eq(1).val(),
-        // name: $(".name").eq(1).val(),
-        // detail: $(".detail").eq(1).val(),
-        // price: $(".price").eq(1).val(),
-        // adult: $(".adult").eq(1).val(),
-        // children: $(".children").eq(1).val(),
-        // checkInTime: $(".checkInTime").eq(1).val(),
-        // checkOutTime: $(".checkOutTime").eq(1).val(),
-        // reservationStatus: $(".reservationStatus").eq(1).val()
-        // };
-
-        // let formData = new FormData();
-
-        // var fileInput = $('.fileInputEditRoom');
-
-        // for (var i = 0; i < fileInput.length; i++) {
-        // if (fileInput[i].files.length > 0) {
-        // for (var j = 0; j < fileInput[i].files.length; j++) {
-        // console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
-
-        // // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
-        // formData.append('img', $('.fileInputEditRoom')[i].files[j]);
-        // }
-        // }
-        // }
-        // // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
-
-        // formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
-        // $.ajax({
-        // url: url,
-        // type: "POST",
-        // enctype: 'multipart/form-data',
-        // data: formData,
-        // contentType: false,
-        // processData: false,
-        // cache: false,
-
-        // beforeSend: function (xhr) {
-        // /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-        // xhr.setRequestHeader(header, token);
-        // },
-
-        // success: function (result, status) {
-        // console.log(paramData);
-        // alert("객실 정보가 수정되었습니다.");
-        // window.location.reload();
-        // }
-        // });
-        // }
 
             </script>
             <!--            // 가려져 있는 수정 폼 -->
@@ -986,7 +913,9 @@ window.location.reload();
                 </div>
             </div>
         </div>
+
         <!----------------------------------------------------------------------------------------->
+
             <h5 class="mb-3"><b>숙소 이용 정보</b></h5>
 
             <div class="text-dark">
@@ -1068,64 +997,65 @@ window.location.reload();
             <div id="map2" class="mt-3" style="width:100%;height:500px;"></div>
     </div><!--149번째줄 일자검색 부터 하단 큰 맵 까지-->
         <!--    map script-->
-        <script th:inline="javascript" type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6084b6d3eb22d21899a8aef757a63c24&libraries=services"></script>
-        <script>
-
-            // 콘솔창에 뜨는 A parser-blocking, cross site 오류는 document.write로 스크립트로 스크립트를 생성하는 것은 가급적
-            // 자제해달라는 문구
-            // 카카오의 답변에 따르면
-            // 지도가 로드되지 않는게 아니라면 무시해도 된다.
-            const mapContainer1 = document.getElementById('map1'); // 지도를 표시할 div
-            const mapContainer2 = document.getElementById('map2'); // 지도를 표시할 div
-
-    function maps (mapContainer){
-             mapOption = {
-                    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                    level: 4 // 지도의 확대 레벨
-                };
 
 
-            // 지도를 생성합니다
-            var map = new kakao.maps.Map(mapContainer, mapOption);
-
-            // 주소-좌표 변환 객체를 생성합니다
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            // 숙소 명,주소
-            var lodging_address = $('input[name=lodging_address]').val();
-            var lodging_name = $('input[name=lodging_name]').val();
-
-            // 주소로 좌표를 검색합니다
-            geocoder.addressSearch(lodging_address, function(result, status) {
-
-                // 정상적으로 검색이 완료됐으면
-                 if (status === kakao.maps.services.Status.OK) {
-
-                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                    // 결과값으로 받은 위치를 마커로 표시합니다
-                    var marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords
-                    });
-
-                    // 인포윈도우로 장소에 대한 설명을 표시합니다
-                    var infowindow = new kakao.maps.InfoWindow({
-                        content: '<div style="width:150px;text-align:center;padding:6px 0;">'+lodging_name+'</div>'
-                    });
-                    infowindow.open(map, marker);
-
-                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                    map.setCenter(coords);
-                }
-            });
-
-            }   // maps
-
-            maps(mapContainer1);
-            maps(mapContainer2);
-
-        </script>
 </div>
+
 </div>
+    <script>
+
+        // 콘솔창에 뜨는 A parser-blocking, cross site 오류는 document.write로 스크립트로 스크립트를 생성하는 것은 가급적
+        // 자제해달라는 문구
+        // 카카오의 답변에 따르면
+        // 지도가 로드되지 않는게 아니라면 무시해도 된다.
+        const mapContainer1 = document.getElementById('map1'); // 지도를 표시할 div
+        const mapContainer2 = document.getElementById('map2'); // 지도를 표시할 div
+
+        function maps (mapContainer){
+                 mapOption = {
+                        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                        level: 4 // 지도의 확대 레벨
+                    };
+
+
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+        // 주소-좌표 변환 객체를 생성합니다
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        // 숙소 명,주소
+        var lodging_address = $('input[name=lodging_address]').val();
+        var lodging_name = $('input[name=lodging_name]').val();
+
+        // 주소로 좌표를 검색합니다
+        geocoder.addressSearch(lodging_address, function(result, status) {
+
+            // 정상적으로 검색이 완료됐으면
+             if (status === kakao.maps.services.Status.OK) {
+
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+
+                // 인포윈도우로 장소에 대한 설명을 표시합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="width:150px;text-align:center;padding:6px 0;">'+lodging_name+'</div>'
+                });
+                infowindow.open(map, marker);
+
+                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                map.setCenter(coords);
+            }
+        });
+
+        }   // maps
+
+        maps(mapContainer1);
+        maps(mapContainer2);
+    </script>
 </html>
