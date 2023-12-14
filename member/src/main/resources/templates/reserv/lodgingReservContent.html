@@ -173,7 +173,7 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-between" style="border:1px solid black;">
+        <div class="d-flex justify-content-between p-5" style="border:1px solid black">
             <div>
                 <h3 th:text="*{name}">a</h3>
                 <span class="d-block" th:text="*{lodgingType}" >a</span>
@@ -182,7 +182,7 @@
             </div>
             <div class="border border-radius" style="height:250px;"><!--  map div  -->
                 <div id="map1" style="width:300px;height:200px;"></div>
-                <span th:text="*{address}" class="d-flex align-items-center">a</span>
+                <span th:text="*{address}" class="d-flex justify-content-center">a</span>
             </div>
         </div>
 
@@ -578,14 +578,14 @@ window.location.reload();
     </p>
 
 
-    <div th:each="roomDto : ${roomDtoList}" class="container mt-3 d-flex" style="border:1px solid black">
+    <div th:each="roomDto : ${roomDtoList}" class="container mt-3 d-flex">
         <input class="room_id" th:value="${roomDto.id}" type="hidden" />
         <div class="w-50 p-3">
             <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail img-fluid"
                  th:alt="${roomDto.name}" style="width:auto;height:auto;">
         </div>
         <div class="w-100 p-3">
-        <div class="d-flex w-100 p-3 justify-content-between" style="border:1px solid black">
+        <div class="d-flex w-100 p-3 justify-content-between">
 <!--            룸 리스트 네임-->
         <h4 th:text="${roomDto.name}"></h4>
 
@@ -627,7 +627,7 @@ window.location.reload();
 
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-5" style="border:1px solid black">
+        <div class="d-flex justify-content-between align-items-center mt-5">
             <div>
                 <span  th:text="'입실: '+${roomDto.checkInTime}"></span>
                 <span class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></span>
@@ -947,22 +947,46 @@ window.location.reload();
 
 
     </div>
+        <hr>
+        <!----------------------------------------------------------------------------------------->
+        <!--    <div class="container-fluid d-flex justify-content-center">-->
+        <!--        <div class="card d-flex justify-content-center text-center" style="width: 24rem;">-->
+        <!--            <div class="card-body">-->
+        <!--                <h5 class="card-title">판매자 정보</h5>-->
+        <!--                <p class="card-text" th:text="'이름: '+${lodgingDto.member.name}"></p>-->
+        <!--                <p class="card-text" th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></p>-->
+        <!--                <a href="#" class="card-link"></a>-->
+        <!--                <a href="#" class="card-link"></a>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </div>-->
 
-    <div class="container-fluid d-flex justify-content-center">
-        <div class="card d-flex justify-content-center text-center" style="width: 24rem;">
-            <div class="card-body">
-                <h5 class="card-title">판매자 정보</h5>
-                <p class="card-text" th:text="'이름: '+${lodgingDto.member.name}"></p>
-                <p class="card-text" th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></p>
-                <a href="#" class="card-link"></a>
-                <a href="#" class="card-link"></a>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            판매자 정보
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">판매자 정보</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-column align-items-center">
+                            <span th:text="'이름: '+${lodgingDto.member.name}"></span>
+                            <span th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-
-
-            <hr>
+        <!----------------------------------------------------------------------------------------->
             <h5 class="mb-3"><b>숙소 이용 정보</b></h5>
 
             <div class="text-dark">
