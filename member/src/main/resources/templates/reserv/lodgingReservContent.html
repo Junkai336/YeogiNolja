@@ -484,6 +484,7 @@
                     var detail = document.querySelectorAll('.detail');
                     var addFormDetail = addForm.querySelector('.addDetail');
 
+
                     $(".addBtn").click(function(e){
                       e.preventDefault();
                       $(".editForm").addClass("hide");
@@ -492,8 +493,6 @@
                         window.summernoteCall();
                         $(".addForm").removeClass("hide");
                     });
-
-
 
                     function roomRegistration() {
                     var token = $("meta[name='_csrf']").attr("content");
@@ -794,7 +793,7 @@
                                         <div class="form-group">
                                             <div class="custom-file img-div">
                                                 <input type="file" class="custom-file-input fileInputEditRoom"
-                                                       name="itemImgFile" multiple="true">
+                                                       name="itemImgFile" multiple="true" value="대표 이미지 수정">
                                                 <label class="custom-file-label"></label>
                                             </div>
                                         </div>

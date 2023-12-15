@@ -49,8 +49,8 @@
         <th:block th:each="lodging : ${lodgingDtoList}" th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
             <div class="col-md-3 margin mt-3">
                 <div class="card border-0 mt-3">
-                    <a th:href="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodging.id})}" class="text-dark"  style="text-decoration:none;">
-
+                    <div class="locationDiv" style="cursor:pointer">
+                        <input type="hidden" th:value="${lodging.id}" class="lodging_id">
                         <img th:src="${lodging.imgUrl}" class="card-img-top"
                              th:alt="${lodging.name}">
 
@@ -58,9 +58,30 @@
                             <h4 class="card-title">[[${lodging.name}]]</h4>
                             <p class="card-text">[[${lodging.detail}]]</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
+
+            <script>
+                
+                $(".locationDiv").click(function(){
+                    var sessionDate = sessionStorage.getItem("date");
+                    let index = $(".locationDiv").index(this);
+                    var lodging_id = $(".lodging_id").eq(index).val();
+                    if(sessionDate != null){
+                    var DateList = sessionDate.split('~');
+                    var checkIn = DateList[0];
+                    var checkOut = DateList[1];
+                    // session 에 일자가 등록 되어 있을 때
+                    location.href = `/reserv/${lodging_id}/checkIn=${checkIn}/checkOut=${checkOut}`;
+                    }else{
+                        // 등록한 일자가 없을 시
+                    location.href = `/reserv/lodgingReservContent/${lodging_id}`;
+                    }
+                });
+
+
+            </script>
 
         </th:block>
     </div>
