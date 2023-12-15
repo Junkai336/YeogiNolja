@@ -73,8 +73,6 @@ public class RoomService {
         roomDto.setChildren(lodgingDto.getRoom().getChildren());
         roomDto.setCheckInTime(lodgingDto.getRoom().getCheckInTime());
         roomDto.setCheckOutTime(lodgingDto.getRoom().getCheckOutTime());
-        roomDto.setReservationStatus(ReservationStatus.AVAILABLE);
-//        roomDto.setLodging(Lodging.toLodging(lodgingDto.getMember(),lodgingDto));
 
         Room room = Room.toRoom(roomDto, lodgingEntity);
         System.out.println(roomDto);
@@ -116,7 +114,6 @@ public class RoomService {
         room.setChildren(roomDto.getChildren());
         room.setCheckInTime(roomDto.getCheckInTime());
         room.setCheckOutTime(roomDto.getCheckOutTime());
-        room.setReservationStatus(roomDto.getReservationStatus());
 
         // 왠지 모르겠지만 이걸 넣으니까 문제없이 됨 대체 왜?
         roomRepository.save(room);

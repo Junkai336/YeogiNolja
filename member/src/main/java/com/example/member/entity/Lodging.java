@@ -48,7 +48,6 @@ public class Lodging extends BaseEntity {
     @Column
     private String extraAddress; // 참고항목
 
-    @Enumerated(EnumType.STRING)
     private LodgingType lodgingType;
 
     @Enumerated(EnumType.STRING)

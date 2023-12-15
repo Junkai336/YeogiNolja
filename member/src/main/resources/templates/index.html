@@ -11,4 +11,40 @@
 
 <div layout:fragment="content">
     <h2>Index Page!</h2>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#lodging" type="button" role="tab" aria-controls="home" aria-selected="true">객실</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#room" type="button" role="tab" aria-controls="profile" aria-selected="false">방</button>
+        </li>
+
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="lodging" role="tabpanel" aria-labelledby="home-tab">숙소</div>
+        <div class="tab-pane fade" id="room" role="tabpanel" aria-labelledby="profile-tab">
+
+
+            <ul class="nav nav-tabs" id="myTab1" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="lodging1-tab1" data-bs-toggle="tab" data-bs-target="#room1" type="button" role="tab" aria-controls="lodging1" aria-selected="true">방1</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="room1-tab1" data-bs-toggle="tab" data-bs-target="#room2" type="button" role="tab" aria-controls="room1$" aria-selected="false">방2</button>
+                </li>
+
+            </ul>
+            <div class="tab-content" id="myTabContent1">
+                <div class="tab-pane fade show active" id="room1" role="tabpanel" aria-labelledby="home-tab">방1 사진 슬라이드</div>
+                <div class="tab-pane fade" id="room2" role="tabpanel" aria-labelledby="profile-tab">방2 사진 슬라이드</div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
+
 </div>

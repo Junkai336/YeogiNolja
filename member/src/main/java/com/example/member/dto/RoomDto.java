@@ -24,8 +24,6 @@ public class RoomDto {
 
     private Lodging lodging;
 
-    private ReservationStatus reservationStatus;
-
     private String name;
 
     private String detail;
@@ -56,7 +54,6 @@ public class RoomDto {
         RoomDto roomDto = new RoomDto();
         roomDto.setId(room.getId());
         roomDto.setLodging(room.getLodging());
-        roomDto.setReservationStatus(room.getReservationStatus());
         roomDto.setName(room.getName());
         roomDto.setPrice(room.getPrice());
         roomDto.setAdult(room.getAdult());
