@@ -3,6 +3,7 @@ package com.example.member.service;
 
 import com.example.member.article.Article;
 import com.example.member.article.ArticleDto;
+import com.example.member.dto.MemberDto;
 import com.example.member.dto.MemberFormDto;
 import com.example.member.entity.Member;
 import com.example.member.repository.MemberRepository;
@@ -105,6 +106,13 @@ public class MemberService implements UserDetailsService {
             }
 
             return new PageImpl<MemberFormDto>(memberDtoList, pageable, totalCount);
+    }
+
+    public MemberDto DtofindByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
+        MemberDto memberDto = MemberDto.toMemberDto(member);
+        return memberDto;
     }
 }
 

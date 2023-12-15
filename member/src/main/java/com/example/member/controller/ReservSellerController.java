@@ -1,7 +1,9 @@
 package com.example.member.controller;
 
+import com.example.member.constant.UserRole;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
+import com.example.member.dto.MemberDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
@@ -14,10 +16,7 @@ import com.example.member.reserv.ReservDto;
 import com.example.member.reserv.ReservService;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
-import com.example.member.service.ItemImgService;
-import com.example.member.service.LodgingService;
-import com.example.member.service.RoomService;
-import com.example.member.service.UploadFileService;
+import com.example.member.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityNotFoundException;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,7 @@ public class ReservSellerController {
     private final ItemImgService itemImgService;
     private final UploadFileService uploadFileService;
     private final ReservedDateService reservedDateService;
+    private final MemberService memberService;
 
     @GetMapping(value = "/reserv/lodgingReservList")
     public String toRservLodgingList(Model model) {
@@ -89,7 +90,9 @@ public class ReservSellerController {
 
 
     @GetMapping(value = "/reserv/lodgingReservContent/{lodging_id}")
-    public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model) throws Exception {
+    public String toReservLodgingContent(@PathVariable("lodging_id") Long lodgingId, Model model, Principal principal) throws Exception {
+        String email = principal.getName();
+        MemberDto memberDto = memberService.DtofindByEmail(email);
 
         try{
             Lodging lodgingEntity = lodgingService.findById(lodgingId);
@@ -99,20 +102,26 @@ public class ReservSellerController {
             lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingEntity);
             uploadFileService.refreshUploadFileCheck(lodgingId);
 
-            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
+            if (memberDto.getUserRole().equals(UserRole.ADMIN)) {
+                // 관리자 일떄 (모든 방들을 보여준다.)
+                List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(roomDtoList);
+                model.addAttribute("roomDtoList", roomDtoListContainImage);
 
-            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
-            // 방들은 제외한 후 보여준다.
-            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
+            }else{
+                // 일반 유저 일때 (예약이 가능한 방들을 보여줌)
+                List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
 
-            System.out.println("이 이상 도달하지 못함");
-
-            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+                // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
+                // 방들은 제외한 후 보여준다.
+                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+                model.addAttribute("roomDtoList", roomDtoListContainImage);
+            }
 
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
-            model.addAttribute("roomDtoList", roomDtoListContainImage);
             model.addAttribute("prevPage", "LodgingController");
+
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
         }
