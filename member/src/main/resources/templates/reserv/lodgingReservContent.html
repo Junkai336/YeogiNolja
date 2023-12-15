@@ -721,7 +721,7 @@
                                         <button type="button" class="closeEditFormBtn btn btn-close ms-auto"></button>
                                     </div>
                                     <input type="hidden" class="id" th:value="*{id}">
-
+                                    <input type="hidden" class="reservationStatus" th:value="*{reservationStatus}">
 
 
                                     <div class="input-group mt-3">
@@ -875,6 +875,7 @@
                     children: $(".children").eq(x).val(),
                     checkInTime: $(".checkInTime").eq(x).val(),
                     checkOutTime: $(".checkOutTime").eq(x).val(),
+                    reservationStatus: $(".reservationStatus").eq(x).val()
                     };
 
                     let formData = new FormData();
@@ -924,6 +925,18 @@
 
                 </div>
                 <hr>
+                <!----------------------------------------------------------------------------------------->
+                <!--    <div class="container-fluid d-flex justify-content-center">-->
+                <!--        <div class="card d-flex justify-content-center text-center" style="width: 24rem;">-->
+                <!--            <div class="card-body">-->
+                <!--                <h5 class="card-title">판매자 정보</h5>-->
+                <!--                <p class="card-text" th:text="'이름: '+${lodgingDto.member.name}"></p>-->
+                <!--                <p class="card-text" th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></p>-->
+                <!--                <a href="#" class="card-link"></a>-->
+                <!--                <a href="#" class="card-link"></a>-->
+                <!--            </div>-->
+                <!--        </div>-->
+                <!--    </div>-->
 
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
@@ -1043,6 +1056,7 @@
 
     </div>
     <script>
+
         // 콘솔창에 뜨는 A parser-blocking, cross site 오류는 document.write로 스크립트로 스크립트를 생성하는 것은 가급적
         // 자제해달라는 문구
         // 카카오의 답변에 따르면
@@ -1097,5 +1111,4 @@
         maps(mapContainer1);
         maps(mapContainer2);
     </script>
-</div>
 </html>
