@@ -97,6 +97,7 @@ public class ReservSellerController {
             LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
 
             lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingEntity);
+            uploadFileService.refreshUploadFileCheck(lodgingId);
 
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
             List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);

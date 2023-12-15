@@ -210,7 +210,7 @@ public class UploadFileService {
         for (UploadFile uploadFile : uploadFileList) {
             if (uploadFile.getEditingExceptionConsideration() == EditingExceptionConsideration.Y) {
                 uploadFile.setEditingExceptionConsideration(EditingExceptionConsideration.N);
-                // 숙소 이미지 이넘타입이 바로 안바뀌어서 추가
+                // 숙소 객실 이미지 이넘타입이 바로 안바뀌어서 추가
                 uploadFileRepository.saveAndFlush(uploadFile);
             }
         }

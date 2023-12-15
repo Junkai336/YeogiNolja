@@ -25,13 +25,13 @@ class MemberRepositoryTest {
 
     @Test
     public void imgoutPut(){
-//     for(int i = 101; i<= 150; i++){
-//         System.out.println(
+     for(int i = 1; i<= 10; i++){
+         System.out.println(
 //                 "INSERT INTO cscart_orders (payment_id, order_id) VALUES ("+i+", "+i+"데이터);"
-//                 "INSERT INTO `just_board`.`comment` (`id`, `reg_time`, `update_time`, `created_by`, `modified_by`, `comment`, `article_id`, `member_id`)" +
-//                         "VALUES ('"+i+"', '2023-12-14 00:32:25.000000', '2023-12-14 00:32:25.681806', '1@1', '1@1', '댓글"+i+"', '1', '1');"
-//         );
-//     }
+                 "INSERT INTO `just_board`.`room` (`room_id`, `reg_time`, `update_time`, `created_by`, `modified_by`, `adult`, `check_in_time`, `check_out_time`, `children`, `detail`, `name`, `price`, `reservation_status`, `lodging_id`)" +
+                         "VALUES ('"+i+"', '2023-12-14 00:02:11.000000', '2023-12-14 00:02:13.859579', '1@1', '1@1', '2', '11:00', '13:00', '1', '방 디테일', '방"+i+"', '100000', 'AVAILABLE', '100');"
+         );
+     }
 
     }
 

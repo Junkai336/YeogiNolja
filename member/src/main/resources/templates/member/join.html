@@ -26,9 +26,9 @@
 
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="container col-4">
 
-    <form action="/members/join" role="form" method="post"  th:object="${memberFormDto}">
+    <form action="/members/join" role="form" method="post"  th:object="${memberFormDto}" class="mt-5">
 
         <div class="form-group">
             <label th:for="name">이름</label>
