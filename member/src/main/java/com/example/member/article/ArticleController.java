@@ -131,6 +131,8 @@ public class ArticleController {
     public String delete(@PathVariable Long id, Model model) {
 
         try{
+            // 삭제 시 해당 게시글에 달린 댓글을 삭제함
+            commentService.deleteAllByRoomId(id);
             articleService.articleDelete(id);
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());

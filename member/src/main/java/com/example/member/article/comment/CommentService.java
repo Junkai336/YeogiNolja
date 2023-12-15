@@ -76,6 +76,13 @@ public class CommentService {
         CommentDto updateCommentDto = CommentDto.toCommentDto(comment);
         return updateCommentDto;
     }
+
+    public void deleteAllByRoomId(Long article_id) {
+        List<Comment> commentList = commentRepository.findAllByArticleId(article_id);
+        for(Comment comment :commentList){
+            commentRepository.delete(comment);
+        }
+    }
 }
 
 
