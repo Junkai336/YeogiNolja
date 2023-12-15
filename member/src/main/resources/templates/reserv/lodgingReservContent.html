@@ -480,18 +480,17 @@
                     var editButton = document.querySelectorAll('.editButton');
                     var detail = document.querySelectorAll('.detail');
                     var addFormDetail = addForm.querySelector('.addDetail');
-
-
-            addBtn.addEventListener('click', function (e) {
-                $(".editForm").addClass("hide");
+                    
+            $(".addBtn").click(function(e){
+              e.preventDefault();
+              $(".editForm").addClass("hide");
                  $('.detail').removeAttr("id");
                 $(".addDetail").attr('id', "summernote");
                 window.summernoteCall();
-            e.preventDefault();
+                $(".addForm").removeClass("hide");
+            });
+            
 
-
-            addForm.classList.toggle('hide');
-            })
 
             function roomRegistration() {
             var token = $("meta[name='_csrf']").attr("content");
@@ -687,18 +686,20 @@
                         </div>
                     </div>
                     <script>
-                        const txtDate = document.querySelector('#txtDate').value;
-                        const reservBtn = document.querySelectorAll(".reservBtn");
-                        var sessionDate = sessionStorage.getItem("date");   // ex) 2023-12-13~2023-12-15
-                        const roomIdList = document.querySelectorAll(".room_id");
-                        const lodgingId = document.querySelector("#lodgingId").value;
-                        for(let i = 0; i< roomIdList.length;i++){
-                        reservBtn[i].addEventListener("click", ()=>{
-                        var room_id = roomIdList[i].value;
-                        location.href= `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
+                        var lodgingId = $("#lodgingId").val();
+                        var txtDate = $("#txtDate").val();
 
+                        $(".reservBtn").click(function(){
+                        console.log("txtDate :"+txtDate);
+                            let k = $('.reservBtn').index(this);
+                            console.log(k+"번째 예약 버튼 클릭!");
+                            var sessionDate = sessionStorage.getItem("date");
+                            const room_id = $(".room_id").eq(k).val();
+                            console.log("클릭한 room Id : "+room_id);
+                           // location.href = `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
                         });
-                        }
+
+
                     </script>
                     <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                         <button type="button" class="btn btn-primary editButton">수정</button>
