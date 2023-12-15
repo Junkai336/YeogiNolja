@@ -483,11 +483,19 @@
 
             $(".addBtn").click(function(e){
               e.preventDefault();
+              if($(".addForm").hasClass("hide") === false){
+                $(".addForm").addClass("hide");
+                  $(".addDetail").removeAttr("id");
+                }else{
+
               $(".editForm").addClass("hide");
                  $('.detail').removeAttr("id");
                 $(".addDetail").attr('id', "summernote");
                 window.summernoteCall();
                 $(".addForm").removeClass("hide");
+                }
+
+
             });
             
 
@@ -804,7 +812,7 @@
                                         <div class="form-group">
                                             <div class="custom-file img-div">
                                                 <input type="file" class="custom-file-input fileInputEditRoom"
-                                                       name="itemImgFile" multiple="true">
+                                                       name="itemImgFile" multiple="true" value="대표 이미지 수정">
                                                 <label class="custom-file-label"></label>
                                             </div>
                                         </div>
@@ -850,7 +858,7 @@
                       });
 
                       $('.closeEditFormBtn').click(function(e){
-                      e.preventEvent();
+                      e.preventDefault();
                        let y = $('.closeEditFormBtn').index(this);
 
                         $('.editForm').addClass('hide');
