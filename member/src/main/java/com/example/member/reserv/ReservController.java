@@ -164,11 +164,17 @@ public class ReservController {
             }
 
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
+
+
+
+
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
+
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
         }
+
         System.out.println("checkIn = "+checkIn+ "//"+"checkOut = "+ checkOut);
 
         return "reserv/lodgingReservContent";
