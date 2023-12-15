@@ -480,7 +480,7 @@
                     var editButton = document.querySelectorAll('.editButton');
                     var detail = document.querySelectorAll('.detail');
                     var addFormDetail = addForm.querySelector('.addDetail');
-                    
+
             $(".addBtn").click(function(e){
               e.preventDefault();
               $(".editForm").addClass("hide");
@@ -690,13 +690,10 @@
                         var txtDate = $("#txtDate").val();
 
                         $(".reservBtn").click(function(){
-                        console.log("txtDate :"+txtDate);
                             let k = $('.reservBtn').index(this);
-                            console.log(k+"번째 예약 버튼 클릭!");
                             var sessionDate = sessionStorage.getItem("date");
                             const room_id = $(".room_id").eq(k).val();
-                            console.log("클릭한 room Id : "+room_id);
-                           // location.href = `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
+                            location.href = `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
                         });
 
 
