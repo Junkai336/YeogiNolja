@@ -101,6 +101,7 @@ public class ReservService {
     public void cancelReserv(Long reservId) {
         Reserv reserv = reservRepository.findById(reservId)
                 .orElseThrow(EntityNotFoundException::new);
+        reservedDateService.cancleDate(reserv);
         reserv.cancelReserv();
     }
 
