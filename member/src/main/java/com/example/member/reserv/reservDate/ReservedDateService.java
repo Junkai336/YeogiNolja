@@ -3,6 +3,7 @@ package com.example.member.reserv.reservDate;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Room;
 import com.example.member.repository.RoomRepository;
+import com.example.member.reserv.Reserv;
 import com.example.member.reserv.ReservDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -154,6 +155,21 @@ public class ReservedDateService {
         // 전체 조회된 방List중 오늘 내일 예약이 되어있는방 제외
         // 현재 예약 가능한 방들을 보여준다.
         return roomDtoList;
+    }
+
+    public void cancleDate(Reserv reserv) {
+        String checkInDate = reserv.getCheckIn();
+        String checkOutDate = reserv.getCheckOut();
+        Room room = reserv.getRoom();
+        Long room_id = room.getId();
+        List<LocalDate> dateList = toLocalDate(checkInDate, checkOutDate);
+
+        for(LocalDate date: dateList){
+            ReservedDate reservedDate = reservedDateRepository.findByDateAndRoom(date, room_id);
+            reservedDateRepository.delete(reservedDate);
+        }
+
+
     }
 }
 
