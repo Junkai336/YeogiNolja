@@ -382,10 +382,12 @@
                     <div class="d-flex justify-content-center">
                         <div class="col-8">
                             <form role="form" method="post" enctype="multipart/form-data">
-                                <p class="h2">
-                                    객실 등록
-                                </p>
-
+                                <div class="d-flex justify-content-between">
+                                    <p class="h2">
+                                        객실 등록
+                                    </p>
+                                    <button type="button" class="btn-close formClose"></button>
+                                </div>
                                 <div class="input-group mt-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">객실명</span>
@@ -483,8 +485,9 @@
                     var editButton = document.querySelectorAll('.editButton');
                     var detail = document.querySelectorAll('.detail');
                     var addFormDetail = addForm.querySelector('.addDetail');
+                    var formCloseBtn = document.querySelector('.formClose');
 
-
+                    // 객실 추가 버튼을 눌렀을 때 하이드 없어짐
                     $(".addBtn").click(function(e){
                       e.preventDefault();
                       $(".editForm").addClass("hide");
@@ -492,6 +495,16 @@
                         $(".addDetail").attr('id', "summernote");
                         window.summernoteCall();
                         $(".addForm").removeClass("hide");
+                    });
+
+                    // X버튼을 누르면 addForm이 hide 됨
+                    $(".formClose").click(function(e){
+                      e.preventDefault();
+                      $(".editForm").addClass("hide");
+                         $('.detail').removeAttr("id");
+                        $(".addDetail").attr('id', "summernote");
+                        window.summernoteCall();
+                        $(".addForm").addClass("hide");
                     });
 
                     function roomRegistration() {
@@ -615,93 +628,95 @@
                 </p>
 
 
-                <div th:each="roomDto : ${roomDtoList}" class="container mt-3 d-flex">
-                    <input class="room_id" th:value="${roomDto.id}" type="hidden"/>
-                    <div class="w-50 p-3">
-                        <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail img-fluid"
-                             th:alt="${roomDto.name}" style="width:auto;height:auto;">
-                    </div>
-                    <div class="w-100 p-3">
-                        <div class="d-flex w-100 p-3 justify-content-between">
-                            <!--            룸 리스트 네임-->
-                            <h4 th:text="${roomDto.name}"></h4>
+                <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
+                    <div class="container d-flex">
+                        <input class="room_id" th:value="${roomDto.id}" type="hidden"/>
+                        <div class="w-50 p-3">
+                            <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail img-fluid"
+                                 th:alt="${roomDto.name}" style="width:auto;height:auto;">
+                        </div>
+                        <div class="w-100 p-3">
+                            <div class="d-flex w-100 p-3 justify-content-between">
+                                <!--            룸 리스트 네임-->
+                                <h4 th:text="${roomDto.name}"></h4>
 
-                            <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true"
-                                 aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalToggleLabel">
-                                                <span th:text="${roomDto.name}"></span>
-                                            </h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div th:utext="${roomDto.detail}"></div>
-                                            <hr>
-                                            <div class="text-danger">
-                                                <h6><b>취소 및 환불 규정</b></h6>
-
-                                                <ul>
-                                                    <li><span>숙박일 기준 6일전: 100% 환불</span></li>
-                                                    <li><span>숙박일 기준 5일전: 90% 환불</span></li>
-                                                    <li><span>숙박일 기준 4일전: 80% 환불</span></li>
-                                                    <li><span>숙박일 기준 3일전: 70% 환불</span></li>
-                                                    <li><span>숙박일 기준 2일전: 50% 환불</span></li>
-                                                    <li><span>숙박일 기준 1일전: 30% 환불</span></li>
-                                                    <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
-                                                    <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
-                                                    <li>
-                                                        <span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span>
-                                                    </li>
-                                                    <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
-
-                                                </ul>
+                                <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true"
+                                     aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalToggleLabel">
+                                                    <span th:text="${roomDto.name}"></span>
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
                                             </div>
+                                            <div class="modal-body">
+                                                <div th:utext="${roomDto.detail}"></div>
+                                                <hr>
+                                                <div class="text-danger">
+                                                    <h6><b>취소 및 환불 규정</b></h6>
 
+                                                    <ul>
+                                                        <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                                                        <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                                                        <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                                                        <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                                                        <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                                                        <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                                                        <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                                                        <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+                                                        <li>
+                                                            <span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span>
+                                                        </li>
+                                                        <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
+
+                                                    </ul>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <a class="btn btn-link btn-sm link-info" data-bs-toggle="modal" href="#exampleModalToggle"
-                               role="button" style="text-decoration: none;">방 상세 보기</a>
+                                <a class="btn btn-link btn-sm link-info" data-bs-toggle="modal" href="#exampleModalToggle"
+                                   role="button" style="text-decoration: none;">방 상세 보기</a>
 
-                        </div>
+                            </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-5">
-                            <div>
-                                <span th:text="'입실: '+${roomDto.checkInTime}"></span>
-                                <span class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></span>
+                            <div class="d-flex justify-content-between align-items-center mt-5">
+                                <div>
+                                    <span th:text="'입실: '+${roomDto.checkInTime}"></span>
+                                    <span class="ms-3" th:text="'퇴실: '+${roomDto.checkOutTime}"></span>
+                                </div>
+                                <div class="mt-5">
+                                    <!--        룸리스트 가격-->
+                                    <span th:text="${roomDto.price}+'원'"></span>
+                                </div>
                             </div>
-                            <div class="mt-5">
-                                <!--        룸리스트 가격-->
-                                <span th:text="${roomDto.price}+'원'"></span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end">
-                            <button type="button"
-                                    sec:authorize="hasAnyAuthority('ROLE_USER')"
-                                    class="btn btn-primary reservBtn">예약하기
-                            </button>
-                            <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
-                            <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="mt-3">
-                                <button type="button" class="btn btn-primary editButton">수정</button>
-                                <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
-                                <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
-                                <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}"
-                                   class="btn btn-danger">삭제</a>
-                                <button type="button" onclick="roomEditPage()" class="btn btn-success mt-1">대표이미지 변경</button>
+                            <div class="d-flex justify-content-end">
+                                <button type="button"
+                                        sec:authorize="hasAnyAuthority('ROLE_USER')"
+                                        class="btn btn-primary reservBtn">예약하기
+                                </button>
+                                <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
+                                <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="mt-3">
+                                    <button type="button" class="btn btn-primary editButton">수정</button>
+                                    <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
+                                    <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
+                                    <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}"
+                                       class="btn btn-danger">삭제</a>
+                                    <button type="button" onclick="roomEditPage()" class="btn btn-success mt-1">대표이미지 변경</button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
 
 
-                    <div class="editForm hide container col-6">
+                    <div class="editForm hide container">
                         <!--            가려져 있는 수정 폼-->
-                        <div>
-                            <div class="d-flex justify-content-center w-50">
+
+                            <div class="container d-flex justify-content-center text-wrap col-8">
                                 <form role="form" method="post" enctype="multipart/form-data" th:object="${roomDto}">
                                     <div class="d-flex">
                                         <p class="h2">
@@ -807,7 +822,6 @@
 
                                 </form>
                             </div>
-                        </div>
                         <script>
 
                             var addForm = document.querySelector('.addForm');
