@@ -151,7 +151,7 @@ public class RoomController {
                 model.addAttribute("errorMessage", e.getMessage());
             }
 
-            return "redirect:/lodging/"+lodgingId;
+            return "redirect:/reserv/lodgingReservContent/"+lodgingId;
 
         } else {
             List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
@@ -165,7 +165,8 @@ public class RoomController {
     @RequestMapping(value = "/room/editRoom", method = {RequestMethod.POST})
     @ResponseBody
     public void editRoom(@RequestPart(value = "paramData") Room room,
-                        @RequestPart(value = "img", required = false) List<MultipartFile> file
+                        @RequestPart(value = "img", required = false) List<MultipartFile> file,
+                         Model model
     ) throws IOException {
 
         Room roomOriginal = roomService.findById(room.getId());
@@ -177,6 +178,7 @@ public class RoomController {
             itemImgService.deleteImg(roomOriginal);
             itemImgService.updateItemImg(file, room);
         } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
         }
 
     }
