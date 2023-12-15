@@ -47,63 +47,69 @@
     <div th:if="${lodgingSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
         <p th:text="${lodgingSuccessMsg}">성공출력용</p>
     </div>
+    <div class="container mt-5 col-6">
+        <!--    <form th:action="@{'/lodging/list/' + ${items.number}}" role="form" method="get" th:object="${items}">-->
+        <form th:action="@{'/lodging/list/'}" role="form" method="get" th:object="${lodgingDtoList}">
+            <table class="table table-hover">
+                <thead class="bg-dark text-white">
+                <tr>
+                    <td>번호</td>
+                    <td>숙소명</td>
+                    <td>상태</td>
+                    <td>등록자</td>
+                    <td>등록일</td>
+                </tr>
+                </thead>
+                <tbody>
+                <!--            <tr th:each="item, status: ${items.getContent()}">-->
+                <tr th:each="lodgingDto : ${lodgingDtoList}">
+                    <!--                아이템목록을 순환하면서 각 아이템에 대한 행을 생성합니다.-->
+                    <td th:text="${lodgingDto.id}"></td>
+                    <td>
+                        <!--                    <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" th:text="${lodgingDto.name}"></a>-->
+                        <a th:href="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodgingDto.id})}"
+                           th:text="${lodgingDto.name}" class="text-dark" style="text-decoration:none;"></a>
+                    </td>
+                    <!--               상품명을 클릭하면 상품 수정페이지로 이동 -->
+                    <!--        th:switch case 사용을 염두에 둬야 한다.-->
+                    <!--        https://solbel.tistory.com/1407 -->
+                    <!--                <td th:text="${lodgingDto.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
 
-    <!--    <form th:action="@{'/lodging/list/' + ${items.number}}" role="form" method="get" th:object="${items}">-->
-    <form th:action="@{'/lodging/list/'}" role="form" method="get" th:object="${lodgingDtoList}">
-        <table class="table">
-            <thead>
-            <tr>
-                <td>번호</td>
-                <td>숙소명</td>
-                <td>상태</td>
-                <td>등록자</td>
-                <td>등록일</td>
-            </tr>
-            </thead>
-            <tbody>
-            <!--            <tr th:each="item, status: ${items.getContent()}">-->
-            <tr th:each="lodgingDto : ${lodgingDtoList}">
-                <!--                아이템목록을 순환하면서 각 아이템에 대한 행을 생성합니다.-->
-                <td th:text="${lodgingDto.id}"></td>
-                <td>
-<!--                    <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" th:text="${lodgingDto.name}"></a>-->
-                    <a th:href="@{/reserv/lodgingReservContent/{lodging_id}(lodging_id = ${lodgingDto.id})}" th:text="${lodgingDto.name}" class="text-dark"  style="text-decoration:none;"></a>
-                </td>
-                <!--               상품명을 클릭하면 상품 수정페이지로 이동 -->
-                <!--        th:switch case 사용을 염두에 둬야 한다.-->
-                <!--        https://solbel.tistory.com/1407 -->
-<!--                <td th:text="${lodgingDto.lodgingType == T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
+                    <!--                <td th:text="${lodgingDto.createdBy}"></td>-->
+                    <td th:text="${lodgingDto.member.name}"></td>
+                    <td th:text="${lodgingDto.regTime}"></td>
+                </tr>
+                </tbody>
+            </table>
 
-                <!--                <td th:text="${lodgingDto.createdBy}"></td>-->
-                <td th:text="${lodgingDto.member.name}"></td>
-                <td th:text="${lodgingDto.regTime}"></td>
-            </tr>
-            </tbody>
-        </table>
+            <!-- 페이지네이션 영역 -->
+            <div th:with="start=${(lodgingDtoList.number/maxPage)*maxPage + 1}, end=(${(lodgingDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < lodgingDtoList.totalPages ? start + (maxPage - 1) : lodgingDtoList.totalPages)})">
+                <ul class="pagination justify-content-center mt-3">
 
-        <!-- 페이지네이션 영역 -->
-        <div th:with="start=${(lodgingDtoList.number/maxPage)*maxPage + 1}, end=(${(lodgingDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < lodgingDtoList.totalPages ? start + (maxPage - 1) : lodgingDtoList.totalPages)})" >
-            <ul class="pagination justify-content-center mt-3">
+                    <li class="page-item" th:classappend="${lodgingDtoList.number eq 0}?'disabled':''">
+                        <a th:href="@{'/lodging/list/' + ${lodgingDtoList.number-1}}" aria-label='Previous'
+                           class="page-link">
+                            <span aria-hidden='true'>Previous</span>
+                        </a>
+                    </li>
 
-                <li class="page-item" th:classappend="${lodgingDtoList.number eq 0}?'disabled':''">
-                    <a th:href="@{'/lodging/list/' + ${lodgingDtoList.number-1}}" aria-label='Previous' class="page-link">
-                        <span aria-hidden='true'>Previous</span>
-                    </a>
-                </li>
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                        th:classappend="${lodgingDtoList.number eq page-1}?'active':''">
+                        <a th:href="@{'/lodging/list/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+                    </li>
 
-                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${lodgingDtoList.number eq page-1}?'active':''">
-                    <a th:href="@{'/lodging/list/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
-                </li>
+                    <li class="page-item"
+                        th:classappend="${lodgingDtoList.number+1 ge lodgingDtoList.totalPages}?'disabled':''">
+                        <a th:href="@{'/lodging/list/' + ${lodgingDtoList.number+1}}" aria-label='Next'
+                           class="page-link">
+                            <span aria-hidden='true'>Next</span>
+                        </a>
+                    </li>
 
-                <li class="page-item" th:classappend="${lodgingDtoList.number+1 ge lodgingDtoList.totalPages}?'disabled':''">
-                    <a th:href="@{'/lodging/list/' + ${lodgingDtoList.number+1}}" aria-label='Next' class="page-link">
-                        <span aria-hidden='true'>Next</span>
-                    </a>
-                </li>
-
-            </ul>
-        </div>
-    </form>
+                </ul>
+            </div>
+        </form>
+    </div>
 
 </div>
 
