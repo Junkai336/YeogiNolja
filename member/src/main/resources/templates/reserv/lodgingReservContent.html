@@ -578,8 +578,9 @@ window.location.reload();
         객실 목록
     </p>
 
+<div th:if="${not #strings.isEmpty(roomDtoList)}">
 
-    <div th:each="roomDto : ${roomDtoList}" class="container mt-3 d-flex">
+    <div th:each="roomDto : ${roomDtoList}" class="container mt-3 d-flex" >
         <input class="room_id" th:value="${roomDto.id}" type="hidden" />
         <div class="w-50 p-3">
             <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail img-fluid"
@@ -874,6 +875,7 @@ window.location.reload();
 
 
     </div>
+</div>
         <hr>
         <!----------------------------------------------------------------------------------------->
         <!--    <div class="container-fluid d-flex justify-content-center">-->

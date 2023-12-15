@@ -28,9 +28,11 @@ public class MemberDto {
     private UserRole userRole;
 
 
-//    public static MemberDto toMemberDto(Member member){
-//        MemberDto memberDto =new MemberDto();
-//
-//
-//    }
+    public static MemberDto toMemberDto(Member member){
+        MemberDto memberDto =new MemberDto();
+        memberDto.setId(member.getId());
+        memberDto.setEmail(member.getEmail());
+        memberDto.setUserRole(member.getUserRole());
+        return memberDto;
+    }
 }

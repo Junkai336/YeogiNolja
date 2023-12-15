@@ -2,14 +2,17 @@ package com.example.member.reserv;
 
 
 import com.example.member.article.ArticleDto;
+import com.example.member.constant.UserRole;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
+import com.example.member.dto.MemberDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
 import com.example.member.repository.MemberRepository;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
+import com.example.member.service.MemberService;
 import com.example.member.service.RoomService;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +42,7 @@ public class ReservController {
     private final LodgingService lodgingService;
     private final RoomService roomService;
     private final UploadFileService uploadFileService;
-
+    private final MemberService memberService;
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
     @GetMapping("/roomReservation/{lodgingId}/{room_id}/{sessionDate}") // roomId/reserv
@@ -128,31 +131,45 @@ public class ReservController {
     }
 
 
-    @GetMapping("/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
+    @GetMapping(value = {"/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}", "/reserv/lodgingReservContent/{lodging_id}"})
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
                          @PathVariable("checkIn") String checkIn,
-    @PathVariable("checkOut") String checkOut, Model model){
+    @PathVariable("checkOut") String checkOut, Model model,
+                           Principal principal){
         System.out.println("예약 일자 등록 시 숙소 id 값 : "+lodging_id);
+        System.out.println("helloworld");
+        String email = principal.getName();
+        MemberDto memberDto = memberService.DtofindByEmail(email);
+
         try{
             Lodging lodgingEntity = lodgingService.findById(lodging_id);
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
             LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodging_id);
 
             lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodgingEntity);
+            if (memberDto.getUserRole().equals(UserRole.ADMIN)) {
+                // 관리자 일떄 (모든 방들을 보여준다.)
+                List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(roomDtoList);
+                model.addAttribute("roomDtoList", roomDtoListContainImage);
+            }else{
+                // 일반 유저 일때 (예약이 가능한 방들을 보여줌)
+                List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
+
+                // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
+                // 방들은 제외한 후 보여준다.
+                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+                model.addAttribute("roomDtoList", roomDtoListContainImage);
+            }
 
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-            List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
 
-            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
-            // 방들은 제외한 후 보여준다.
-            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
 
-            System.out.println("이 이상 도달하지 못함");
 
-            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
 
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
-            model.addAttribute("roomDtoList", roomDtoListContainImage);
+
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
