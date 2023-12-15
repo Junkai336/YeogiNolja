@@ -45,10 +45,9 @@
 
 
     <div class="container">
+        <h5 class="fw-semibold mt-5">추천 숙소</h5>
         <th:block th:each="lodging : ${lodgingDtoList}" th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
-
-            <div class="col-md-3 margin mt-5">
-                <h5 class="fw-semibold">추천 숙소</h5>
+            <div class="col-md-3 margin mt-3">
                 <div class="card border-0 mt-3">
                     <div class="locationDiv" style="cursor:pointer">
                         <input type="hidden" th:value="${lodging.id}" class="lodging_id">

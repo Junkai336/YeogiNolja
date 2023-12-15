@@ -142,7 +142,7 @@
         <p th:text="${roomSuccessMsg}">성공출력용</p>
     </div>
 
-    <div class="table" th:object="${lodgingDto}">
+    <div class="table text-nowrap" th:object="${lodgingDto}">
 
         <!-- map에 필요한 숙소,주소-->
         <input type="hidden" id="lodgingId" name="lodging_id" th:value="*{id}">
@@ -166,7 +166,7 @@
                              th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                     </a>
                 </div>
-                <ul id="subImgBox" class="col-6 d-none d-sm-none d-md-block">
+                <ul id="subImgBox" class="col-6 d-none d-sm-none d-md-block text-wrap">
                     <li th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"
                         th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
                         <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
@@ -185,7 +185,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between p-5" style="border:1px solid black">
+                <div class="d-flex justify-content-between p-5">
                     <div>
                         <h3 th:text="*{name}">a</h3>
                         <span class="d-block" th:text="*{lodgingType}">a</span>
@@ -377,97 +377,100 @@
                     <button type="button" class="btn btn-primary addBtn">객실 추가</button>
                 </div>
 
-                <div class="container w-100 addForm hide">
-                    <div class="d-flex justify-content-center w-50">
-                        <form role="form" method="post" enctype="multipart/form-data">
-                            <p class="h2">
-                                객실 등록
-                            </p>
+                <!-- 객실 추가 폼-->
+                <div class="container addForm hide">
+                    <div class="d-flex justify-content-center">
+                        <div class="col-8">
+                            <form role="form" method="post" enctype="multipart/form-data">
+                                <p class="h2">
+                                    객실 등록
+                                </p>
 
-                            <div class="input-group mt-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">객실명</span>
-                                </div>
-                                <input id="name" type="text" class="form-control" placeholder="객실명을 입력해주세요">
-                            </div>
-
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">가격</span>
-                                </div>
-                                <input id="price" type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">
-                            </div>
-
-                            <div class="input-group mt-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">인원수</span>
+                                <div class="input-group mt-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">객실명</span>
+                                    </div>
+                                    <input id="name" type="text" class="form-control" placeholder="객실명을 입력해주세요">
                                 </div>
 
-                                <span>성인</span>
-                                <select id="adult" class="form-select" aria-label="select">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-
-                                <span>아동</span>
-                                <select id="children" class="form-select" aria-label="select">
-                                    <option value="1">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">객실 상세 내용</span>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">가격</span>
+                                    </div>
+                                    <input id="price" type="number" class="form-control" placeholder="객실의 가격을 입력해주세요">
                                 </div>
-                                <label th:for="summernote" class="form-label"></label>
-                                <textarea class="form-control addDetail" name="summernote" aria-label="With textarea"
-                                          rows="3"></textarea>
-                            </div>
 
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">체크인 시간</span>
+                                <div class="input-group mt-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">인원수</span>
+                                    </div>
+
+                                    <span>성인</span>
+                                    <select id="adult" class="form-select" aria-label="select">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+
+                                    <span>아동</span>
+                                    <select id="children" class="form-select" aria-label="select">
+                                        <option value="1">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
                                 </div>
-                                <input id="checkInTime" type="time" class="form-control timepickerCheckIn"
-                                       placeholder="체크인 시간을 입력해주세요">
-                            </div>
 
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">체크아웃 시간</span>
+                                <div class="input-group text-wrap">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">객실 상세 내용</span>
+                                    </div>
+                                    <label th:for="summernote" class="form-label"></label>
+                                    <textarea class="form-control addDetail" name="summernote" aria-label="With textarea"
+                                              rows="3"></textarea>
                                 </div>
-                                <input id="checkOutTime" type="time" class="form-control timepickerCheckOut"
-                                       placeholder="체크아웃 시간을 입력해주세요">
-                            </div>
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">객실 이미지 등록</span>
-                            </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">체크인 시간</span>
+                                    </div>
+                                    <input id="checkInTime" type="time" class="form-control timepickerCheckIn"
+                                           placeholder="체크인 시간을 입력해주세요">
+                                </div>
 
-                            <div>
-                                <div class="form-group">
-                                    <div class="custom-file img-div">
-                                        <input type="file" class="custom-file-input fileInputAddRoom" name="itemImgFile"
-                                               multiple="true">
-                                        <label class="custom-file-label"></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">체크아웃 시간</span>
+                                    </div>
+                                    <input id="checkOutTime" type="time" class="form-control timepickerCheckOut"
+                                           placeholder="체크아웃 시간을 입력해주세요">
+                                </div>
+
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">객실 이미지 등록</span>
+                                </div>
+
+                                <div>
+                                    <div class="form-group">
+                                        <div class="custom-file img-div">
+                                            <input type="file" class="custom-file-input fileInputAddRoom" name="itemImgFile"
+                                                   multiple="true">
+                                            <label class="custom-file-label"></label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div>
-                                <button type="button" onclick="roomRegistration()" class="btn btn-primary mt-1">객실 등록
-                                </button>
-                            </div>
+                                <div class="d-flex justify-content-center mt-3">
+                                    <button type="button" onclick="roomRegistration()" class="btn btn-primary mt-1">
+                                        객실 등록</button>
+                                </div>
 
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -481,79 +484,70 @@
                     var detail = document.querySelectorAll('.detail');
                     var addFormDetail = addForm.querySelector('.addDetail');
 
-            $(".addBtn").click(function(e){
-              e.preventDefault();
-              if($(".addForm").hasClass("hide") === false){
-                $(".addForm").addClass("hide");
-                  $(".addDetail").removeAttr("id");
-                }else{
 
-              $(".editForm").addClass("hide");
-                 $('.detail').removeAttr("id");
-                $(".addDetail").attr('id', "summernote");
-                window.summernoteCall();
-                $(".addForm").removeClass("hide");
-                }
+                    $(".addBtn").click(function(e){
+                      e.preventDefault();
+                      $(".editForm").addClass("hide");
+                         $('.detail').removeAttr("id");
+                        $(".addDetail").attr('id', "summernote");
+                        window.summernoteCall();
+                        $(".addForm").removeClass("hide");
+                    });
 
+                    function roomRegistration() {
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
 
-            });
-            
+                    var url = `/lodging/addRoom`;
 
+                    var paramData = {
+                    name: $("#name").eq(0).val(),
+                    detail: $(".addDetail").eq(0).val(),
+                    price: $("#price").eq(0).val(),
+                    adult: $("#adult").eq(0).val(),
+                    children: $("#children").eq(0).val(),
+                    checkInTime: $("#checkInTime").eq(0).val(),
+                    checkOutTime: $("#checkOutTime").eq(0).val()
+                    };
 
-            function roomRegistration() {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
+                    let formData = new FormData();
 
-            var url = `/lodging/addRoom`;
+                    var fileInput = $('.fileInputAddRoom');
 
-            var paramData = {
-            name: $("#name").eq(0).val(),
-            detail: $(".addDetail").eq(0).val(),
-            price: $("#price").eq(0).val(),
-            adult: $("#adult").eq(0).val(),
-            children: $("#children").eq(0).val(),
-            checkInTime: $("#checkInTime").eq(0).val(),
-            checkOutTime: $("#checkOutTime").eq(0).val()
-            };
+                    for (var i = 0; i < fileInput.length; i++) {
+                    if (fileInput[i].files.length > 0) {
+                    for (var j = 0; j < fileInput[i].files.length; j++) {
+                    console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
 
-            let formData = new FormData();
+                    // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+                    formData.append('img', $('.fileInputAddRoom')[i].files[j]);
+                    }
+                    }
+                    }
+                    // formData.append('img', $('.fileInputAddRoom')[0].files[0]);
 
-            var fileInput = $('.fileInputAddRoom');
+                    formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
 
-            for (var i = 0; i < fileInput.length; i++) {
-            if (fileInput[i].files.length > 0) {
-            for (var j = 0; j < fileInput[i].files.length; j++) {
-            console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+                    $.ajax({
+                    url: url,
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    cache: false,
 
-            // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
-            formData.append('img', $('.fileInputAddRoom')[i].files[j]);
-            }
-            }
-            }
-            // formData.append('img', $('.fileInputAddRoom')[0].files[0]);
+                    beforeSend: function (xhr) {
+                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                    xhr.setRequestHeader(header, token);
+                    },
 
-            formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
-
-            $.ajax({
-            url: url,
-            type: "POST",
-            enctype: 'multipart/form-data',
-            data: formData,
-            contentType: false,
-            processData: false,
-            cache: false,
-
-            beforeSend: function (xhr) {
-            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-            xhr.setRequestHeader(header, token);
-            },
-
-            success: function (result, status) {
-            alert("객실 정보가 저장되었습니다.");
-            window.location.reload();
-            }
-            });
-            }
+                    success: function (result, status) {
+                    alert("객실 정보가 저장되었습니다.");
+                    window.location.reload();
+                    }
+                    });
+                    }
 
                 </script>
                 <!------------------------------------------------------------------------------------------------------->
@@ -670,8 +664,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <a class="btn btn-link btn-sm" data-bs-toggle="modal" href="#exampleModalToggle"
-                               role="button">방 상세 보기</a>
+                            <a class="btn btn-link btn-sm link-info" data-bs-toggle="modal" href="#exampleModalToggle"
+                               role="button" style="text-decoration: none;">방 상세 보기</a>
 
                         </div>
 
@@ -691,35 +685,22 @@
                                     class="btn btn-primary reservBtn">예약하기
                             </button>
                             <!--            <a th:href="@{/reserv/roomReservation/{room_id}(room_id = ${roomDto.id})}" sec:authorize="hasAnyAuthority('ROLE_USER')" class="btn btn-primary ms-auto" >예약하기</a>-->
+                            <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')" class="mt-3">
+                                <button type="button" class="btn btn-primary editButton">수정</button>
+                                <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
+                                <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
+                                <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}"
+                                   class="btn btn-danger">삭제</a>
+                                <button type="button" onclick="roomEditPage()" class="btn btn-success mt-1">대표이미지 변경</button>
+                            </div>
                         </div>
                     </div>
-                    <script>
-                        var lodgingId = $("#lodgingId").val();
-                        var txtDate = $("#txtDate").val();
-
-                        $(".reservBtn").click(function(){
-                            let k = $('.reservBtn').index(this);
-                            var sessionDate = sessionStorage.getItem("date");
-                            const room_id = $(".room_id").eq(k).val();
-                            location.href = `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
-                        });
 
 
-                    </script>
-                    <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                        <button type="button" class="btn btn-primary editButton">수정</button>
-                        <!--            <button type="button" class="btn btn-primary editButton">수정</button>-->
-                        <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
-                        <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}"
-                           class="btn btn-danger">삭제</a>
-                        <button type="button" onclick="roomEditPage()" class="btn btn-success mt-1">대표이미지 변경</button>
-                    </div>
 
-
-                    <div class="editForm hide">
-
+                    <div class="editForm hide container col-6">
                         <!--            가려져 있는 수정 폼-->
-                        <div class="container w-100">
+                        <div>
                             <div class="d-flex justify-content-center w-50">
                                 <form role="form" method="post" enctype="multipart/form-data" th:object="${roomDto}">
                                     <div class="d-flex">
@@ -866,66 +847,66 @@
                         $('.editButton').eq(y).removeClass('hide');
                       });
 
-                    $('.roomEditSubmitBtn').click(function(){
-                        let x = $('.roomEditSubmitBtn').index(this);
+                        $('.roomEditSubmitBtn').click(function(){
+                            let x = $('.roomEditSubmitBtn').index(this);
 
-                        var token = $("meta[name='_csrf']").attr("content");
-                    var header = $("meta[name='_csrf_header']").attr("content");
+                            var token = $("meta[name='_csrf']").attr("content");
+                        var header = $("meta[name='_csrf_header']").attr("content");
 
-                    var url = `/room/editRoom`;
+                        var url = `/room/editRoom`;
 
-                    var paramData = {
-                    id: $(".id").eq(x).val(),
-                    name: $(".name").eq(x).val(),
-                    detail: $(".detail").eq(x).val(),
-                    price: $(".price").eq(x).val(),
-                    adult: $(".adult").eq(x).val(),
-                    children: $(".children").eq(x).val(),
-                    checkInTime: $(".checkInTime").eq(x).val(),
-                    checkOutTime: $(".checkOutTime").eq(x).val(),
-                    reservationStatus: $(".reservationStatus").eq(x).val()
-                    };
+                        var paramData = {
+                        id: $(".id").eq(x).val(),
+                        name: $(".name").eq(x).val(),
+                        detail: $(".detail").eq(x).val(),
+                        price: $(".price").eq(x).val(),
+                        adult: $(".adult").eq(x).val(),
+                        children: $(".children").eq(x).val(),
+                        checkInTime: $(".checkInTime").eq(x).val(),
+                        checkOutTime: $(".checkOutTime").eq(x).val(),
+                        reservationStatus: $(".reservationStatus").eq(x).val()
+                        };
 
-                    let formData = new FormData();
+                        let formData = new FormData();
 
-                    var fileInput = $('.fileInputEditRoom');
+                        var fileInput = $('.fileInputEditRoom');
 
-                    for (var i = 0; i < fileInput.length; i++) {
-                    if (fileInput[i].files.length > 0) {
-                    for (var j = 0; j < fileInput[i].files.length; j++) {
-                    console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
+                        for (var i = 0; i < fileInput.length; i++) {
+                        if (fileInput[i].files.length > 0) {
+                        for (var j = 0; j < fileInput[i].files.length; j++) {
+                        console.log(" fileInput[i].files[j] :::"+ fileInput[i].files[j]);
 
-                    // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
-                    formData.append('img', $('.fileInputEditRoom')[i].files[j]);
-                    }
-                    }
-                    }
-                    // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
+                        // formData에 'file'이라는 키값으로 fileInput 값을 append 시킨다.
+                        formData.append('img', $('.fileInputEditRoom')[i].files[j]);
+                        }
+                        }
+                        }
+                        // formData.append('img', $('.fileInputEditRoom')[0].files[0]);
 
-                    formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
+                        formData.append("paramData", new Blob([JSON.stringify(paramData)], { type: "application/json" }));
 
-                    $.ajax({
-                    url: url,
-                    type: "POST",
-                    enctype: 'multipart/form-data',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    cache: false,
+                        $.ajax({
+                        url: url,
+                        type: "POST",
+                        enctype: 'multipart/form-data',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        cache: false,
 
-                    beforeSend: function (xhr) {
-                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                    xhr.setRequestHeader(header, token);
-                    },
+                        beforeSend: function (xhr) {
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                        },
 
-                    success: function (result, status) {
-                    console.log(paramData);
-                    alert("객실 정보가 수정되었습니다.");
-                    window.location.reload();
-                    }
-                    });
+                        success: function (result, status) {
+                        console.log(paramData);
+                        alert("객실 정보가 수정되었습니다.");
+                        window.location.reload();
+                        }
+                        });
 
-                    });
+                        });
 
                         </script>
                         <!--            // 가려져 있는 수정 폼 -->
@@ -1119,4 +1100,16 @@
         maps(mapContainer1);
         maps(mapContainer2);
     </script>
+    <script>
+        var lodgingId = $("#lodgingId").val();
+        var txtDate = $("#txtDate").val();
+
+        $(".reservBtn").click(function(){
+            let k = $('.reservBtn').index(this);
+            var sessionDate = sessionStorage.getItem("date");
+            const room_id = $(".room_id").eq(k).val();
+            location.href = `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
+        });
+    </script>
+
 </html>
