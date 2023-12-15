@@ -105,75 +105,6 @@ public class LodgingController {
 
     }
 
-    // 일자 등록없이 기본 값(오늘, 내일) 일자로하여 예약이 가능한 방을 보여준다.
-//    @GetMapping(value = "/{lodging_id}")
-//    public String show(@PathVariable Long lodging_id, Model model) {
-//
-//        uploadFileService.refreshUploadFileCheck();
-//
-//        Lodging lodging = lodgingRepository.findById(lodging_id).orElseThrow(EntityNotFoundException::new);
-//
-//        lodgingService.emptyRoomGrantedLodgingId(lodging_id, lodging);
-//
-//        LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
-//
-//        LodgingDto lodgingDtoContainImage = lodgingService.imageLoad(lodgingDto, lodging_id);
-//
-//        for (ItemImgDto itemImgDto : lodgingDtoContainImage.getItemImgDtoList()) {
-//            System.out.println(itemImgDto);
-//        }
-//
-//        Member member = lodging.getMember();
-//
-//        lodgingDto.setMember(member);
-//
-//        List<ItemImg> lodgingItemImgList = itemImgService.findByLodgingId(lodging_id);
-//
-//
-//        // ------------------------------------------------------------
-////        LocalDate defaultNow = LocalDate.now();
-////        LocalDate tomorrow = LocalDate.now().plusDays(1);
-//        List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
-//
-//        for (int i = 0; i < roomDtoList.size(); i++) {
-//            // 객실 DTO i번쨰 꺼내오기
-//            RoomDto roomDto = roomDtoList.get(i);
-//            // 꺼내온 숙소 DTO의 아이디를 조회하고 아이디에 맞는 이미지들을 리스트로 뽑아오기
-//            List<ItemImg> itemImgList = itemImgRepository.findByRoomId(roomDto.getId());
-//
-//            List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-//
-//            for (ItemImg itemImg : itemImgList) {
-//                ItemImgDto itemImgDto = ItemImgDto.toItemImgDto(itemImg);
-//                itemImgDtoList.add(itemImgDto);
-//            }
-//
-//            // 숙소 DTO 대표 imgUrl을 저장하기 위한 과정
-//            for (int l = 0; l < itemImgDtoList.size(); l++) {
-//                ItemImgDto itemImgDto = itemImgDtoList.get(l);
-//
-//                if (itemImgDto.getRepimgYn().equals("Y") && itemImgDto.getRoom().getId().equals(roomDto.getId())) {
-//                    roomDto.setImgUrl(itemImgDto.getImgUrl());
-//                }
-//            }
-//
-//            // 숙소 DTO에 이미지 DTO 저장
-//            roomDto.setItemImgDtoList(itemImgDtoList);
-//            // 다시 숙소 DTO에 저장
-//            roomDtoList.set(i, roomDto);
-//
-//            // -----------------------------------------------------------
-//
-//            model.addAttribute("lodgingDto", lodgingDtoContainImage);
-//            model.addAttribute("checkForm", new ReservDto());
-//            model.addAttribute("roomDtoList", roomDtoList);
-//            model.addAttribute("lodgingItemImgList", lodgingItemImgList);
-//        }
-//
-//        return "reserv/lodgingReservContennt";
-//
-//    }
-
     @GetMapping(value = "/{id}/lodgingForm")
     public String toUpdate(@PathVariable Long id, Model model, Principal principal) {
         String email = principal.getName();
@@ -267,7 +198,6 @@ public class LodgingController {
                         @RequestPart(value = "img", required = false) List<MultipartFile> file,
                         Model model
     ) throws IOException {
-        room.setReservationStatus(ReservationStatus.AVAILABLE);
         roomService.saveRoomJS(room);
         uploadFileService.uploadFileGrantedRoomId(room);
         try {

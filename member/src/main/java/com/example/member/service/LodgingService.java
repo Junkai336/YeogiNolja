@@ -93,7 +93,6 @@ public class LodgingService {
         lodging.setAddress(lodgingDto.getAddress());
         lodging.setDetailAddress(lodgingDto.getDetailAddress());
         lodging.setExtraAddress(lodgingDto.getExtraAddress());
-        lodging.setLodgingType(lodgingDto.getLodgingType());
 //        lodging.setRegTime(lodgingDto.getRegTime());
 //        lodging.setUpdateTime(lodgingDto.getUpdateTime());
 

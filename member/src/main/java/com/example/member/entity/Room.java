@@ -22,8 +22,6 @@ public class Room extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Lodging lodging;
 
-    @Enumerated(EnumType.STRING)
-    private ReservationStatus reservationStatus;
 
     @Column
     private String name;
@@ -54,7 +52,6 @@ public class Room extends BaseEntity {
         Room room = new Room();
         room.setId(roomDto.getId());
         room.setLodging(lodging);
-        room.setReservationStatus(roomDto.getReservationStatus());
         room.setName(roomDto.getName());
         room.setDetail(roomDto.getDetail());
         room.setAdult(roomDto.getAdult());

@@ -56,9 +56,6 @@ public class ReservService {
         Room reservRoom = roomRepository.findById(reserv.getRoom().getId())
                 .orElseThrow(EntityNotFoundException::new);
 
-        if(reservRoom.getReservationStatus().equals("RESERV")){
-            throw new RuntimeException("이미 예약된 숙소입니다");
-        }
     }
 
     public ReservDto newReserv(Long roomId, Principal principal,String date) throws Exception{
