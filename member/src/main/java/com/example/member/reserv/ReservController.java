@@ -8,7 +8,6 @@ import com.example.member.dto.LodgingDto;
 import com.example.member.dto.MemberDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
-import com.example.member.entity.Room;
 import com.example.member.repository.MemberRepository;
 import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
@@ -179,45 +178,5 @@ public class ReservController {
         System.out.println("checkIn = "+checkIn+ "//"+"checkOut = "+ checkOut);
 
         return "reserv/lodgingReservContent";
-    }
-
-    // 결제 관련 수정중입니다.
-    // 결제성공시 해당 메소드 진입 -> 결제 검증, httpStatus ok 리턴 -> window.location.href로 saveReserv를 리턴할 예정
-    @PostMapping("reservationPay")
-    @ResponseBody
-    public HttpStatus reservationPay(int amount, Long roomId, String imp_uid, String merchant_uid) {
-//        try {
-
-        // price가 string으로 저장되기 때문에 int로 변환 과정을 거침
-//        Room room = roomService.findById(roomId);
-//        int roomPrice = Integer.parseInt(room.getPrice());
-//
-//        // 결제된 가격이 실제 객실 가격과 다르다면 badRequest를 보냄
-//        if(roomPrice != amount) {
-//            System.out.println("검증 실패 : 결제가격이 상품가격과 일치하지 않음");
-//            return new ResponseEntity<String>("결제 가격이 실제 상품 가격과 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-//        }
-
-        // 해당 roomId를 가진 reserv Entity가 있을 경우 중복으로 판단 후 badRequest를 보냄
-//        boolean duplication = reservService.validateHavingRoomId(room);
-//        if(duplication) {
-//            System.out.println("검증 실패: 중복 예약");
-//            return new ResponseEntity<String>("이미 예약된 객실입니다.", HttpStatus.BAD_REQUEST);
-//        }
-
-        // 성공적인 경우
-            System.out.println("검증 성공");
-            return HttpStatus.OK;
-
-//        } catch (Exception e) {
-//            // try catch에 걸린 경우
-//            System.out.println("검증 실패: try catch");
-////            return new ResponseEntity<String>("결제에 문제가 발생했습니다.", HttpStatus.BAD_REQUEST);
-//            return new ResponseEntity<String>("객실 예약에 성공했습니다.", HttpStatus.OK);
-//        }
-
-        // System.out.println("imp_uid : " + imp_uid);
-        // System.out.println("merchant_uid : " + merchant_uid);
-
     }
 }
