@@ -3,15 +3,15 @@
 
 <div th:fragment="header">
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <nav class="navbar navbar-expand-sm bg-white shadow-sm">
 
-        <div class="container-fluid text-nowrap">
-            <a class="navbar-brand" href="/">header</a>
+        <div class="container text-nowrap">
+            <a class="navbar-brand" href="/">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav d-flex justify-content-evenly">
                     <li class="nav-item">
                         <a class="nav-link" href="/">홈</a>
                     </li>
@@ -50,7 +50,7 @@
                         <p>안녕하세요, <span th:text="${email}"></span>님! 환영합니다.</p>
                     </li>
                 </ul>
-                <div class="nav-item">dd</div>
+                <div class="nav-item"></div>
             </div>
         </div>
 
