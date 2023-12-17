@@ -628,9 +628,11 @@
                 </p>
 
 
+
                 <div th:each="roomDto : ${roomDtoList}" class="container mt-3">
                     <div class="container d-flex">
                         <input class="room_id" th:value="${roomDto.id}" type="hidden"/>
+                        <input type="hidden" th:value="${roomDto.detail}" class="roomDtoDetail">
                         <div class="w-50 p-3">
                             <img th:src="${roomDto.imgUrl}" class="img-fluid img-thumbnail img-fluid"
                                  th:alt="${roomDto.name}" style="width:auto;height:auto;">
@@ -638,50 +640,14 @@
                         <div class="w-100 p-3">
                             <div class="d-flex w-100 p-3 justify-content-between">
                                 <!--            룸 리스트 네임-->
-                                <h4 th:text="${roomDto.name}"></h4>
+                                <h4 class="roomNameH4" th:text="${roomDto.name}"></h4>
 
-                                <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true"
-                                     aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalToggleLabel">
-                                                    <span th:text="${roomDto.name}"></span>
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div th:utext="${roomDto.detail}"></div>
-                                                <hr>
-                                                <div class="text-danger">
-                                                    <h6><b>취소 및 환불 규정</b></h6>
-
-                                                    <ul>
-                                                        <li><span>숙박일 기준 6일전: 100% 환불</span></li>
-                                                        <li><span>숙박일 기준 5일전: 90% 환불</span></li>
-                                                        <li><span>숙박일 기준 4일전: 80% 환불</span></li>
-                                                        <li><span>숙박일 기준 3일전: 70% 환불</span></li>
-                                                        <li><span>숙박일 기준 2일전: 50% 환불</span></li>
-                                                        <li><span>숙박일 기준 1일전: 30% 환불</span></li>
-                                                        <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
-                                                        <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
-                                                        <li>
-                                                            <span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span>
-                                                        </li>
-                                                        <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
-
-                                                    </ul>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="btn btn-link btn-sm link-info" data-bs-toggle="modal" href="#exampleModalToggle"
+                                <!--방 상세 내용 모달 창버튼 -->
+                                <a class="btn btn-link btn-sm link-info detailBtn" data-bs-toggle="modal" href="#exampleModalToggle"
                                    role="button" style="text-decoration: none;">방 상세 보기</a>
 
                             </div>
+
 
                             <div class="d-flex justify-content-between align-items-center mt-5">
                                 <div>
@@ -710,7 +676,6 @@
                             </div>
                         </div>
                     </div>
-
 
 
                     <div class="editForm hide container">
@@ -927,20 +892,58 @@
                     </div>
 
                 </div>
-                <hr>
-                <!----------------------------------------------------------------------------------------->
-                <!--    <div class="container-fluid d-flex justify-content-center">-->
-                <!--        <div class="card d-flex justify-content-center text-center" style="width: 24rem;">-->
-                <!--            <div class="card-body">-->
-                <!--                <h5 class="card-title">판매자 정보</h5>-->
-                <!--                <p class="card-text" th:text="'이름: '+${lodgingDto.member.name}"></p>-->
-                <!--                <p class="card-text" th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></p>-->
-                <!--                <a href="#" class="card-link"></a>-->
-                <!--                <a href="#" class="card-link"></a>-->
-                <!--            </div>-->
-                <!--        </div>-->
-                <!--    </div>-->
 
+                <!--방 상세 내용 모달 창 -->
+                <div class="modal fade modal-lg" id="exampleModalToggle" aria-hidden="true"
+                     aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalToggleLabel">
+                                    <span id="roomName"></span>
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="roomDetail"></div>
+                                <hr>
+                                <div class="text-danger">
+                                    <h6><b>취소 및 환불 규정</b></h6>
+
+                                    <ul>
+                                        <li><span>숙박일 기준 6일전: 100% 환불</span></li>
+                                        <li><span>숙박일 기준 5일전: 90% 환불</span></li>
+                                        <li><span>숙박일 기준 4일전: 80% 환불</span></li>
+                                        <li><span>숙박일 기준 3일전: 70% 환불</span></li>
+                                        <li><span>숙박일 기준 2일전: 50% 환불</span></li>
+                                        <li><span>숙박일 기준 1일전: 30% 환불</span></li>
+                                        <li><span>숙박일 당일 및 No-show: 환불 불가</span></li>
+                                        <li><span>취소, 환불 시 수수료가 발생할 수 있습니다.</span></li>
+                                        <li>
+                                            <span>예약 후 10분 내 취소될 경우 취소 수수료가 발생하지 않습니다. (*체크인 시간 경과 후 제외)</span>
+                                        </li>
+                                        <li><span>예약 후 10분 경과 시엔 해당 숙소의 취소 및 환불 규정이 적용됩니다.</span></li>
+
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $(".detailBtn").click(function(){
+                        let kk = $(".detailBtn").index(this);
+                        var roomName = $(".roomNameH4").eq(kk).text();
+                        var roomDetail = $(".roomDtoDetail").eq(kk).val();
+                        $("#roomName").text(roomName);
+                        $("#roomDetail").html(roomDetail);
+                    });
+                </script>
+
+                <hr>
+           
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
                         data-bs-target="#exampleModal">
@@ -1125,5 +1128,5 @@
             location.href = `/reserv/roomReservation/${lodgingId}/${room_id}/${txtDate}`;
         });
     </script>
-
+    </div>
 </html>
