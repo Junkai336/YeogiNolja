@@ -33,5 +33,6 @@ public interface ReservRepository extends JpaRepository<Reserv,Long> {
             "order by r.regTime desc")
     List<Reserv> findReservsPaging(@Param("email") String email, Pageable pageable);
 
-
+    @Query(value = "select * from Reserv r where r.room.id= :room_id", nativeQuery = true)
+    Optional<Reserv> findByRoomId(@Param("room_id") Long roomId);
 }

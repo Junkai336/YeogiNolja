@@ -130,4 +130,16 @@ public class ReservService {
         return new PageImpl<ReservDto>(reservDtoList, pageable, totalCount);
     }
 
+    public boolean validateHavingRoomId(Room room) throws Exception {
+
+        Long room_id = room.getId();
+
+        Reserv reserv = reservRepository.findByRoomId(room_id).orElse(null);
+
+        if(reserv != null) {
+            return true;
+        }
+        return false;
+    }
+
 }
