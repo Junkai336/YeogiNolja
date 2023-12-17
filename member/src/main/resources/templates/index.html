@@ -11,4 +11,39 @@
 
 <div layout:fragment="content">
     <h2>Index Page!</h2>
+
+    <div class="container d-flex justify-content-evenly flex-wrap text-nowrap" style="border:1px solid black">
+        <div class="mt-2 mb-2 container col-6" style="border:1px solid black">
+            <div class="container">
+                <a href="#" class="d-flex justify-content-between">
+                    <p>공지사항</p>
+                    <p>더보기</p>
+                </a>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="border:1px solid black">
+                    <a href="#" class="d-flex justify-content-between" th:each="article : ${articleDtoList}" th:if="${article.categoryStatus == T(com.example.member.constant.CategoryStatus).NOTICE}">
+                        <span class="d-inline-block text-truncate" style="max-width: 300px;" th:text="*{article.title}">타이틀</span>
+                        <span th:text="*{article.regDateStr}">날짜</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="mt-2 mb-2 container col-6">
+            <div class="container">
+                <a href="#" class="d-flex justify-content-between">
+                    <p>이벤트</p>
+                    <p>더보기</p>
+                </a>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <a href="#" class="d-flex justify-content-between" th:each="article : ${articleDtoList}" th:if="${article.categoryStatus == T(com.example.member.constant.CategoryStatus).FREE}">
+                        <span class="d-inline-block text-truncate" style="max-width: 300px;" th:text="*{article.title}">타이틀</span>
+                        <span th:text="*{article.regDateStr}">날짜</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
