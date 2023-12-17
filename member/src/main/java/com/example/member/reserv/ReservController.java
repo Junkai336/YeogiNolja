@@ -1,20 +1,20 @@
 package com.example.member.reserv;
 
 
-import com.example.member.article.ArticleDto;
 import com.example.member.constant.UserRole;
-import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.MemberDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
-import com.example.member.repository.MemberRepository;
-import com.example.member.reserv.reservDate.ReservedDateDto;
 import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.MemberService;
 import com.example.member.service.RoomService;
 import com.example.member.service.UploadFileService;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +24,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -184,7 +184,7 @@ public class ReservController {
     // 결제성공시 해당 메소드 진입 -> 결제 검증, httpStatus ok 리턴 -> window.location.href로 saveReserv를 리턴할 예정
     @PostMapping("reservationPay")
     @ResponseBody
-    public HttpStatus reservationPay(int amount, Long roomId, String imp_uid, String merchant_uid) {
+    public HttpStatus reservationPay(Integer amount, Long roomId, String imp_uid, String merchant_uid) {
 //        try {
 
         // price가 string으로 저장되기 때문에 int로 변환 과정을 거침
