@@ -37,7 +37,7 @@ public class ReservedDateService {
         int countDate = Period.between(checkIn, checkOut).getDays();
         System.out.println(countDate);
 
-    // checkIn ~ checkOut 일자 List로 저장
+        // checkIn ~ checkOut 일자 List로 저장
 //     ex_)[2023-12-30, 2023-12-31, 2024-01-01, 2024-01-02, 2024-01-03, 2024-01-04, 2024-01-05, 2024-01-06]
         List<LocalDate> reservDate = new ArrayList<>();
         reservDate.add(checkIn);
@@ -124,6 +124,7 @@ public class ReservedDateService {
     public List<RoomDto> defaultValidation(List<RoomDto> roomDtoList, String checkIn, String checkOut) {
         // 오늘 일자와 내일 일자를 불러온다
         List<LocalDate> checkDateList = toLocalDate(checkIn, checkOut);
+        int countDays = checkDateList.size()-1;
         List<Long> room_idList = new ArrayList<>();
         for(LocalDate date: checkDateList){
             // 일자를 매개값으로 받아 해당 일자에 예약이 되어있는 방의 id를 모두 받아온다.
@@ -149,14 +150,23 @@ public class ReservedDateService {
                 if (roomDto.getId().equals(room.getId())){
                     roomDtoList.remove(roomDto);
                 }
+
             }
 
         }
         // 전체 조회된 방List중 오늘 내일 예약이 되어있는방 제외
         // 현재 예약 가능한 방들을 보여준다.
-        return roomDtoList;
+        return priceByDate(roomDtoList, countDays);
     }
 
+    public List<RoomDto> priceByDate(List<RoomDto> roomDtoList, int dateCount){
+        for(RoomDto roomDto : roomDtoList) {
+            // 예약 일자에 따라 표시하는 가격 변경
+            int roomPrice = Integer.parseInt(roomDto.getPrice());
+            roomDto.setPrice(String.valueOf(roomPrice * dateCount));
+        }
+        return roomDtoList;
+    }
     public void cancleDate(Reserv reserv) {
         String checkInDate = reserv.getCheckIn();
         String checkOutDate = reserv.getCheckOut();
