@@ -10,9 +10,34 @@
 </th:block>
 
 <div layout:fragment="content">
-    <h2>Index Page!</h2>
-
-    <div class="container d-flex justify-content-evenly flex-wrap text-nowrap" style="border:1px solid black">
+    <!--    배너사진-->
+    <div class="container-fluid p-0">
+        <img th:src="@{/img/mainBanner.png}" alt="mainBanner" class="img-fluid" style="width: 100%;"/>
+    </div>
+    <!--    추천숙소-->
+    <div class="container">
+        <h5 class="fw-semibold mt-5">추천 숙소</h5>
+        <div class="d-flex">
+            <div class="col-md-3 mt-3 p-2" th:each="lodging : ${lodgingDtoList}"
+                 th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
+                <div class="card border-0 mt-3">
+                    <div class="locationDiv" style="cursor:pointer">
+                        <input type="hidden" th:value="${lodging.id}" class="lodging_id">
+                        <div class="ratio ratio-4x3">
+                            <img th:src="${lodging.imgUrl}" class="card-img-top rounded-4"
+                                 th:alt="${lodging.name}">
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${lodging.name}"></h4>
+                            <p class="card-text" th:text="${lodging.detail}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    공지사항,이벤트-->
+    <div class="container d-flex justify-content-evenly flex-wrap text-nowrap mt-5" style="border:1px solid black">
         <div class="mt-2 mb-2 container col-6" style="border:1px solid black">
             <div class="container">
                 <a href="#" class="d-flex justify-content-between">
@@ -22,7 +47,8 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item" style="border:1px solid black">
-                    <a href="#" class="d-flex justify-content-between" th:each="article : ${articleDtoList}" th:if="${article.categoryStatus == T(com.example.member.constant.CategoryStatus).NOTICE}">
+                    <a href="#" class="d-flex justify-content-between" th:each="article : ${articleDtoList}"
+                       th:if="${article.categoryStatus == T(com.example.member.constant.CategoryStatus).NOTICE}">
                         <span class="d-inline-block text-truncate" style="max-width: 300px;" th:text="*{article.title}">타이틀</span>
                         <span th:text="*{article.regDateStr}">날짜</span>
                     </a>
@@ -38,7 +64,8 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
-                    <a href="#" class="d-flex justify-content-between" th:each="article : ${articleDtoList}" th:if="${article.categoryStatus == T(com.example.member.constant.CategoryStatus).FREE}">
+                    <a href="#" class="d-flex justify-content-between" th:each="article : ${articleDtoList}"
+                       th:if="${article.categoryStatus == T(com.example.member.constant.CategoryStatus).FREE}">
                         <span class="d-inline-block text-truncate" style="max-width: 300px;" th:text="*{article.title}">타이틀</span>
                         <span th:text="*{article.regDateStr}">날짜</span>
                     </a>
