@@ -63,7 +63,7 @@
             </div>
 
             <script>
-                
+
                 $(".locationDiv").click(function(){
                     var sessionDate = sessionStorage.getItem("date");
                     let index = $(".locationDiv").index(this);
@@ -85,9 +85,6 @@
 
         </th:block>
     </div>
-
-
-
 
     <!--    페이지네이션과 검색어입력 관련 부분-->
     <!--    <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >-->
@@ -111,5 +108,5 @@
 
     <!--        </ul>-->
     <!--    </div>-->
-
 </div>
+</html>
