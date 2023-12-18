@@ -34,7 +34,6 @@
 </th:block>
 
 
-
 <div layout:fragment="content">
 
     <!--    <input type="hidden" name="searchQuery" th:value="${lodgingDto.searchQuery}">-->
@@ -43,20 +42,23 @@
     <!--    </div>-->
 
 
-
     <div class="container">
         <h5 class="fw-semibold mt-5">추천 숙소</h5>
         <th:block>
-            <div class="col-md-3 margin mt-3" th:each="lodging : ${lodgingDtoList}" th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
-                <div class="card border-0 mt-3">
-                    <div class="locationDiv" style="cursor:pointer">
-                        <input type="hidden" th:value="${lodging.id}" class="lodging_id">
-                        <img th:src="${lodging.imgUrl}" class="card-img-top"
-                             th:alt="${lodging.name}">
-
-                        <div class="card-body">
-                            <h4 class="card-title">[[${lodging.name}]]</h4>
-                            <p class="card-text">[[${lodging.detail}]]</p>
+            <div class="d-flex">
+                <div class="col-3 margin mt-3 p-2" th:each="lodging : ${lodgingDtoList}"
+                     th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
+                    <div class="card border-0 mt-3">
+                        <div class="locationDiv" style="cursor:pointer">
+                            <input type="hidden" th:value="${lodging.id}" class="lodging_id">
+                            <div class="ratio ratio-4x3">
+                                <img th:src="${lodging.imgUrl}" class="card-img-top rounded-4"
+                                     th:alt="${lodging.name}">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">[[${lodging.name}]]</h4>
+                                <p class="card-text">[[${lodging.detail}]]</p>
+                            </div>
                         </div>
                     </div>
                 </div>
