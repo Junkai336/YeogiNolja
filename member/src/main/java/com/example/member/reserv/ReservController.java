@@ -186,7 +186,7 @@ public class ReservController {
     @PostMapping("reservationPay")
     @ResponseBody
     public HttpStatus reservationPay(
-                                        @RequestBody ReservSaveDto reservSaveDto
+//                                        @RequestBody ReservSaveDto reservSaveDto
                                      )
                                      {
             // 예약 엔티티에서 결제할 Room의 Id와 동일한 Room Id가 있을 경우 예약일자 체크를 한다.
@@ -194,10 +194,10 @@ public class ReservController {
             // 포함되는 날짜가 있다면 중복으로 판단한다. (roomId 중복 + reserved Date 중복)
 //try {
 //
-                                         System.out.println(reservSaveDto.getRoom_id());
-                                         System.out.println(reservSaveDto.getCheckIn());
-                                         System.out.println(reservSaveDto.getCheckOut());
-//
+//                                         System.out.println(reservSaveDto.getRoom_id());
+//                                         System.out.println(reservSaveDto.getCheckIn());
+//                                         System.out.println(reservSaveDto.getCheckOut());
+////
 //        List<Reserv> reservList = reservService.findAll();
 //
 //        if(!reservList.isEmpty()) {

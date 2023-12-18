@@ -130,7 +130,7 @@
             // http 응답을 받기 위해 선언 (솔직히 잘 모르겠음)
             const requestHttp = new XMLHttpRequest();
             const url = '/reserv/reservationPay';
-            requestHttp.open("Post", url);
+            requestHttp.open("POST", url);
 
             // 결제하기 버튼을 누를 시 작동하는 함수
                 $('#cash').click(function () {
@@ -182,9 +182,9 @@
                             $.ajax({
                                 url: "/reserv/reservationPay",
                                 type: 'POST',
-                               // dataType: 'json',
-                                data: paramData,
-                                contentType: "application/json",
+                               dataType: 'json',
+                                data: data,
+                                // contentType: "application/json",
                                 beforeSend: function (xhr) {
 
                                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
