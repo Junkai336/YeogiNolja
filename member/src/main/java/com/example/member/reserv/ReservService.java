@@ -79,6 +79,11 @@ public class ReservService {
         reservDto.setMember(member); // member email
         reservDto.setCheckIn(checkDate[0]);
         reservDto.setCheckOut(checkDate[1]);
+
+        List<LocalDate> checkDateList = reservedDateService.toLocalDate(checkDate[0], checkDate[1]);
+        int countDays = checkDateList.size()-1;
+        int roomPrice = Integer.parseInt(room.getPrice());
+        reservDto.setTotalPrice(countDays*roomPrice);
         return reservDto;
     }
 

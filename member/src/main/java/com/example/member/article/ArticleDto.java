@@ -33,6 +33,9 @@ public class ArticleDto{
 
     private LocalDateTime regTime;
 
+    /*메인에 출력할 String Date*/
+    private String regDateStr;
+
     private List<CommentDto> commentDtoList = new ArrayList<>();
 
 //    // 조회수
