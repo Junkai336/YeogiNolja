@@ -32,30 +32,32 @@
 
         <div class="form-group">
             <label th:for="name">이름</label>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요" th:text="*{name}">
+            <input type="text" th:field="*{name}" class="form-control border-0 border-bottom rounded-0 mb-2" placeholder="이름을 입력해주세요" th:text="*{name}">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group">
             <label th:for="email">이메일주소</label>
-            <input type="email" th:field="*{email}" class="form-control" placeholder="이메일을 입력해주세요">
+            <input type="email" th:field="*{email}" class="form-control border-0 border-bottom rounded-0 mb-2" placeholder="이메일을 입력해주세요">
             <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group">
             <label th:for="password">비밀번호</label>
-            <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력">
+            <input type="password" th:field="*{password}" class="form-control border-0 border-bottom rounded-0 mb-2" placeholder="비밀번호 입력">
             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
         </div>
 
         <div class="form-group">
             <label th:for="phoneNumber">휴대폰 번호</label>
-            <input type="text" th:field="*{phoneN1}" class="form-control w-200">-
-            <p th:if="${#fields.hasErrors('phoneN1')}" th:errors="*{phoneN1}" class="fieldError">Incorrect data</p>
-            <input type="text" th:field="*{phoneN2}" class="form-control w-200">-
-            <p th:if="${#fields.hasErrors('phoneN2')}" th:errors="*{phoneN2}" class="fieldError">Incorrect data</p>
-            <input type="text" th:field="*{phoneN3}" class="form-control w-200">
-            <p th:if="${#fields.hasErrors('phoneN3')}" th:errors="*{phoneN3}" class="fieldError">Incorrect data</p>
+            <div class="d-flex">
+                <input type="text" th:field="*{phoneN1}" class="form-control w-200 border-0 border-bottom rounded-0 mb-2 me-1">-
+                <p th:if="${#fields.hasErrors('phoneN1')}" th:errors="*{phoneN1}" class="fieldError">Incorrect data</p>
+                <input type="text" th:field="*{phoneN2}" class="form-control w-200 border-0 border-bottom rounded-0 mb-2 ms-1 me-1">-
+                <p th:if="${#fields.hasErrors('phoneN2')}" th:errors="*{phoneN2}" class="fieldError">Incorrect data</p>
+                <input type="text" th:field="*{phoneN3}" class="form-control border-0 border-bottom rounded-0 mb-2 w-200 ms-1">
+                <p th:if="${#fields.hasErrors('phoneN3')}" th:errors="*{phoneN3}" class="fieldError">Incorrect data</p>
+            </div>
         </div>
 
         <div class="form-group row">
