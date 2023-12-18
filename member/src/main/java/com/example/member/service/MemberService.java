@@ -114,6 +114,12 @@ public class MemberService implements UserDetailsService {
         MemberDto memberDto = MemberDto.toMemberDto(member);
         return memberDto;
     }
+
+    public Member findById(Long member_id) {
+        Member member = memberRepository.findById(member_id)
+                .orElseThrow(EntityNotFoundException::new);
+        return member;
+    }
 }
 
 

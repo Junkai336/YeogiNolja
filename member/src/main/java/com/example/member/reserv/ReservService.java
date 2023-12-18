@@ -38,6 +38,7 @@ public class ReservService {
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
     private final ReservedDateService reservedDateService;
+    private final ReservedDateRepository reservedDateRepository;
 
     public void saveReserv(ReservDto reservDto, List<LocalDate> dateList)throws Exception{
         Room room = reservDto.getRoom();
@@ -135,16 +136,28 @@ public class ReservService {
         return new PageImpl<ReservDto>(reservDtoList, pageable, totalCount);
     }
 
-    public boolean validateHavingRoomId(Room room) throws Exception {
-
-        Long room_id = room.getId();
-
-        Reserv reserv = reservRepository.findByRoomId(room_id).orElse(null);
-
-        if(reserv != null) {
-            return true;
-        }
-        return false;
+    public List<Reserv> findAll() {
+        List<Reserv> reservList = reservRepository.findAll();
+        return reservList;
     }
 
+    public boolean validateCheckDate(Reserv reserv, Long roomId, String checkIn, String checkOut) throws Exception {
+
+        List<LocalDate> reservDateList = reservedDateService.toLocalDate(checkIn, checkOut);
+        List<ReservedDate> reservedDateList = reservedDateRepository.findAll();
+
+        for(ReservedDate reservedDate : reservedDateList) {
+            for(LocalDate reservDate : reservDateList) {
+                if(reservedDate.getReserved_date().equals(reservDate)) {
+                    System.out.println(reservDate);
+                    System.out.println("duplication !!!!!!!!!!!!!!!!!!!");
+                    return true;
+                }
+            }
+        }
+
+        System.out.println("no duplication");
+
+        return false;
+    }
 }
