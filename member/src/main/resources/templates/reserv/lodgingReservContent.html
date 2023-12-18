@@ -159,36 +159,37 @@
 
         <div class="container mt-5" th:object="${lodgingDto}" st>
             <div id="lodging_container" class="image_box container-fluid d-flex">
-                <div id="regImg" class="d-inline-block col-6" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"
+                <div id="regImg" class="d-inline-block" th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"
                      th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                     <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
-                        <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail"
+                        <img th:src="${lodgingImg.imgUrl}" class="img-fluid rounded"
                              th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'Y')}">
                     </a>
                 </div>
-                <ul id="subImgBox" class="col-6 d-none d-sm-none d-md-block text-wrap">
-                    <li th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"
-                        th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
-                        <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">
-                            <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail"
-                                 th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">
-                        </a>
-                    </li>
-                </ul>
+<!--                <ul id="subImgBox" class="col-6 d-none d-sm-none d-md-block text-wrap">-->
+<!--                    <li th:each="lodgingImg : ${lodgingDto.itemImgDtoList}"-->
+<!--                        th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">-->
+<!--                        <a data-bs-toggle="modal" href="#lodgingModalToggle" role="button">-->
+<!--                            <img th:src="${lodgingImg.imgUrl}" class="img-fluid img-thumbnail"-->
+<!--                                 th:alt="${lodgingImg.imgName}" th:if="${#strings.equals(lodgingImg.repimgYn, 'N')}">-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                </ul>-->
             </div>
             <div>
                 <div class="d-inline-block">
                     <div id="dateForm">
                         <label for="txtDate"><i class="bi bi-calendar2"></i></label>
-                        <input type="text" name="daterange" id="txtDate"/>
-                        <button id="txtDateBtn" type="button" class="btn btn-secondary btn-sm">일자 검색</button>
+                        <input class="border-0 border-bottom" type="text" name="daterange" id="txtDate"/>
+                        <button id="txtDateBtn" type="button" class="btn btn-secondary btn-sm ms-1">일자 검색</button>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between p-5">
                     <div>
+                        <span class="d-block mb-1" th:text="*{lodgingType}">a</span>
                         <h3 th:text="*{name}">a</h3>
-                        <span class="d-block" th:text="*{lodgingType}">a</span>
+                        <p th:text="*{detail}" class="mt-4">a</p>
                         <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
                         <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
                     </div>
@@ -943,35 +944,6 @@
                 </script>
 
                 <hr>
-           
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal">
-                    판매자 정보
-                </button>
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">판매자 정보</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="d-flex flex-column align-items-center">
-                                    <span th:text="'이름: '+${lodgingDto.member.name}"></span>
-                                    <span th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></span>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!----------------------------------------------------------------------------------------->
 
@@ -1052,6 +1024,35 @@
                 </ul>
                 <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingEntity.id}, room_id=${roomDto.id})}"-->
                 <!--            <a th:href="@{/lodging/{id}(id = ${lodgingDto.id})}" class="btn btn-primary my-2">자세히 보기</a>-->
+                <hr>
+                <!-- Button trigger modal -->
+                <a data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" style="cursor:pointer">
+                    <h5 class="d-inline-block w-100"><b>판매자 정보</b></h5>
+                </a>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">판매자 정보</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="d-flex flex-column align-items-center">
+                                    <span th:text="'이름: '+${lodgingDto.member.name}"></span>
+                                    <span th:text="'핸드폰 번호: '+${lodgingDto.member.phoneN1}+'-'+${lodgingDto.member.phoneN2}+'-'+${lodgingDto.member.phoneN3}"></span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <hr>
                 <div id="map2" class="mt-3" style="width:100%;height:500px;"></div>
             </div><!--149번째줄 일자검색 부터 하단 큰 맵 까지-->

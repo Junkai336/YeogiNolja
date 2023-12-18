@@ -63,14 +63,14 @@
         <div class="form-group row">
             <div class="col-md-6 mb-3">
                 <label for="adrBtn">주소지</label>
-                <input type="text" class="form-control" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">
+                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">
                 <p th:if="${#fields.hasErrors('postcode')}" th:errors="*{postcode}" class="fieldError">Incorrect data</p>
-                <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" id="adrBtn"><br>
-                <input type="text" class="form-control" th:field="*{address}" id="address" placeholder="주소" value=""><br>
+                <input type="button" class="btn btn-sm btn-secondary" onclick="execDaumPostcode()" value="우편번호 찾기" id="adrBtn"><br>
+                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{address}" id="address" placeholder="주소" value=""><br>
                 <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
-                <input type="text" class="form-control" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">
+                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">
                 <p th:if="${#fields.hasErrors('detailAddress')}" th:errors="*{detailAddress}" class="fieldError">Incorrect data</p>
-                <input type="text" class="form-control" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">
+                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">
 
                 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
                 <script>
@@ -128,7 +128,7 @@
         </div>
 
         <div style="text-align: center">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-success">회원가입</button>
         </div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
