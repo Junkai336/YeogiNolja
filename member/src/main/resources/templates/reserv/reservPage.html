@@ -76,7 +76,8 @@
                 </div>
             </div>
             <div class="col-10 d-flex align-items-end flex-column">
-                <p th:text="*{room.price}+'원'" class="fw-bolder mt-4">방가격</p>
+                <p th:text="'(1박 기준)'+*{room.price}+'원'" class=" mt-4">방가격</p>
+                    <p class="ms-3 fw-bolder" th:text="'결제 금액 : '+${reservDto.totalPrice}+ '원'"></p>
                 <p style="color:red" class="fw-bolder">취소 및 환불불가</p>
             </div>
 

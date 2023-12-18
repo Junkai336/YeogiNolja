@@ -38,6 +38,8 @@ public class ReservDto {
     private String checkIn;
     private String checkOut;
 
+    private int totalPrice;
+
     public static ReservDto toReservDto(Reserv reserv){
         Member member = reserv.getMember();
         ReservDto reservDto = new ReservDto();
