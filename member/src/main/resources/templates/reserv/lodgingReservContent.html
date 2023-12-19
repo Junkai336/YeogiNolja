@@ -370,9 +370,9 @@
                     <a th:href="@{/lodging/{id}/lodgingDelete(id = ${lodgingDto.id})}" class="btn btn-danger w-10 mx-2">삭제</a>
                 </div>
 
-                <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                    <button type="button" onclick="roomEditPage()" class="btn btn-success">대표이미지 변경</button>
-                </div>
+<!--                <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
+<!--                    <button type="button" onclick="roomEditPage()" class="btn btn-success">대표이미지 변경</button>-->
+<!--                </div>-->
 
                 <div class="d-flex justify-content-center" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                     <button type="button" class="btn btn-primary addBtn">객실 추가</button>
@@ -660,7 +660,7 @@
                                     <!--            <a th:href="@{/lodging/{lodging_id}/roomUpdate/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}" class="btn btn-primary" >수정</a>-->
                                     <a th:href="@{/lodging/{lodging_id}/roomDelete/{room_id}(lodging_id = ${lodgingDto.id}, room_id=${roomDto.id})}"
                                        class="btn btn-danger">삭제</a>
-                                    <button type="button" onclick="roomEditPage()" class="btn btn-success mt-1">대표이미지 변경</button>
+<!--                                    <button type="button" onclick="roomEditPage()" class="btn btn-success mt-1">대표이미지 변경</button>-->
                                 </div>
                             </div>
                         </div>
