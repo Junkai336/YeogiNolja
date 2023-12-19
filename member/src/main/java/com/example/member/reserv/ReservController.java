@@ -73,7 +73,7 @@ public class ReservController {
 
 
     // 예약 내역
-    @GetMapping({"/reservs","/reservs/{page}"})
+    @GetMapping(value = {"/reservs","/reservs/{page}"})
     public String reservHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
         Page<ReservDto> reservDtoList = reservService.getReservList(principal.getName(), pageable);
@@ -209,10 +209,10 @@ public class ReservController {
         } catch (Exception e){
             System.out.println(e.getMessage());
 //            return new ResponseEntity<ReservDto>(reservDto, HttpStatus.BAD_REQUEST);
-            return HttpStatus.OK;
+            return HttpStatus.BAD_REQUEST;
         }
 //        return new ResponseEntity<ReservDto>(reservDto, HttpStatus.OK);
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.OK;
     }
 
 }
