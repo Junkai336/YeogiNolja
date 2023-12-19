@@ -37,10 +37,8 @@ import java.util.List;
 public class ReservSellerController {
 
     private final LodgingService lodgingService;
-    private final LodgingRepository lodgingRepository;
     private final RoomService roomService;
     private final ItemImgRepository itemImgRepository;
-    private final ItemImgService itemImgService;
     private final UploadFileService uploadFileService;
     private final ReservedDateService reservedDateService;
     private final MemberService memberService;
@@ -110,12 +108,14 @@ public class ReservSellerController {
 
             }else{
                 // 일반 유저 일때 (예약이 가능한 방들을 보여줌)
-                List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
+                List<LocalDate> dateList = reservedDateService.DefaultDate();
+                List<RoomDto> roomDtoList = reservedDateService.defaultValidation(lodgingId, dateList);
+
 
                 // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
                 // 방들은 제외한 후 보여준다.
-                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
-                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+//                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(roomDtoList);
                 model.addAttribute("roomDtoList", roomDtoListContainImage);
             }
 

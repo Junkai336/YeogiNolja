@@ -66,4 +66,19 @@ public class ReservDto {
         return number;
     }
 
+    public static ReservDto toSaveReservDto(ReservSaveDto reservSaveDto,
+                                            Member member,
+                                            Room room,
+                                            Lodging lodging) {
+        ReservDto reservDto = new ReservDto();
+        reservDto.setMember(member);
+        reservDto.setRoom(room);
+        reservDto.setLodging(lodging);
+        reservDto.setCheckIn(reservSaveDto.getCheckIn());
+        reservDto.setCheckOut(reservSaveDto.getCheckOut());
+        reservDto.setReservPN(reservSaveDto.getTel());
+        reservDto.setReservName(reservSaveDto.getName());
+        return reservDto;
+//        reservDto.setLodging(reservSaveDto.getLodging_id());
+    }
 }

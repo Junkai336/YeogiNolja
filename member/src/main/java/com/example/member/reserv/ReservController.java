@@ -6,6 +6,8 @@ import com.example.member.dto.LodgingDto;
 import com.example.member.dto.MemberDto;
 import com.example.member.dto.RoomDto;
 import com.example.member.entity.Lodging;
+import com.example.member.entity.Member;
+import com.example.member.entity.Room;
 import com.example.member.reserv.reservDate.ReservedDateService;
 import com.example.member.service.LodgingService;
 import com.example.member.service.MemberService;
@@ -19,15 +21,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -63,43 +70,6 @@ public class ReservController {
 
         return "reserv/reservPage";
     }
-// 여기서부터 저장 시작****************************************************************
-//    @PostMapping("/roomReservation/saveReserv")
-//    public String saveReserv(@Valid ReservDto reservDto, BindingResult result,Model model
-//     ,Principal principal){
-//        String email = principal.getName();
-//        Long lodgingId = reservDto.getRoom().getLodging().getId();
-//        System.out.println("LodgingId : "+ lodgingId);
-//        if(result.hasErrors()){
-//           return "reserv/reservPage";
-//        }
-//        try {
-//            List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
-//            reservService.saveReserv(reservDto, reservDateList);
-//
-//
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//            LodgingDto lodgingDto = lodgingService.findLodging(lodgingId);
-//            LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
-//            uploadFileService.refreshUploadFileCheck(lodgingId);
-//            lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingService.findById(lodgingId));
-//            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-//            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
-//            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
-//            // 방들은 제외한 후 보여준다.
-//            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
-//            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
-//
-//            model.addAttribute("errorMessage", e.getMessage());
-//            model.addAttribute("lodgingDto", lodgingDtoContainImage);
-//            model.addAttribute("roomDtoList", roomDtoListContainImage);
-//            model.addAttribute("prevPage", "LodgingController");
-//            return "reserv/lodgingReservContent";
-//        }
-//
-//        return "redirect:/reserv/reservs";
-//    }
 
 
     // 예약 내역
@@ -131,10 +101,10 @@ public class ReservController {
     }
 
 
-    @GetMapping(value = {"/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}", "/reserv/lodgingReservContent/{lodging_id}"})
+    @GetMapping("/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
-                         @PathVariable("checkIn") String checkIn,
-    @PathVariable("checkOut") String checkOut, Model model,
+                           @PathVariable("checkIn") String checkIn,
+                           @PathVariable("checkOut") String checkOut, Model model,
                            Principal principal){
         System.out.println("예약 일자 등록 시 숙소 id 값 : "+lodging_id);
         String email = principal.getName();
@@ -153,107 +123,92 @@ public class ReservController {
                 model.addAttribute("roomDtoList", roomDtoListContainImage);
             }else{
                 // 일반 유저 일때 (예약이 가능한 방들을 보여줌)
-                List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
-
+                List<LocalDate> dateList = reservedDateService.toLocalDate(checkIn, checkOut);
+                List<RoomDto> resultDtoList = reservedDateService.defaultValidation(lodging_id, dateList);
+                System.out.println("resultDtoList :"+resultDtoList);
                 // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
                 // 방들은 제외한 후 보여준다.
-                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
-                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+//                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultDtoList);
                 model.addAttribute("roomDtoList", roomDtoListContainImage);
             }
-
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-
-
-
-
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
-
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
         }
 
-        System.out.println("checkIn = "+checkIn+ "//"+"checkOut = "+ checkOut);
 
-        return "reserv/lodgingReservContent";
+        return "/reserv/lodgingReservContent";
     }
 
     // 결제 관련 수정중입니다.
     // 결제성공시 해당 메소드 진입 -> 결제 검증, httpStatus ok 리턴 -> window.location.href로 saveReserv를 리턴할 예정
     @PostMapping("reservationPay")
     @ResponseBody
-    public HttpStatus reservationPay(Integer amount, Long roomId, String imp_uid, String merchant_uid) {
-//        try {
-
-        // price가 string으로 저장되기 때문에 int로 변환 과정을 거침
-//        Room room = roomService.findById(roomId);
-//        int roomPrice = Integer.parseInt(room.getPrice());
+    public HttpStatus reservationPay(
+//                                        @RequestBody ReservSaveDto reservSaveDto
+                                     )
+                                     {
+            // 예약 엔티티에서 결제할 Room의 Id와 동일한 Room Id가 있을 경우 예약일자 체크를 한다.
+            // 체크인 날짜(checkIn) ~ 체크아웃 날짜(checkOut) 사이에 reserved Date가 있는지 체크를 하고,
+            // 포함되는 날짜가 있다면 중복으로 판단한다. (roomId 중복 + reserved Date 중복)
+//try {
+//    System.out.println("hellos");
+//                                         System.out.println(reservSaveDto.getRoom_id());
+//                                         System.out.println(reservSaveDto.getCheckIn());
+//                                         System.out.println(reservSaveDto.getCheckOut());
+////
+//        List<Reserv> reservList = reservService.findAll();
 //
-//        // 결제된 가격이 실제 객실 가격과 다르다면 badRequest를 보냄
-//        if(roomPrice != amount) {
-//            System.out.println("검증 실패 : 결제가격이 상품가격과 일치하지 않음");
-//            return new ResponseEntity<String>("결제 가격이 실제 상품 가격과 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+//        if(!reservList.isEmpty()) {
+//            System.out.println("ok !reservList.isEmpty");
+//        for(Reserv reserv : reservList) {
+//            if(reserv.getRoom().getId().equals(reservSaveDto.getRoom_id())) {
+//                System.out.println("enter boolean duplication");
+//                boolean duplication = reservService.validateCheckDate(reserv, reservSaveDto.getRoom_id(), reservSaveDto.getCheckIn(), reservSaveDto.getCheckOut());
+//                System.out.println("ok boolean duplication");
+//                if(duplication) {
+//                    System.out.println("error : 검증 실패: 객실 및 예약일자가 겹치므로 중복 예약");
+//                    return HttpStatus.BAD_REQUEST;
+//                }
+//            }
 //        }
-
-        // 해당 roomId를 가진 reserv Entity가 있을 경우 중복으로 판단 후 badRequest를 보냄
-//        boolean duplication = reservService.validateHavingRoomId(room);
-//        if(duplication) {
-//            System.out.println("검증 실패: 중복 예약");
-//            return new ResponseEntity<String>("이미 예약된 객실입니다.", HttpStatus.BAD_REQUEST);
 //        }
+//} catch (Exception e) {
+//    System.out.println("error: try catch");
+//    return HttpStatus.BAD_REQUEST;
+//}
 
-        // 성공적인 경우
-        System.out.println("검증 성공");
+        System.out.println("success : 검증 성공");
         return HttpStatus.OK;
-
-//        } catch (Exception e) {
-//            // try catch에 걸린 경우
-//            System.out.println("검증 실패: try catch");
-////            return new ResponseEntity<String>("결제에 문제가 발생했습니다.", HttpStatus.BAD_REQUEST);
-//            return new ResponseEntity<String>("객실 예약에 성공했습니다.", HttpStatus.OK);
-//        }
-
-        // System.out.println("imp_uid : " + imp_uid);
-        // System.out.println("merchant_uid : " + merchant_uid);
-
     }
 
     @PostMapping("/roomReservation/saveReserv")
     @ResponseBody
-    public String saveReserv2(@RequestBody ReservDto reservDto, BindingResult result,Model model
+    public HttpStatus saveReserv(@RequestBody ReservSaveDto reservSaveDto,Model model
             ,Principal principal){
-        String email = principal.getName();
-        Long lodgingId = reservDto.getRoom().getLodging().getId();
-        System.out.println("LodgingId : "+ lodgingId);
-        if(result.hasErrors()){
-            return "reserv/reservPage";
-        }
+
+        Member member =  memberService.findById(reservSaveDto.getMember_id());
+        Room room = roomService.findById(reservSaveDto.getRoom_id());
+        Lodging lodging = lodgingService.findById(reservSaveDto.getLodging_id());
+
+        ReservDto reservDto = ReservDto.toSaveReservDto(reservSaveDto, member, room, lodging);
         try {
+        String email = principal.getName();
+        Long lodgingId = lodging.getId();
+        System.out.println("LodgingId : "+ lodgingId);
             List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
-            reservService.saveReserv(reservDto, reservDateList);
-
-
+            reservService.saveReserve(reservDto, reservDateList);
+            System.out.println("예약저장");
         } catch (Exception e){
             System.out.println(e.getMessage());
-            LodgingDto lodgingDto = lodgingService.findLodging(lodgingId);
-            LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
-            uploadFileService.refreshUploadFileCheck(lodgingId);
-            lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingService.findById(lodgingId));
-            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
-            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
-            // 방들은 제외한 후 보여준다.
-            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
-            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
-
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("lodgingDto", lodgingDtoContainImage);
-            model.addAttribute("roomDtoList", roomDtoListContainImage);
-            model.addAttribute("prevPage", "LodgingController");
-            return "reserv/lodgingReservContent";
+//            return new ResponseEntity<ReservDto>(reservDto, HttpStatus.BAD_REQUEST);
+            return HttpStatus.OK;
         }
-
-        return "redirect:/reserv/reservs";
+//        return new ResponseEntity<ReservDto>(reservDto, HttpStatus.OK);
+        return HttpStatus.BAD_REQUEST;
     }
+
 }

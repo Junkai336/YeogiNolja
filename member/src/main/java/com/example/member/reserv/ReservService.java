@@ -38,8 +38,9 @@ public class ReservService {
     private final RoomRepository roomRepository;
     private final LodgingRepository lodgingRepository;
     private final ReservedDateService reservedDateService;
+    private final ReservedDateRepository reservedDateRepository;
 
-    public void saveReserv(ReservDto reservDto, List<LocalDate> dateList)throws Exception{
+    public void saveReserve(ReservDto reservDto, List<LocalDate> dateList){
         Room room = reservDto.getRoom();
         Lodging lodging = room.getLodging();
         Reserv reserv = Reserv.createReserv(reservDto, lodging);
@@ -106,7 +107,7 @@ public class ReservService {
     public void cancelReserv(Long reservId) {
         Reserv reserv = reservRepository.findById(reservId)
                 .orElseThrow(EntityNotFoundException::new);
-        reservedDateService.cancleDate(reserv);
+        reservedDateService.cancelDate(reserv);
         reserv.cancelReserv();
     }
 
@@ -135,16 +136,24 @@ public class ReservService {
         return new PageImpl<ReservDto>(reservDtoList, pageable, totalCount);
     }
 
-    public boolean validateHavingRoomId(Room room) throws Exception {
 
-        Long room_id = room.getId();
+    public boolean validateCheckDate(Reserv reserv, Long roomId, String checkIn, String checkOut) throws Exception {
 
-        Reserv reserv = reservRepository.findByRoomId(room_id).orElse(null);
+        List<LocalDate> reservDateList = reservedDateService.toLocalDate(checkIn, checkOut);
+        List<ReservedDate> reservedDateList = reservedDateRepository.findAll();
 
-        if(reserv != null) {
-            return true;
+        for(ReservedDate reservedDate : reservedDateList) {
+            for(LocalDate reservDate : reservDateList) {
+                if(reservedDate.getReserve_date().equals(reservDate)) {
+                    System.out.println(reservDate);
+                    System.out.println("duplication !!!!!!!!!!!!!!!!!!!");
+                    return true;
+                }
+            }
         }
+
+        System.out.println("no duplication");
+
         return false;
     }
-
 }
