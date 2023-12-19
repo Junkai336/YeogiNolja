@@ -27,6 +27,8 @@ public class ArticleDto{
 
     private CategoryStatus categoryStatus;
 
+    private String articleStatus;
+
     private Member member;
 
     private String createdBy;
@@ -44,6 +46,16 @@ public class ArticleDto{
 //    // 추천수
 //    private Long recommendations;
 
+    public static ArticleDto setStatusString(ArticleDto articleDto){
+        if (articleDto.getCategoryStatus() == CategoryStatus.NOTICE) {
+            articleDto.setArticleStatus("공지사항");
+        } else if (articleDto.getCategoryStatus() == CategoryStatus.FREE) {
+            articleDto.setArticleStatus("자유게시판");
+        } else if (articleDto.getCategoryStatus() == CategoryStatus.EVENT) {
+            articleDto.setArticleStatus("이벤트");
+        }
+        return null;
+    }
     public static ArticleDto toArticleDto(Article article){
         ArticleDto articleDto = new ArticleDto();
         articleDto.setId(article.getId());

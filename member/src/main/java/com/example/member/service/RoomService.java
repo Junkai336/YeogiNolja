@@ -198,4 +198,13 @@ public class RoomService {
         List<Room> roomList = roomRepository.findAll();
         return roomList;
     }
+
+    public LodgingDto findRoomPriceMin(LodgingDto lodgingDto ,Long lodgingId) {
+
+            String roomPriceMin = roomRepository.findRoomPriceMin(lodgingId);
+            lodgingDto.setMinPrice(roomPriceMin);
+        System.out.println("roomPriceMin :" + roomPriceMin);
+            return lodgingDto;
+        }
+
 }
