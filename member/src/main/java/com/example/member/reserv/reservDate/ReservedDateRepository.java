@@ -11,12 +11,12 @@ import java.util.List;
 @Repository
 public interface ReservedDateRepository extends JpaRepository<ReservedDate, Long> {
 
-    @Query(value = "select * from rev_date_table rd where rd.room_id= :room_id", nativeQuery = true)
+    @Query(value = "select * from reserve_date rd where rd.room_id= :room_id", nativeQuery = true)
      List<ReservedDate> findByRoomId(@Param("room_id") Long room_id);
 
-    @Query(value = "select rd.room_id from rev_date_table rd where rd.reserved_date= :check_date", nativeQuery = true)
-    List<Long> findAllByDate(@Param("check_date") LocalDate date);
+    @Query(value = "SELECT room_id FROM just_board.reserve_date where reserve_date=:date", nativeQuery = true)
+    List<Long> findAllByDate(@Param("date") LocalDate date);
 
-    @Query(value = "select * from rev_date_table rd where rd.reserved_date = :input_date && rd.room_id = :room_id", nativeQuery = true)
-    ReservedDate findByDateAndRoom(@Param("input_date") LocalDate date,@Param("room_id") Long roomId);
+    @Query(value = "SELECT id FROM just_board.reserve_date where reserve_date=:date and room_id=:room_id", nativeQuery = true)
+    List<Long> findByDateAndRoom(@Param("date") LocalDate date,@Param("room_id") Long roomId);
 }

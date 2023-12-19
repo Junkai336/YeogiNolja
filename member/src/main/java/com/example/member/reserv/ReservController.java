@@ -30,7 +30,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -101,10 +101,10 @@ public class ReservController {
     }
 
 
-    @GetMapping(value = {"/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}", "/reserv/lodgingReservContent/{lodging_id}"})
+    @GetMapping("/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
-                         @PathVariable("checkIn") String checkIn,
-    @PathVariable("checkOut") String checkOut, Model model,
+                           @PathVariable("checkIn") String checkIn,
+                           @PathVariable("checkOut") String checkOut, Model model,
                            Principal principal){
         System.out.println("예약 일자 등록 시 숙소 id 값 : "+lodging_id);
         String email = principal.getName();
@@ -123,30 +123,24 @@ public class ReservController {
                 model.addAttribute("roomDtoList", roomDtoListContainImage);
             }else{
                 // 일반 유저 일때 (예약이 가능한 방들을 보여줌)
-                List<RoomDto> roomDtoList = roomService.roomDtoList(lodging_id);
-
+                List<LocalDate> dateList = reservedDateService.toLocalDate(checkIn, checkOut);
+                List<RoomDto> resultDtoList = reservedDateService.defaultValidation(lodging_id, dateList);
+                System.out.println("resultDtoList :"+resultDtoList);
                 // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
                 // 방들은 제외한 후 보여준다.
-                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
-                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
+//                List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList, checkIn, checkOut);
+                List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultDtoList);
                 model.addAttribute("roomDtoList", roomDtoListContainImage);
             }
-
             // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-
-
-
-
             model.addAttribute("lodgingDto", lodgingDtoContainImage);
-
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
         }
 
-        System.out.println("checkIn = "+checkIn+ "//"+"checkOut = "+ checkOut);
 
-        return "reserv/lodgingReservContent";
+        return "/reserv/lodgingReservContent";
     }
 
     // 결제 관련 수정중입니다.
@@ -210,7 +204,8 @@ public class ReservController {
         Long lodgingId = lodging.getId();
         System.out.println("LodgingId : "+ lodgingId);
             List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
-            reservService.saveReserv(reservDto, reservDateList);
+            reservService.saveReserve(reservDto, reservDateList);
+            System.out.println("예약저장");
         } catch (Exception e){
             System.out.println(e.getMessage());
 //            return new ResponseEntity<ReservDto>(reservDto, HttpStatus.BAD_REQUEST);

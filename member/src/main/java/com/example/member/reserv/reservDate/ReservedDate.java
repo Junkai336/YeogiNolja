@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Setter
 @Getter
-@Table(name = "rev_date_table")
+@Table(name = "reserve_date")
 public class ReservedDate {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,5 +23,5 @@ public class ReservedDate {
     private Room room;
 
     @Column
-    private LocalDate reserved_date;
+    private LocalDate reserve_date;
 }
