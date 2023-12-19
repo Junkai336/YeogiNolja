@@ -193,4 +193,9 @@ public class RoomService {
     public void saveRoomJS(Room room) {
         roomRepository.save(room);
     }
+
+    public List<Room> findAll() {
+        List<Room> roomList = roomRepository.findAll();
+        return roomList;
+    }
 }
