@@ -4,6 +4,7 @@ import com.example.member.entity.Member;
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.MemberRepository;
 import com.example.member.repository.UploadFileRepository;
+import com.example.member.service.MainService;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class ArticleService {
     private final MemberRepository memberRepository;
     private final UploadFileRepository uploadFileRepository;
     private final UploadFileService uploadFileService;
+    private final MainService mainService;
 
 //    public Board create(BoardDto boardDto) {
 //        Board board = boardDto.toEntity();
@@ -120,6 +122,7 @@ public class ArticleService {
 
         for(Article article : articleList) {
             ArticleDto articleDto = ArticleDto.toArticleDto(article);
+            articleDto.setRegDateStr(mainService.localDateToString(articleDto));
             articleDtoList.add(articleDto);
         }
 

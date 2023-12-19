@@ -28,7 +28,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "select * from article where category_status='NOTICE' ORDER BY reg_time desc limit 5",nativeQuery = true)
     List<Article> findArticlesNotice();
 
-    @Query(value = "select * from article where category_status='FREE' ORDER BY reg_time desc limit 5",nativeQuery = true)
-    List<Article> findArticlesFree();
+    @Query(value = "select * from article where category_status='EVENT' ORDER BY reg_time desc limit 5",nativeQuery = true)
+    List<Article> findArticlesEvent();
 }
 
