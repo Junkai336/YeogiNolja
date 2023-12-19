@@ -178,13 +178,17 @@
                             };
 
                              var paramData = JSON.stringify(data);
+                            var roomId = $("#room").val();
+                             var checkIn = $("#checkIn").val();
+                             var checkOut=  $("#checkOut").val();
+                             var url = `/reserv/reservationPay/${roomId}/${checkIn}/${checkOut}`;
 
                             $.ajax({
-                                url: "/reserv/reservationPay",
+                                url: url,
                                 type: 'POST',
                                dataType: 'json',
-                                data: data,
-                                // contentType: "application/json",
+                                data: paramData,
+                                contentType: "application/json",
                                 beforeSend: function (xhr) {
 
                                     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
