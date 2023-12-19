@@ -51,7 +51,7 @@
                 <td th:text="${articleDto.id}"></td>
                 <!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
                 <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
-                <td th:text="${articleDto.categoryStatus == T(com.example.member.constant.CategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+                <td th:text="${articleDto.categoryStatus}"></td>
                 <td>
                     <a th:href="@{/article/{article_id}(article_id = ${articleDto.id})}">
                         <span th:text="${articleDto.title}" class="d-inline-block text-truncate"

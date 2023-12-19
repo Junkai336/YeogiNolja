@@ -33,6 +33,7 @@ public class LodgingService {
     private final UploadFileService uploadFileService;
     private final FileService fileService;
     private final UploadFileRepository uploadFileRepository;
+    private final RoomService roomService;
 
 
 
@@ -69,7 +70,8 @@ public class LodgingService {
 
         for (Lodging lodging : lodgingList) {
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodging);
-            lodgingDtoList.add(lodgingDto);
+            LodgingDto resultDto =roomService.findRoomPriceMin(lodgingDto ,lodging.getId());
+            lodgingDtoList.add(resultDto);
         }
 
         return lodgingDtoList;
