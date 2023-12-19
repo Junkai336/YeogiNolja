@@ -117,11 +117,6 @@
 
             // input 값 확인
              console.log("room_id: " + room);
-                // console.log(roomName);
-                // console.log(roomPrice);
-                // console.log(memberName);
-                // console.log(memberEmail);
-                // console.log(memberPhoneNumber);
 
             // 가맹점 식별 코드 초기화
             var IMP = window.IMP;
@@ -169,15 +164,9 @@ $('#cash').click(function () {
       // 서버 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
 
       var data = {
-        //        amount: roomPrice,
         room_id: room,
         checkIn: $("#checkIn").val(),
         checkOut: $("#checkOut").val(),
-        // imp_uid : 포트원 결제 고유번호
-        //  imp_uid : rsp.imp_uid
-        //가맹점 주문번호
-        //  merchant_uid: rsp.merchant_uid
-        //기타 필요한 데이터가 있으면 추가 전달
       };
 
       var paramData = JSON.stringify(data);
@@ -225,55 +214,9 @@ $('#cash').click(function () {
 
       }
     })
-      //.done(function (Http) {
-
-      // 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
-      // 결제가 실제로 완료되었을 때 오는 곳
-      //    console.log("rsp.imp_uid" + rsp.imp_uid);
-      //    console.log("http 응답 상태: " + requestHttp.responseText);
-
-
-      // (잘 모르겠음)
-      // requestHttp.onreadystatechange=(e)=>{
-      //  console.log("http 상태가 바뀌었을 때 동작: " + requestHttp.responseText);
     }
-    // console.log("밖에서도 나옴? : " + requestHttp.responseText);
-    // 200 응답을 받을 시
-    // if (code == 200 || requestHttp.responseText == 'OK') {
-    //        var msg = '결제가 완료되었습니다.';
-
-    //        msg += '\n포트원 결제 고유 ID : ' + rsp.imp_uid;
-    //        msg += '\n상점 거래 ID : ' + rsp.merchant_uid;
-    //        msg += '\n결제 금액 : ' + rsp.paid_amount;
-    //        msg += '\n카드 승인번호<-? : ' + rsp.apply_num;
-
-    //        alert(msg);
-
-    //        saveReserv();
-
-    // 에러 응답을 받을 시 (결제는 완료됨)
-    //    } else {
-    //    var msg = '결제에 실패하였습니다.';
-    //    msg += '\n결제 금액 : ' + rsp.paid_amount;
-    //  msg += '\n결제 처리가 이미 완료된 경우 판매자와 문의하십시오.'
-    //    // 예약이 이미 잡힌 경우
-
-    //   alert(msg);
-
-    // }
   });
-
-  // 결제 자체에서 에러가 나서 결제가 실패하는 경우
-  //   } else {
-  //      var msg = '결제에 실패하였습니다.';
-  //      msg += '에러내용 : ' + rsp.error_msg;
-
-  //    }
-  // 결제 성공 여부와 상관없이 오는 곳
-  // alert("msg: " + msg);
-// });
   });
-//
 
             function saveReserv() {
   var token = $("meta[name='_csrf']").attr("content");
