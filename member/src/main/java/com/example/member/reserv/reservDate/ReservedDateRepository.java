@@ -17,6 +17,6 @@ public interface ReservedDateRepository extends JpaRepository<ReservedDate, Long
     @Query(value = "SELECT room_id FROM just_board.reserve_date where reserve_date=:date", nativeQuery = true)
     List<Long> findAllByDate(@Param("date") LocalDate date);
 
-    @Query(value = "SELECT room_id FROM just_board.reserve_date where reserve_date=:date and room_id=:room_id", nativeQuery = true)
+    @Query(value = "SELECT id FROM just_board.reserve_date where reserve_date=:date and room_id=:room_id", nativeQuery = true)
     List<Long> findByDateAndRoom(@Param("date") LocalDate date,@Param("room_id") Long roomId);
 }
