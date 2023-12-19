@@ -30,7 +30,7 @@ public class SecurityConfig {
         // mvcMatchers에 permitAll로 등록되지 않은 경우 loginPage(member/login) 으로 이동한다.
         http.authorizeRequests()
                 .mvcMatchers("/members/**", "/", "/board/**").permitAll()
-                .mvcMatchers("/css/**", "js/**", "img/**").permitAll()
+                .mvcMatchers("/css/**", "js/**", "img/**", "images/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
