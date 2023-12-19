@@ -35,6 +35,9 @@ public class Member extends BaseEntity{
     @Column
     private String name;
 
+    @Column
+    private String nickName;
+
     // 특정 열에 중복값이 입력되지 않는다?
     @Column
     private String email;
@@ -65,6 +68,21 @@ public class Member extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    private String providerId;  // oauth2를 이용할 경우 아이디값
+
+
+
+    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
+    public Member(String name, String password, String email, UserRole role, String provider, String providerId) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.userRole = role;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
+
 
     public static Member toMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member = new Member();
@@ -82,6 +100,7 @@ public class Member extends BaseEntity{
         member.setUserRole(UserRole.USER);
         return member;
     }
+
 
 
 }
