@@ -70,43 +70,6 @@ public class ReservController {
 
         return "reserv/reservPage";
     }
-// 여기서부터 저장 시작****************************************************************
-//    @PostMapping("/roomReservation/saveReserv")
-//    public String saveReserv(@Valid ReservDto reservDto, BindingResult result,Model model
-//     ,Principal principal){
-//        String email = principal.getName();
-//        Long lodgingId = reservDto.getRoom().getLodging().getId();
-//        System.out.println("LodgingId : "+ lodgingId);
-//        if(result.hasErrors()){
-//           return "reserv/reservPage";
-//        }
-//        try {
-//            List<LocalDate> reservDateList = reservedDateService.toLocalDate(reservDto.getCheckIn(), reservDto.getCheckOut());
-//            reservService.saveReserv(reservDto, reservDateList);
-//
-//
-//        } catch (Exception e){
-//            System.out.println(e.getMessage());
-//            LodgingDto lodgingDto = lodgingService.findLodging(lodgingId);
-//            LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
-//            uploadFileService.refreshUploadFileCheck(lodgingId);
-//            lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingService.findById(lodgingId));
-//            // 숙소의 id값을 가지고 있는 방을 List로 호출한다.
-//            List<RoomDto> roomDtoList = roomService.roomDtoList(lodgingId);
-//            // 호출된 List에서 오늘, 내일 예약이 잡혀있는(예약이 불가한)
-//            // 방들은 제외한 후 보여준다.
-//            List<RoomDto> resultRoomDtoList =reservedDateService.defaultValidation(roomDtoList);
-//            List<RoomDto> roomDtoListContainImage = roomService.imageLoad(resultRoomDtoList);
-//
-//            model.addAttribute("errorMessage", e.getMessage());
-//            model.addAttribute("lodgingDto", lodgingDtoContainImage);
-//            model.addAttribute("roomDtoList", roomDtoListContainImage);
-//            model.addAttribute("prevPage", "LodgingController");
-//            return "reserv/lodgingReservContent";
-//        }
-//
-//        return "redirect:/reserv/reservs";
-//    }
 
 
     // 예약 내역
