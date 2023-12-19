@@ -40,7 +40,7 @@ public class ReservService {
     private final ReservedDateService reservedDateService;
     private final ReservedDateRepository reservedDateRepository;
 
-    public void saveReserv(ReservDto reservDto, List<LocalDate> dateList)throws Exception{
+    public void saveReserve(ReservDto reservDto, List<LocalDate> dateList){
         Room room = reservDto.getRoom();
         Lodging lodging = room.getLodging();
         Reserv reserv = Reserv.createReserv(reservDto, lodging);
@@ -107,7 +107,7 @@ public class ReservService {
     public void cancelReserv(Long reservId) {
         Reserv reserv = reservRepository.findById(reservId)
                 .orElseThrow(EntityNotFoundException::new);
-        reservedDateService.cancleDate(reserv);
+        reservedDateService.cancelDate(reserv);
         reserv.cancelReserv();
     }
 
@@ -136,10 +136,6 @@ public class ReservService {
         return new PageImpl<ReservDto>(reservDtoList, pageable, totalCount);
     }
 
-    public List<Reserv> findAll() {
-        List<Reserv> reservList = reservRepository.findAll();
-        return reservList;
-    }
 
     public boolean validateCheckDate(Reserv reserv, Long roomId, String checkIn, String checkOut) throws Exception {
 
@@ -148,7 +144,7 @@ public class ReservService {
 
         for(ReservedDate reservedDate : reservedDateList) {
             for(LocalDate reservDate : reservDateList) {
-                if(reservedDate.getReserved_date().equals(reservDate)) {
+                if(reservedDate.getReserve_date().equals(reservDate)) {
                     System.out.println(reservDate);
                     System.out.println("duplication !!!!!!!!!!!!!!!!!!!");
                     return true;
