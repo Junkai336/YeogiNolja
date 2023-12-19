@@ -22,7 +22,7 @@ public class ReservedDateDto {
         ReservedDateDto reservedDateDto = new ReservedDateDto();
         reservedDateDto.setId(reservedDate.getId());
         reservedDateDto.setRoom(reservedDate.getRoom());
-        reservedDateDto.setLocalDate(reservedDate.getReserved_date());
+        reservedDateDto.setLocalDate(reservedDate.getReserve_date());
         return reservedDateDto;
     }
 }

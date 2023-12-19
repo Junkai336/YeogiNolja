@@ -580,9 +580,6 @@
                          startDate: moment(),
                          endDate: moment().add(1, 'day'),
                          minDate: moment(),
-                         showDropdowns: true,    // 년 월 수동 설정 여부
-                         autoApply: true,    // 확인/취소 버튼 사용 여부
-
                         });
 
                          $("#txtDate").on('show.daterangepicker', function(ev, pricker){
@@ -591,27 +588,18 @@
                              $(".cancelBtn").css("float", "right");
                          });
 
-
-                         var dateBtn = document.querySelector("#txtDateBtn");
-                         var reservationDate = document.querySelector("#txtDate");
-
-                         dateBtn.addEventListener("click", (e)=>{
+                         $("#txtDate").change(function(e){
                          e.preventDefault();
-                         var reserveDate =  reservationDate.value;
+                         var reserveDate =  $("#txtDate").val();
                          var arr = reserveDate.split('~');
                          var startDate = arr[0];
                          var endDate = arr[1];
                          console.log(startDate+"////"+ endDate);
 
-                         const lodgingId = document.querySelector("#lodgingId").value;
-                         console.log(lodgingId);
-
-                         var check_date = reserveDate;
-                         sessionStorage.setItem("date", check_date);
+                         sessionStorage.setItem("date", reserveDate);
                          location.href = `/reserv/${lodgingId}/checkIn=${startDate}/checkOut=${endDate}`;
-
-
                          });
+
                         var reservationDate = document.querySelector("#txtDate");
                         var sessionDate = sessionStorage.getItem("date");
                         if(sessionDate != null){
