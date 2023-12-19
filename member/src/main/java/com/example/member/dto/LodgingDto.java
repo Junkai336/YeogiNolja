@@ -89,7 +89,4 @@ public class LodgingDto {
 
         return lodgingDto;
     }
-
-
-
 }
