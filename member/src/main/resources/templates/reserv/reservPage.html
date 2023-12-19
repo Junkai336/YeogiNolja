@@ -117,11 +117,6 @@
 
             // input 값 확인
              console.log("room_id: " + room);
-                // console.log(roomName);
-                // console.log(roomPrice);
-                // console.log(memberName);
-                // console.log(memberEmail);
-                // console.log(memberPhoneNumber);
 
             // 가맹점 식별 코드 초기화
             var IMP = window.IMP;
@@ -129,122 +124,99 @@
 
             // http 응답을 받기 위해 선언 (솔직히 잘 모르겠음)
             const requestHttp = new XMLHttpRequest();
-            const url = '/reserv/reservationPay';
+             var roomId = $("#room").val();
+             var checkIn = $("#checkIn").val();
+             var checkOut=  $("#checkOut").val();
+             var url = `/reserv/reservationPay/${roomId}/${checkIn}/${checkOut}`;
             requestHttp.open("POST", url);
 
             // 결제하기 버튼을 누를 시 작동하는 함수
-                $('#cash').click(function () {
+$('#cash').click(function () {
 
-                // 가맹점 식별 코드 (포트원 결제연동 -> 내 식별 코드)
+  // 가맹점 식별 코드 (포트원 결제연동 -> 내 식별 코드)
 
-                    IMP.request_pay({
-                    // 등록된 PG사가 여러개인 경우 inicis로 지정
-                    // PG사: 온라인 쇼핑몰 - 신용카드사 와의 결제를 대행해주는 업체
-                        pg: 'html5_inicis',
-                    // card(신용카드), trans(실시간계좌이체), phone(휴대폰소액결제) 등등
-                        pay_method: 'card',
-                    // 상점에서 관리하는 주문 번호
-                        merchant_uid: memberName + '_' + roomName + '_'+ new Date().getTime(),
+  IMP.request_pay({
+    // 등록된 PG사가 여러개인 경우 inicis로 지정
+    // PG사: 온라인 쇼핑몰 - 신용카드사 와의 결제를 대행해주는 업체
+    pg: 'html5_inicis',
+    // card(신용카드), trans(실시간계좌이체), phone(휴대폰소액결제) 등등
+    pay_method: 'card',
+    // 상점에서 관리하는 주문 번호
+    merchant_uid: memberName + '_' + roomName + '_' + new Date().getTime(),
 
-                    // 이니시스 결제창에서 등장하는 상품명
-                        name: roomName,
-                    // 실제 금액
-                        amount: roomPrice,
+    // 이니시스 결제창에서 등장하는 상품명
+    name: roomName,
+    // 실제 금액
+    amount: roomPrice,
 
-                    // 구매자 항목
-                    // 구매자 이메일 (필수입력)
-                        buyer_email: memberEmail,
-                    // 구매자 이름
-                        buyer_name: memberName,
-                    // 구매자 핸드폰 번호 (필수입력) <미설정시 이니시스 결제창에서 오류 발생>
-                        buyer_tel: memberPhoneNumber
+    // 구매자 항목
+    // 구매자 이메일 (필수입력)
+    buyer_email: memberEmail,
+    // 구매자 이름
+    buyer_name: memberName,
+    // 구매자 핸드폰 번호 (필수입력) <미설정시 이니시스 결제창에서 오류 발생>
+    buyer_tel: memberPhoneNumber
 
-                    }, function (rsp) {
-                        console.log(rsp);
+  }, function (rsp) {
+    console.log(rsp);
 
-                        if (rsp.success) {
-                            // 서버 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
+    if (rsp.success) {
+      // 서버 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
 
-                            var data = {
-                            //        amount: roomPrice,
-                                    room_id: room,
-                                    checkIn: $("#checkIn").val(),
-                                    checkOut: $("#checkOut").val(),
-                                        // imp_uid : 포트원 결제 고유번호
-                                            //  imp_uid : rsp.imp_uid
-                                        //가맹점 주문번호
-                                            //  merchant_uid: rsp.merchant_uid
-                                    //기타 필요한 데이터가 있으면 추가 전달
-                            };
+      var data = {
+        room_id: room,
+        checkIn: $("#checkIn").val(),
+        checkOut: $("#checkOut").val(),
+      };
 
-                             var paramData = JSON.stringify(data);
-                            var roomId = $("#room").val();
-                             var checkIn = $("#checkIn").val();
-                             var checkOut=  $("#checkOut").val();
-                             var url = `/reserv/reservationPay/${roomId}/${checkIn}/${checkOut}`;
+      var paramData = JSON.stringify(data);
+      var roomId = $("#room").val();
+      var checkIn = $("#checkIn").val();
+      var checkOut = $("#checkOut").val();
+      var url = `/reserv/reservationPay/${roomId}/${checkIn}/${checkOut}`;
 
-                            $.ajax({
-                                url: url,
-                                type: 'POST',
-                               dataType: 'json',
-                                data: paramData,
-                                contentType: "application/json",
-                                beforeSend: function (xhr) {
+      $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        data: paramData,
+        contentType: "application/json",
+        beforeSend: function (xhr) {
 
-                                    /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                                    xhr.setRequestHeader(header, token);
+          /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+          xhr.setRequestHeader(header, token);
 
-                                    requestHttp.setRequestHeader(header, token);
-                                    requestHttp.send(xhr);
-                                },
-                            }).done(function (Http) {
+          requestHttp.setRequestHeader(header, token);
+          requestHttp.send(xhr);
+        }
+      , statusCode: {
+        200: function() {
+          var msg = '결제가 완료되었습니다.';
+          alert(msg);
 
-                            // 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
-                            // 결제가 실제로 완료되었을 때 오는 곳
-                                console.log("rsp.imp_uid" + rsp.imp_uid);
-                                console.log("http 응답 상태: " + requestHttp.responseText);
+          saveReserv();
+        },
+        400: function() {
+          alert('400 status code! server error');
+          var msg = '결제에 실패하였습니다.';
+          msg += '\n결제 금액 : ' + rsp.paid_amount;
+          msg += '\n결제 처리가 이미 완료된 경우 판매자와 문의하십시오.'
+          // 예약이 이미 잡힌 경우
 
-                            // (잘 모르겠음)
-                            requestHttp.onreadystatechange=(e)=>{
-                            console.log("http 상태가 바뀌었을 때 동작: " + Http.responseText);
-                            }
+          alert(msg);
+        },
+        500: function() {
+          alert('500 status code! server error');
+          var msg = '결제에 실패하였습니다.';
+          msg += '에러내용 : ' + rsp.error_msg;
+          alert(msg);
+        }
 
-                            // 200 응답을 받을 시
-                                if (requestHttp.status == 200) {
-                                    var msg = '결제가 완료되었습니다.';
-
-                                    msg += '\n포트원 결제 고유 ID : ' + rsp.imp_uid;
-                                    msg += '\n상점 거래 ID : ' + rsp.merchant_uid;
-                                    msg += '\n결제 금액 : ' + rsp.paid_amount;
-                                    msg += '\n카드 승인번호<-? : ' + rsp.apply_num;
-
-                                    alert(msg);
-
-                                    saveReserv();
-
-                            // 에러 응답을 받을 시 (결제는 완료됨)
-                                } else {
-                                var msg = '결제에 실패하였습니다.';
-                                msg += '\n결제 금액 : ' + rsp.paid_amount;
-                                msg += '\n결제 처리가 이미 완료된 경우 판매자와 문의하십시오.'
-                                    // 예약이 이미 잡힌 경우
-
-                                    alert(msg);
-
-                                }
-                            });
-                    // 결제 자체에서 에러가 나서 결제가 실패하는 경우
-                        } else {
-                            var msg = '결제에 실패하였습니다.';
-                            msg += '에러내용 : ' + rsp.error_msg;
-
-                        }
-                        // 결제 성공 여부와 상관없이 오는 곳
-                        // alert("msg: " + msg);
-                    });
-                });
-
-//
+      }
+    })
+    }
+  });
+  });
 
             function saveReserv() {
   var token = $("meta[name='_csrf']").attr("content");
@@ -277,14 +249,12 @@
     dataType: "json",
     cache: false,
 
-    success: function (status) {
-      console.log(paramData);
+    success: function () {
       alert("예약이 성공적으로 저장되었습니다.");
-      window.location.href = '/reserv/reservs';
+      location.href='/reserv/reservs';
 
-    }, error: function (status) {
+    }, error: function () {
       alert("예약 중 오류가 발생되었습니다.");
-    console.log(result);
     }
 
   });
