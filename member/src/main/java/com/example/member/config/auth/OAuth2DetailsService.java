@@ -122,8 +122,10 @@ public class OAuth2DetailsService extends DefaultOAuth2UserService {
 //        return new CustomUserDetails(byUsername, oAuth2User.getAttributes());
 //    }
         String provider = userRequest.getClientRegistration().getRegistrationId();    // google
-
-       if(provider.equals("kakao")){	//추가
+        if(provider.equals("google")){
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        }
+        else if(provider.equals("kakao")){	//추가
             oAuth2UserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
         }
 //        String providerId = oAuth2User.getAttribute("sub");
