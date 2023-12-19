@@ -21,15 +21,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -193,7 +198,7 @@ public class ReservController {
             // 체크인 날짜(checkIn) ~ 체크아웃 날짜(checkOut) 사이에 reserved Date가 있는지 체크를 하고,
             // 포함되는 날짜가 있다면 중복으로 판단한다. (roomId 중복 + reserved Date 중복)
 //try {
-//
+//    System.out.println("hellos");
 //                                         System.out.println(reservSaveDto.getRoom_id());
 //                                         System.out.println(reservSaveDto.getCheckIn());
 //                                         System.out.println(reservSaveDto.getCheckOut());
@@ -203,9 +208,9 @@ public class ReservController {
 //        if(!reservList.isEmpty()) {
 //            System.out.println("ok !reservList.isEmpty");
 //        for(Reserv reserv : reservList) {
-//            if(reserv.getRoom().getId().equals(room_id)) {
+//            if(reserv.getRoom().getId().equals(reservSaveDto.getRoom_id())) {
 //                System.out.println("enter boolean duplication");
-//                boolean duplication = reservService.validateCheckDate(reserv, room_id, checkIn, checkOut);
+//                boolean duplication = reservService.validateCheckDate(reserv, reservSaveDto.getRoom_id(), reservSaveDto.getCheckIn(), reservSaveDto.getCheckOut());
 //                System.out.println("ok boolean duplication");
 //                if(duplication) {
 //                    System.out.println("error : 검증 실패: 객실 및 예약일자가 겹치므로 중복 예약");

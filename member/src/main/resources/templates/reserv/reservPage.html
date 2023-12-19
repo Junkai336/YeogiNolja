@@ -7,7 +7,7 @@
     <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
     <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
-<!--    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>-->
+    <!--    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>-->
 </head>
 
 <!-- 사용자 CSS 추가 -->
@@ -72,7 +72,7 @@
             </div>
             <div class="col-10 d-flex align-items-end flex-column">
                 <p th:text="'(1박 기준)'+*{room.price}+'원'" class=" mt-4">방가격</p>
-                    <p class="ms-3 fw-bolder" th:text="'결제 금액 : '+${reservDto.totalPrice}+ '원'"></p>
+                <p class="ms-3 fw-bolder" th:text="'결제 금액 : '+${reservDto.totalPrice}+ '원'"></p>
                 <p style="color:red" class="fw-bolder">취소 및 환불불가</p>
             </div>
 
@@ -193,7 +193,7 @@
                                     requestHttp.setRequestHeader(header, token);
                                     requestHttp.send(xhr);
                                 },
-                            }).done(function (data, Http) {
+                            }).done(function (Http) {
 
                             // 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
                             // 결제가 실제로 완료되었을 때 오는 곳
