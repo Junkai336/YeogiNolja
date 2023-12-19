@@ -1,42 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div class="footer" th:fragment="footer">
+
+<div class="footer mt-5" th:fragment="footer">
     <footer class="page-footer font-small cyan darken-3 mt-auto">
-        <div class="container d-flex text-nowrap" style="border:1px solid black">
+        <div class="container d-flex text-nowrap justify-content-evenly">
             <div class="container">
-                <h2>고객센터</h2>
-                <span>오전 9시 ~ 새벽 3시 운영</span><br>
-                <button>1670-6250</button>
-                <button>카카오 문의</button>
+                <h5 class="fw-bold">고객센터</h5>
+                <p class="m-0">오전 9시 ~ 새벽 3시 운영</p><br>
+                <button class="btn btn-outline-secondary border border-opacity-25">1670-6250</button>
+                <button class="btn btn-outline-secondary border border-opacity-25">카카오 문의</button>
             </div>
-            <div class="container d-flex" style="border:1px solid black">
+            <div class="container d-flex justify-content-evenly">
                 <div class="container">
-                    <p>회사</p>
-                    <div>
-                        <a href="#">회사소개</a>
+                    <div class="d-flex flex-column">
+                        <p>회사</p>
+                        <p><a href="#" class="link-secondary link-underline link-underline-opacity-0 link-underline-opacity-100-hover" style="text-decoration:none">회사소개</a></p>
                     </div>
                 </div>
                 <div class="container">
-                    <p>서비스</p>
-                    <div>
-                        <a href="#">공지사항</a>
-                        <a href="#">자주 묻는 질문</a>
-                        <a href="#">기업 출장/복지 서비스 문의</a>
+                    <div class="d-flex flex-column">
+                        <p>서비스</p>
+                        <a href="#" class="link-secondary" style="text-decoration:none">공지사항</a>
+                        <a href="#" class="link-secondary" style="text-decoration:none">자주 묻는 질문</a>
+                        <a href="#" class="link-secondary" style="text-decoration:none">기업 출장/복지 서비스 문의</a>
                     </div>
                 </div>
-                <div class="container">
-                    <p>혜택</p>
-                    <div class="">
-                        <a href="#">혜택안내</a>
-                        <a href="#">혜택안내</a>
-                        <a href="#">혜택안내</a>
-                        <a href="#">혜택안내</a>
+                <div class="container ms-2 d-flex">
+                    <div class="d-flex flex-column">
+                        <p>혜택</p>
+                        <a href="#" class="link-secondary" style="text-decoration:none">혜택안내</a>
+                        <a href="#" class="link-secondary" style="text-decoration:none">혜택안내</a>
+                        <a href="#" class="link-secondary" style="text-decoration:none">혜택안내</a>
+                        <a href="#" class="link-secondary" style="text-decoration:none">혜택안내</a>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="footer-copyright text-center py-3">
-            2020 Shopping Mall Example WebSite
+        <div class="container mt-5" style="font-size:11px;">
+            <p class="lh-sm m-0">(주)여기놀자컴퍼니</p>
+            <p class="lh-sm m-0">주소 : 서울특별시 강남구 봉은사로 479, 479타워 11층 | 대표이사 : 정명훈 | 사업자등록번호 : 742-86-00224</p>
+            <p class="lh-sm m-0">전자우편주소 : help@goodchoice.kr | 통신판매번호 : 2017-서울강남-01779 | 관광사업자 등록번호 : 제1026-24호 | 전화번호 : 1670-6250 | 호스팅서비스제공자의 상호 표시 : (주)여기놀자컴퍼니</p>
+            <p class="lh-sm m-0">(주)여기놀자컴퍼니는 통신판매중개자로서 통신판매의 당사자가 아니며, 상품의 예약, 이용 및 환불 등과 관련한 의무와 책임은 각 판매자에게 있습니다.</p>
+            <div class="footer-copyright py-3 mt-5 mb-5">
+                Copyright GC COMPANY Corp. All rights reserved.
+            </div>
         </div>
     </footer>
 </div>
