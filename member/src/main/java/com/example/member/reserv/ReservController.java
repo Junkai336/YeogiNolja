@@ -101,7 +101,7 @@ public class ReservController {
     }
 
 
-    @GetMapping("/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
+    @GetMapping("/lodgingReservContent/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
                            @PathVariable("checkIn") String checkIn,
                            @PathVariable("checkOut") String checkOut, Model model,
@@ -140,7 +140,7 @@ public class ReservController {
         }
 
 
-        return "/reserv/lodgingReservContent";
+        return "reserv/lodgingReservContent";
     }
 
     // 결제 관련 수정중입니다.

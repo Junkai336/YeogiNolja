@@ -75,7 +75,7 @@
                     var checkIn = DateList[0];
                     var checkOut = DateList[1];
                     // session 에 일자가 등록 되어 있을 때
-                    location.href = `/reserv/${lodging_id}/checkIn=${checkIn}/checkOut=${checkOut}`;
+                    location.href = `/reserv/lodgingReservContent/${lodging_id}/checkIn=${checkIn}/checkOut=${checkOut}`;
                     }else{
                         // 등록한 일자가 없을 시
                     location.href = `/reserv/lodgingReservContent/${lodging_id}`;
