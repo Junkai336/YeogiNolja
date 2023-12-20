@@ -140,7 +140,7 @@ public class ReservController {
         }
 
 
-        return "/reserv/lodgingReservContent";
+        return "reserv/lodgingReservContent";
     }
 
     // 결제 관련 수정중입니다.
