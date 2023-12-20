@@ -597,7 +597,7 @@
                          console.log(startDate+"////"+ endDate);
 
                          sessionStorage.setItem("date", reserveDate);
-                         location.href = `/reserv/${lodgingId}/checkIn=${startDate}/checkOut=${endDate}`;
+                         location.href = `/reserv/lodgingReservContent/${lodgingId}/checkIn=${startDate}/checkOut=${endDate}`;
                          });
 
                         var reservationDate = document.querySelector("#txtDate");
