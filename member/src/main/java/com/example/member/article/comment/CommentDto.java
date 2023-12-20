@@ -1,6 +1,7 @@
 package com.example.member.article.comment;
 
 import com.example.member.article.Article;
+import com.example.member.article.ArticleDto;
 import com.example.member.entity.Member;
 import lombok.*;
 
@@ -21,6 +22,9 @@ public class CommentDto {
 
     private LocalDateTime createdByTime;
 
+    /*시간변환 String Date*/
+    private String regDateStr;
+
 
 
     public static CommentDto toCommentDto(Comment comment) {
@@ -36,9 +40,18 @@ public class CommentDto {
         List<CommentDto> commentDtoList = new ArrayList<>();
         for (Comment comment : commentList) {
             CommentDto commentDto = toCommentDto(comment);
+            commentDto.setRegDateStr(commentDto.localDateToString(commentDto));
             commentDtoList.add(commentDto);
         }
         return commentDtoList;
+    }
+
+    public String localDateToString(CommentDto commentDto){
+        LocalDateTime regTime = commentDto.getCreatedByTime();
+        String regTimeStr = regTime.toString();
+        String[] dateStr = regTimeStr.split("T");
+        String mainDate = dateStr[0].replace("-", ".");
+        return mainDate;
     }
 
 }
