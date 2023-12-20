@@ -149,10 +149,23 @@ public class LodgingService {
 
         // 객실 이미지 삭제
         for (int i = 0; i < targetRoom.size(); i++) {
+
             Room roomTarget = targetRoom.get(i);
+            System.out.println("어떤 객실의 이미지를 삭제하는가?: " + targetRoom.get(i));
             List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomTarget.getId());
+            for(ItemImg itemImg : targetRoomItemImgList) {
+                System.out.println("객실의 이미지는 잘 불러오는가?: " + itemImg);
+                System.out.println("객실의 이미지의 roomID는?" + itemImg.getRoom().getId());
+            }
+
+            if(!targetRoomItemImgList.isEmpty()) {
+                for(ItemImg itemImg : targetRoomItemImgList) {
+                System.out.println("누굴 삭제하는가?(룸 아이디 하나당 이미지 여러개 삭제): " + itemImg);
+                }
+            itemImgService.deleteFile(targetRoomItemImgList);
             itemImgRepository.deleteAll(targetRoomItemImgList);
-            itemImgService.deleteFile(targetRoomItemImgList.get(i));
+            }
+
 
         }
 
