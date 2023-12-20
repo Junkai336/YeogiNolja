@@ -25,14 +25,14 @@
     <!--        <p th:text="${boardSuccessMsg}">성공출력용</p>-->
     <!--    </div>-->
 
-    <div class="mt-5 text-nowrap">
-        <button type="button" class="btn btn-success">전체글보기</button>
-        <button type="button" class="btn btn-success">공지사항</button>
-        <button type="button" class="btn btn-success">자유게시판</button>
-    </div>
+<!--    <div class="mt-5 text-nowrap">-->
+<!--        <button type="button" class="btn btn-success">전체글보기</button>-->
+<!--        <button type="button" class="btn btn-success">공지사항</button>-->
+<!--        <button type="button" class="btn btn-success">자유게시판</button>-->
+<!--    </div>-->
 
     <!-- 테이블 영역 -->
-    <div class="mt-3 text-nowrap">
+    <div class="mt-5 text-nowrap" style="margin: 0 100px 0 0;">
         <table class="table table-hover">
             <thead>
             <tr>
@@ -51,7 +51,7 @@
                 <td th:text="${articleDto.id}"></td>
                 <!--                <td th:text="${boardList.boardCategoryStatus}"></td>-->
                 <!--                항목이 3개 이상이 된다면..? 수정해야한다. -->
-                <td th:text="${articleDto.categoryStatus == T(com.example.member.constant.CategoryStatus).NOTICE} ? '공지사항' : '자유게시판'"></td>
+                <td th:text="${articleDto.articleStatus}"></td>
                 <td>
                     <a th:href="@{/article/{article_id}(article_id = ${articleDto.id})}">
                         <span th:text="${articleDto.title}" class="d-inline-block text-truncate"
@@ -60,7 +60,7 @@
                 </td>
                 <!--                <td th:text="${boardList.createdBy}"></td>-->
                 <td th:text="${articleDto.member.name}"></td>
-                <td th:text="${articleDto.regTime}"></td>
+                <td th:text="${articleDto.regDateStr}"></td>
                 <td>a</td>
                 <td>a</td>
                 <td>

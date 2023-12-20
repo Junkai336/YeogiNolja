@@ -4,10 +4,7 @@ import com.example.member.article.ArticleDto;
 import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.entity.ItemImg;
-import com.example.member.service.ItemImgService;
-import com.example.member.service.LodgingService;
-import com.example.member.service.MainService;
-import com.example.member.service.UploadFileService;
+import com.example.member.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +20,7 @@ public class MainController {
     private final LodgingService lodgingService;
     private final UploadFileService uploadFileService;
     private final ItemImgService itemImgService;
+    private final RoomService roomService;
 
     @GetMapping(value = "/")
     public String toHome(Model model) {
@@ -52,6 +50,8 @@ public class MainController {
                     lodgingDto.setImgUrl(itemImgDto.getImgUrl());
                 }
             }
+
+
 
             // 숙소 DTO에 이미지 DTO 저장
             lodgingDto.setItemImgDtoList(itemImgDtoList);

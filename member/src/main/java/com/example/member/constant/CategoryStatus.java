@@ -2,6 +2,6 @@ package com.example.member.constant;
 
 public enum CategoryStatus {
 
-    NOTICE, FREE
+    NOTICE, FREE, EVENT
 
 }

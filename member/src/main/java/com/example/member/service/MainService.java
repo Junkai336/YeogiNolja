@@ -16,7 +16,7 @@ public class MainService {
     private final ArticleRepository articleRepository;
     public List<ArticleDto> articles() {
         List<Article> articleList1 = articleRepository.findArticlesNotice();
-        List<Article> articleList2 = articleRepository.findArticlesFree();
+        List<Article> articleList2 = articleRepository.findArticlesEvent();
         List<ArticleDto> articleDtoList = new ArrayList<>();
 
         for(Article article : articleList1){

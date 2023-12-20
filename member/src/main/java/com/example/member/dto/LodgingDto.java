@@ -65,8 +65,7 @@ public class LodgingDto {
 
     private List<Long> itemImgIds = new ArrayList<>();
 
-
-
+    private String minPrice;
     // Entity -> Dto
     public static LodgingDto toLodgingDto (Lodging lodging) {
         Member member = lodging.getMember();
@@ -90,7 +89,4 @@ public class LodgingDto {
 
         return lodgingDto;
     }
-
-
-
 }
