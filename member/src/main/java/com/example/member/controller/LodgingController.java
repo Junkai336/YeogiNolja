@@ -162,7 +162,7 @@ public class LodgingController {
     }
 
     @GetMapping(value = "/{id}/lodgingDelete")
-    public String delete(@PathVariable Long id, RedirectAttributes rttr, Model model, Principal principal) throws Exception {
+    public String delete(@PathVariable Long id, RedirectAttributes rttr, Model model, Principal principal) {
         String email = principal.getName();
 
         Lodging target = lodgingService.findById(id);
@@ -170,13 +170,14 @@ public class LodgingController {
 
         if (email.equals(target.getCreatedBy())) {
 
-//            try {
+            try {
             lodgingService.deleteLodging(id, target, targetRoom);
             rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 삭제가 완료되었습니다.");
 
-//            } catch (Exception e) {
-//                model.addAttribute("errorMessage", e.getMessage());
-//            }
+            } catch (Exception e) {
+                System.out.println("lodging delete catch");
+                model.addAttribute("errorMessage", e.getMessage());
+            }
 
 
 

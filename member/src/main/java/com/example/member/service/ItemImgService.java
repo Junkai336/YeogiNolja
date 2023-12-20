@@ -142,6 +142,12 @@ public class ItemImgService {
         fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
     }
 
+    public void deleteFile(List<ItemImg> itemImgList) throws Exception {
+        for(ItemImg itemImg : itemImgList) {
+        fileService.deleteFile(itemImgLocation + "/" + itemImg.getImgName());
+        }
+    }
+
 
     public void deleteImg(Room roomOriginal) throws Exception {
         List<ItemImg> targetRoomItemImgList = itemImgRepository.findByRoomId(roomOriginal.getId());
