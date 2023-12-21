@@ -124,7 +124,6 @@ public class ReservSellerController {
 
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
-            model.addAttribute("lodgingDto", lodgingDtoContainImage);
             System.out.println("ReservSellerController : lodgingReservContent catch !!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
