@@ -138,6 +138,7 @@ public class ReservController {
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
+            System.out.println("ReservController : lodgingReservContent catch !!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
 
