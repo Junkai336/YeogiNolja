@@ -26,9 +26,11 @@
 
 </th:block>
 
-<div layout:fragment="content" class="container mt-5 pt-5 col-8 d-flex justify-content-center">
-
-    <form action="/members/edit" role="form" method="post"  th:object="${memberFormDto}" class="col-6">
+<div layout:fragment="content" class="container col-4 border d-flex flex-column justify-content-center rounded-3 shadow"
+     style="height: 730px; min-width:400px;">
+    <h4 class="container fw-semibold ms-2">회원정보수정</h4>
+    <form action="/members/edit" role="form" method="post"  th:object="${memberFormDto}"
+          class="container mt-5" style="max-width: 450px; height:600px;">
         <input type="hidden" th:field="*{Id}" class="form-control">
         <div class="form-group">
             <label th:for="name">이름</label>
@@ -61,13 +63,13 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-md-6 mb-3">
+            <div class="mb-3">
                 <label for="adrBtn">주소지</label>
-                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">
+                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" style="width:50%;" th:field="*{postcode}" id="postcode" placeholder="우편번호" value="">
                 <input type="button" class="btn btn-sm btn-secondary" onclick="execDaumPostcode()" value="우편번호 찾기" id="adrBtn"><br>
                 <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{address}" id="address" placeholder="주소" value=""><br>
-                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">
-                <input type="text" class="form-control border-0 border-bottom rounded-0" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">
+                <input type="text" class="form-control border-0 border-bottom rounded-0 mb-2" style="width:50%;" th:field="*{detailAddress}" id="detailAddress" placeholder="상세주소" value="">
+                <input type="text" class="form-control border-0 border-bottom rounded-0" style="width:50%;" th:field="*{extraAddress}" id="extraAddress" placeholder="참고항목" value="">
 
                 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
                 <script>
