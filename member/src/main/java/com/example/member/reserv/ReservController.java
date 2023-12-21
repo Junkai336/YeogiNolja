@@ -31,6 +31,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -137,6 +138,7 @@ public class ReservController {
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
+            System.out.println("ReservController : lodgingReservContent catch !!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
 
