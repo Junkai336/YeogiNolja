@@ -64,7 +64,7 @@ public class LodgingService {
     }
 
     public List<LodgingDto> lodgingDtos() {
-        List<Lodging> lodgingList = lodgingRepository.findAll();
+        List<Lodging> lodgingList = lodgingRepository.findByLodgingLimit4();
 
         List<LodgingDto> lodgingDtoList = new ArrayList<>();
 

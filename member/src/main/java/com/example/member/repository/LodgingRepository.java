@@ -25,4 +25,7 @@ public interface LodgingRepository extends JpaRepository<Lodging, Long> {
 
     @Query(value = "select count(l) from Lodging l")
     Long countLodging();
+
+    @Query(value = "select * from lodging ORDER BY lodging_id desc limit 4;",nativeQuery = true)
+    List<Lodging> findByLodgingLimit4();
 }
