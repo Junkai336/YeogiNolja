@@ -49,6 +49,11 @@ public class MemberFormDto {
 
     private String extraAddress; // 참고항목
 
+    // 회원가입시 유저롤 선택
+    private String joinUserRole;
+    private String sellerName;
+    private String sellerNum;
+
 
     public static MemberFormDto toMemberFormDto(Member member) {
         MemberFormDto memberFormDto = new MemberFormDto();

@@ -19,7 +19,7 @@ import javax.persistence.*;
 // NoArgs 와 AllArgs가 같이 있어야 에러가 발생하지 않는다.
 @AllArgsConstructor
 @NoArgsConstructor
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
 
     // primary key를 가진 변수 선언
     @Id
@@ -71,6 +71,8 @@ public class Member extends BaseEntity{
     private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
+    // 회원가입시 유저롤 선택
+    private String joinUserRole;
 
 
     @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
@@ -84,7 +86,7 @@ public class Member extends BaseEntity{
     }
 
 
-    public static Member toMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
+    public static Member toMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
         member.setName(memberFormDto.getName());
@@ -97,10 +99,14 @@ public class Member extends BaseEntity{
         member.setAddress(memberFormDto.getAddress());
         member.setDetailAddress(memberFormDto.getDetailAddress());
         member.setExtraAddress(memberFormDto.getExtraAddress());
-        member.setUserRole(UserRole.ADMIN);
+        if (memberFormDto.getJoinUserRole().equals("0")) {
+            member.setUserRole(UserRole.USER);
+        } else if(memberFormDto.getJoinUserRole().equals("1")){
+            member.setUserRole(UserRole.ADMIN);
+        }
         return member;
-    }
 
+    }
 
 
 }
