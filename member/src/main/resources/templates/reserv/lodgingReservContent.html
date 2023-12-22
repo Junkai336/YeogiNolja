@@ -189,7 +189,7 @@
                     <div>
                         <span class="d-block mb-1" th:text="*{lodgingType}">a</span>
                         <h3 th:text="*{name}">a</h3>
-                        <p th:text="*{detail}" class="mt-4">a</p>
+                        <p th:utext="*{detail}" class="mt-4">a</p>
                         <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
                         <!--            <td th:text="${lodging.lodgingType== T(com.example.member.constant.LodgingType).PENSION} ? '펜션' : '풀빌라'"></td>-->
                     </div>

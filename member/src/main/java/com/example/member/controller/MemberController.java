@@ -56,7 +56,7 @@ public class MemberController {
             return "redirect:/member/join";
         }
 
-        return "/index";
+        return "index";
     }
 
     @GetMapping(value = "/login")

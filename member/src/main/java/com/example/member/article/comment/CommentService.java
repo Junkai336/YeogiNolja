@@ -64,17 +64,14 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
-    public CommentDto update(Long commentId, EditCommentDto editCommentDto) {
+    public void update(Long commentId, EditCommentDto editCommentDto) {
 
-        if (commentId != editCommentDto.getId()) {
-            throw new IllegalArgumentException("다시 시도해주시기 바랍니다.");
-        }
+
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(EntityNotFoundException::new);
 
         comment.setComment(editCommentDto.getComment());
-        CommentDto updateCommentDto = CommentDto.toCommentDto(comment);
-        return updateCommentDto;
+        System.out.println("hdhdhfd" + comment.getComment());
     }
 
     public void deleteAllByRoomId(Long article_id) {
