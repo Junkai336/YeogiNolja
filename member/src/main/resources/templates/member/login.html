@@ -10,6 +10,12 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+        .joinLink {
+            text-decoration-line: none;
+        }
+        .joinLink:hover {
+            text-decoration-line: underline;
+        }
     </style>
 </th:block>
 
@@ -84,7 +90,7 @@
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
             </form>
-            <div class="d-flex justify-content-evenly" style="width:200px;">
+            <div class="d-flex justify-content-evenly mt-1" style="width:200px;">
                 <div class="btn-group col" role="group" aria-label="Third group">
                     <a href="/oauth2/authorization/google">
                         <img src="/img/google_login_btn2.png" class="oa_btn_img" alt="구글 로그인" style="width:50px">
@@ -101,9 +107,9 @@
                     </a>
                 </div>
             </div>
-            <div class="ms-2 mt-5">
+            <div class="ms-2 mt-5 d-flex flex-column align-items-center">
                 <p style="font-size:12px;">계정이 없으신가요?</p>
-                <a class="link-underline-secondary" href="/members/join">이메일로 회원가입</a>
+                <a class="link-secondary joinLink" href="/members/join">이메일로 회원가입</a>
             </div>
     </div>
 
