@@ -46,8 +46,6 @@ public class MemberController {
     // 검증 오류가 발생할 경우 오류 내용을 보관하는 스프링 프레임워크에서 제공하는 객체
     @PostMapping(value = "/join")
     public String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
-
-
         try {
             Member member = Member.toMember(memberFormDto, passwordEncoder);
             memberService.saveMember(member);
