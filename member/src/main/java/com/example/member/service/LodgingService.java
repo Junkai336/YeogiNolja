@@ -129,14 +129,17 @@ public class LodgingService {
 
     public void deleteLodging(Long id, Lodging target, List<Room> targetRoom) throws Exception {
 
-        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+//        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+        List<UploadFile> uploadFileList = uploadFileRepository.findAllByLodgingId(id);
 
         // 서머노트 이미지 삭제
                 for(UploadFile uploadFile : uploadFileList) {
-                    if (uploadFile.getLodging().getId().equals(target.getId())) {
-                        System.out.println("hello");
-                        uploadFileRepository.delete(uploadFile);
-                        uploadFileService.fileDelete(uploadFile);
+                    if (uploadFile.getLodging() !=null) {
+                        if (uploadFile.getLodging().getId().equals(target.getId())) {
+                            System.out.println("hello");
+                            uploadFileRepository.delete(uploadFile);
+                            uploadFileService.fileDelete(uploadFile);
+                        }
                     }
                 }
 
