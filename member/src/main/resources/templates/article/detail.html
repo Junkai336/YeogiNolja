@@ -130,7 +130,7 @@
 
                     newCommentInput.value = '';
 
-
+}
             });
 
         </script>
@@ -318,15 +318,16 @@
                         xhr.setRequestHeader(header, token);
                     },
                     dataType : "json",
-                    cache   : false
-                });
+                    cache   : false,
+                    success: function(status){
+                    alert("댓글 수정이 완료되었습니다!!");
+                        window.location.reload();
+                    },error: function(status){
+                    alert("오류가 발생하였습니다. ")
+                    }
 
-              // 수정 요청이 끝난 후
-                      alert("댓글 수정이 완료 되었습니다.");
-                      window.location.reload();
-              }else{
-                alert("수정할 내용을 입력해주시기 바랍니다.");
-              }
+                });
+}
         });
       });
 

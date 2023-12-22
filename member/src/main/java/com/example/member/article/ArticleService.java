@@ -95,17 +95,19 @@ public class ArticleService {
         uploadFileService.uploadFileGrantedArticleId(article);
 
     }
-    public void articleDelete(Long article_id)throws Exception{
+    public void articleDelete(Long article_id){
 
-        List<UploadFile> uploadFileList = uploadFileRepository.findAll();
+        List<UploadFile> uploadFileList = uploadFileRepository.findAllByArticleId(article_id);
 
         Article article = articleRepository.findById(article_id)
                 .orElseThrow(EntityNotFoundException::new);
-
+        System.out.println("여기까지는 문제 없음");
         for(UploadFile uploadFile : uploadFileList) {
-            if (uploadFile.getArticle().getId().equals(article.getId())) {
-                uploadFileRepository.delete(uploadFile);
-                uploadFileService.fileDelete(uploadFile);
+            if (uploadFile.getArticle() !=null){
+                if (uploadFile.getArticle().getId().equals(article.getId())) {
+                    uploadFileRepository.delete(uploadFile);
+                    uploadFileService.fileDelete(uploadFile);
+                }
             }
         }
 

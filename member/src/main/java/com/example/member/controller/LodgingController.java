@@ -175,7 +175,7 @@ public class LodgingController {
             rttr.addFlashAttribute("lodgingSuccessMsg", "숙소 삭제가 완료되었습니다.");
 
             } catch (Exception e) {
-                System.out.println("lodging delete catch");
+                System.out.println("nnn lodging delete catch" + e.getMessage());
                 model.addAttribute("errorMessage", e.getMessage());
             }
 

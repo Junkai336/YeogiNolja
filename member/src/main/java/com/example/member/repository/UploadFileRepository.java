@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UploadFileRepository extends JpaRepository<UploadFile, Long>{
 
-    @Query(nativeQuery = true, value = "select * from Article a where a.article_id= :article_id")
+    @Query(nativeQuery = true, value = "select * from just_board.upload_file a where a.article_id= :article_id")
     List<UploadFile> findAllByArticleId(@Param("article_id") Long article_id);
 
     @Query(nativeQuery = true, value = "select * from Lodging l where l.lodging_id= :lodging_id")
