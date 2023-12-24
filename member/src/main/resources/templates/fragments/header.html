@@ -6,7 +6,7 @@
     <nav class="navbar navbar-expand-sm bg-white shadow-sm fixed-top">
 
         <div class="container-fluid text-nowrap">
-            <a class="navbar-brand ms-3" href="/">Logo</a>
+            <a class="navbar-brand ms-3" href="/">여기놀자</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -38,9 +38,9 @@
                         <li class="nav-item" sec:authorize="isAuthenticated()">
                             <a class="nav-link" href="/reserv/reservs">나의 예약 현황</a>
                         </li>
-                        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                            <a class="nav-link" href="/members/list">회원 관리</a>
-                        </li>
+<!--                        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">-->
+<!--                            <a class="nav-link" href="/members/list">회원 관리</a>-->
+<!--                        </li>-->
                         <li class="nav-item" sec:authorize="isAnonymous()">
                             <a class="nav-link" href="/members/login">로그인</a>
                         </li>
@@ -49,9 +49,9 @@
                         <li class="nav-item" sec:authorize="isAuthenticated()">
                             <a class="nav-link" href="/members/logout">로그아웃</a>
                         </li>
-                        <li class="nav-item" sec:authorize="isAuthenticated()">
-                            <p>안녕하세요, <span th:text="${email}"></span>님! 환영합니다.</p>
-                        </li>
+<!--                        <li class="nav-item" sec:authorize="isAuthenticated()">-->
+<!--                            <p>안녕하세요, <span th:text="${email}"></span>님! 환영합니다.</p>-->
+<!--                        </li>-->
                     </ul>
                 </div>
                 <div class="nav-item"></div>
