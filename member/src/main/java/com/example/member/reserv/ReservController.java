@@ -2,17 +2,16 @@ package com.example.member.reserv;
 
 
 import com.example.member.constant.UserRole;
+import com.example.member.dto.ItemImgDto;
 import com.example.member.dto.LodgingDto;
 import com.example.member.dto.MemberDto;
 import com.example.member.dto.RoomDto;
+import com.example.member.entity.ItemImg;
 import com.example.member.entity.Lodging;
 import com.example.member.entity.Member;
 import com.example.member.entity.Room;
 import com.example.member.reserv.reservDate.ReservedDateService;
-import com.example.member.service.LodgingService;
-import com.example.member.service.MemberService;
-import com.example.member.service.RoomService;
-import com.example.member.service.UploadFileService;
+import com.example.member.service.*;
 import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
@@ -38,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +51,7 @@ public class ReservController {
     private final RoomService roomService;
     private final UploadFileService uploadFileService;
     private final MemberService memberService;
+    private final ItemImgService itemImgService;
 
     // 예약하기 버튼을 눌렀을 때 예약 결제창
     @GetMapping("/roomReservation/{lodgingId}/{room_id}/{sessionDate}") // roomId/reserv

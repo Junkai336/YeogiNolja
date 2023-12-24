@@ -57,12 +57,6 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
-<!--        .content-mg{-->
-<!--            margin-left:30%;-->
-<!--            margin-right:30%;-->
-<!--            margin-top:2%;-->
-<!--            margin-bottom:100px;-->
-<!--        }-->
         .repImgDiv{
             margin-right:15px;
             margin-left:15px;
@@ -87,64 +81,69 @@
     </style>
 </th:block>
 
-<div layout:fragment="content" class="content-mg container">
-    <h2 class="mb-4">
-        예약 내역
-    </h2>
-
-    <div class="card d-flex">
-        <div th:each="reserv : ${reservDtoList}" class="d-flex mb-3">
-<!--            <div class="repImgDiv">-->
-<!--                <img th:src="${reserv.room.lodging.imgUrl}"-->
-<!--                     class="rounded repImg"-->
-<!--                     th:alt="${reserv.lodging.name}">-->
-<!--            </div>-->
-            <div class="align-self-center w-75">
-                <p th:text="${reserv.reservationStatus}">방 상태</p>
-                <p th:text="${reserv.room.lodging.name}" class="fs24 font-weight-bold">숙소이름</p>
-                <p th:text="${reserv.room.name}">방 이름</p>
-                <p th:text="${reserv.room.detail}">방 디테일</p>
-                <p th:text="${reserv.checkIn}+${reserv.room.checkInTime}">방 체크인</p>
-                <p th:text="${reserv.checkOut}+${reserv.room.checkOutTime}">방 체크아웃</p>
-                <!--                    <span th:text="${reserv.room.}">방 인원</span>-->
-                <div class="ml-3">
-                    <th:block th:if="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">
-                        <button type="button" class="btn btn-outline-secondary" th:value="${reserv.id}" onclick="cancelReserv(this.value)">예약취소</button>
-                    </th:block>
-                    <th:block th:unless="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">
-                        <h4>(취소 완료)</h4>
-                    </th:block>
+<div layout:fragment="content" class="container">
+    <div class="d-flex flex-column align-items-center">
+        <div class="card d-flex">
+            <h2 class="mb-5 fw-bold">
+                예약 내역
+            </h2>
+            <div th:each="reserv : ${reservDtoList}" class="d-flex mb-3">
+                <!--            <div class="repImgDiv">-->
+                <!--                <img th:src="${lodging.imgUrl}"-->
+                <!--                     class="rounded repImg"-->
+                <!--                     th:alt="${lodging.name}">-->
+                <!--            </div>-->
+                <div class="align-self-center w-75">
+                    <p th:text="${reserv.reservationStatus}">방 상태</p>
+                    <p th:text="${reserv.room.lodging.name}" class="fs24 font-weight-bold">숙소이름</p>
+                    <p th:text="${reserv.room.name}">방 이름</p>
+                    <p th:utext="${reserv.room.detail}">방 디테일</p>
+                    <p th:text="'체크인 - '+${reserv.checkIn}+' '+${reserv.room.checkInTime}">방 체크인</p>
+                    <p th:text="'체크아웃 - '+${reserv.checkOut}+' '+${reserv.room.checkOutTime}">방 체크아웃</p>
+                    <!--                    <span th:text="${reserv.room.}">방 인원</span>-->
+                    <div class="ml-3">
+                        <th:block
+                                th:if="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">
+                            <button type="button" class="btn btn-outline-secondary" th:value="${reserv.id}"
+                                    onclick="cancelReserv(this.value)">예약취소
+                            </button>
+                        </th:block>
+                        <th:block
+                                th:unless="${reserv.reservationStatus == T(com.example.member.constant.ReservationStatus).RESERVED}">
+                            <h4>(취소 완료)</h4>
+                        </th:block>
+                    </div>
+                    <hr>
                 </div>
-
             </div>
         </div>
+
+        <!-- 페이지네이션 영역 -->
+        <div th:with="start=${(reservDtoList.number/maxPage)*maxPage + 1}, end=(${(reservDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reservDtoList.totalPages ? start + (maxPage - 1) : reservDtoList.totalPages)})">
+            <ul class="pagination justify-content-center mt-3">
+
+                <li class="page-item" th:classappend="${reservDtoList.number eq 0}?'disabled':''">
+                    <a th:href="@{'/reserv/reservs/' + ${reservDtoList.number-1}}" aria-label='Previous'
+                       class="page-link">
+                        <span aria-hidden='true'>Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}"
+                    th:classappend="${reservDtoList.number eq page-1}?'active':''">
+                    <a th:href="@{'/reserv/reservs/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-item"
+                    th:classappend="${reservDtoList.number+1 ge reservDtoList.totalPages}?'disabled':''">
+                    <a th:href="@{'/reserv/reservs/' + ${reservDtoList.number+1}}" aria-label='Next' class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
     </div>
-
-    <!-- 페이지네이션 영역 -->
-    <div th:with="start=${(reservDtoList.number/maxPage)*maxPage + 1}, end=(${(reservDtoList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reservDtoList.totalPages ? start + (maxPage - 1) : reservDtoList.totalPages)})" >
-        <ul class="pagination justify-content-center mt-3">
-
-            <li class="page-item" th:classappend="${reservDtoList.number eq 0}?'disabled':''">
-                <a th:href="@{'/reserv/reservs/' + ${reservDtoList.number-1}}" aria-label='Previous' class="page-link">
-                    <span aria-hidden='true'>Previous</span>
-                </a>
-            </li>
-
-            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${reservDtoList.number eq page-1}?'active':''">
-                <a th:href="@{'/reserv/reservs/' + ${page-1}}" th:inline="text" class="page-link">[[${page}]]</a>
-            </li>
-
-            <li class="page-item" th:classappend="${reservDtoList.number+1 ge reservDtoList.totalPages}?'disabled':''">
-                <a th:href="@{'/reserv/reservs/' + ${reservDtoList.number+1}}" aria-label='Next' class="page-link">
-                    <span aria-hidden='true'>Next</span>
-                </a>
-            </li>
-
-        </ul>
-    </div>
-
-
-
 </div>
 
 </html>
