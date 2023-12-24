@@ -167,7 +167,7 @@ public class ItemImgService {
     }
 
     public List<ItemImg> findByMainLodgingId(Long id) {
-        List<ItemImg> itemImgList = itemImgRepository.findByLodgingIdLimit4(id);
+        List<ItemImg> itemImgList = itemImgRepository.findByLodgingIdImg(id);
         return itemImgList;
     }
 }

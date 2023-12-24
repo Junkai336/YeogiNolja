@@ -24,8 +24,8 @@ public interface ItemImgRepository extends JpaRepository<ItemImg, Long> {
 
         List<ItemImg> findByLodgingId(Long lodgingId);
 
-        @Query(value = "select * from item_img where lodging_id and repimg_yn='Y' ORDER BY item_img_id desc limit 4",nativeQuery = true)
-        List<ItemImg> findByLodgingIdLimit4(Long lodgingId);
+        @Query(value = "select * from item_img where lodging_id and repimg_yn='Y' ORDER BY item_img_id desc",nativeQuery = true)
+        List<ItemImg> findByLodgingIdImg(Long lodgingId);
 
 
         List<ItemImg> findByRoomId(Long roomId);
