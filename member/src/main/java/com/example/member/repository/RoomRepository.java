@@ -15,7 +15,8 @@ public interface RoomRepository  extends JpaRepository<Room, Long> {
     List<Room> findAllByLodgingId(@Param("lodging_id") Long lodging_id);
 
     // 로징
-    @Query(value = "SELECT MIN(price) AS price FROM just_board.room where lodging_id= :lodging_id",nativeQuery = true)
+//    @Query(value = "SELECT MIN(price) AS price FROM just_board.room where lodging_id= :lodging_id",nativeQuery = true)
+    @Query(value = "SELECT price FROM just_board.room where lodging_id= :lodging_id limit 1",nativeQuery = true)
     String findRoomPriceMin(@Param("lodging_id") Long lodging_id);
 
     //    select * from room where lodging_id = (select min(price) from room);
