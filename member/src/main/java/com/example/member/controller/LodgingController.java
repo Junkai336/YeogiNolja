@@ -91,7 +91,7 @@ public class LodgingController {
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
 
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 8);
         Page<LodgingDto> lodgingDtoList = lodgingService.getLodgingList(pageable);
 
         model.addAttribute("lodgingDtoList", lodgingDtoList);

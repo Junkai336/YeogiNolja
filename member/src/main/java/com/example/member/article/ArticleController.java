@@ -45,7 +45,7 @@ public class ArticleController {
             uploadFileService.emptyUploadFileCheck();
             uploadFileService.backwardUploadFileCheck();
 
-            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
+            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 8);
             Page<ArticleDto> articleDtoList = articleService.getArticleList(pageable);
 
             model.addAttribute("articleDtoList", articleDtoList);
