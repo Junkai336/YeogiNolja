@@ -38,7 +38,7 @@
     </style>
 </th:block>
 
-<div layout:fragment="content">
+<div layout:fragment="content" style="min-height: 700px;">
 
     <div th:if="${lodgingErrorMsg} != null" class="btn btn-danger d-flex justify-content-center">
         <p th:text="${lodgingErrorMsg}">에러출력용</p>
@@ -47,10 +47,12 @@
     <div th:if="${lodgingSuccessMsg} != null" class="btn btn-success d-flex justify-content-center">
         <p th:text="${lodgingSuccessMsg}">성공출력용</p>
     </div>
+
     <div class="container mt-5 col-6">
+            <a class="btn btn-primary" href="/lodging/registration">숙소 등록</a>
         <!--    <form th:action="@{'/lodging/list/' + ${items.number}}" role="form" method="get" th:object="${items}">-->
         <form th:action="@{'/lodging/list/'}" role="form" method="get" th:object="${lodgingDtoList}">
-            <table class="table table-hover">
+            <table class="table table-hover mt-3">
                 <thead>
                 <tr class="fw-semibold">
                     <td>번호</td>
