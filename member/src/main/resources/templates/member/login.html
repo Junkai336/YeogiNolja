@@ -3,12 +3,19 @@
       layout:decorate="~{layouts/layout1}">
 
 <head>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
+        .joinLink {
+            text-decoration-line: none;
+        }
+        .joinLink:hover {
+            text-decoration-line: underline;
+        }
     </style>
 </th:block>
 
@@ -51,54 +58,59 @@
 
 <div layout:fragment="content">
 
+        <div class="container d-flex flex-column align-items-center justify-content-center border rounded-4 shadow-lg"
+             style="max-width: 450px; height: 550px;">
+            <form action="/members/login" method="post" role="form" class="px-4 py-3" style="width:300px;">
 
-    <div class="dropdown container col-5">
-        <form action="/members/login" method="post" role="form" class="px-4 py-3 mt-5">
+                <div class="form-group mb-3">
+                    <label th:for="email" class="form-label">이메일주소</label>
+                    <input type="email" name="email" id="email" class="form-control border-0 border-bottom rounded-0"
+                           placeholder="email@example.com" autocomplete="off">
+                </div>
 
-            <div class="form-group mb-3">
-                <label th:for="email" class="form-label">이메일주소</label>
-                <input type="email" name="email" id="email" class="form-control border-0 border-bottom rounded-0"
-                       placeholder="email@example.com" autocomplete="off">
-            </div>
+                <div class="form-group mb-3">
+                    <label th:for="password" class="form-label">비밀번호</label>
+                    <input type="password" name="password" id="password"
+                           class="form-control border-0 border-bottom rounded-0"
+                           placeholder="Password" autocomplete="off">
+                </div>
 
-            <div class="form-group mb-3">
-                <label th:for="password" class="form-label">비밀번호</label>
-                <input type="password" name="password" id="password" class="form-control border-0 border-bottom rounded-0"
-                       placeholder="Password" autocomplete="off">
-            </div>
+                <div class="form-group mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="idSaveCheck">
+                        <label class="form-check-label" for="idSaveCheck" style="font-size: 12px;">
+                            로그인 정보 기억하기
+                        </label>
+                    </div>
+                </div>
 
-            <div class="form-group mb-3">
-                <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="idSaveCheck">
-                    <label class="form-check-label" for="idSaveCheck">
-                        로그인 정보 기억하기
-                    </label>
+                <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+
+                <button type="submit" class="btn btn-primary" style="width: 250px;">로그인</button>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+            </form>
+            <div class="d-flex justify-content-evenly mt-1" style="width:200px;">
+                <div class="btn-group col" role="group" aria-label="Third group">
+                    <a href="/oauth2/authorization/google">
+                        <img src="/img/google_login_btn2.png" class="oa_btn_img" alt="구글 로그인" style="width:50px">
+                    </a>
+                </div>
+                <div class="btn-group col" role="group" aria-label="Third group">
+                    <a href="/oauth2/authorization/kakao">
+                        <img src="/img/k_login.png" alt="카카오 로그인" style="width:50px"/>
+                    </a>
+                </div>
+                <div class="btn-group col" role="group" aria-label="Third group">
+                    <a href="/oauth2/authorization/naver">
+                        <img src="/img/naver_login.png" alt="네이버 로그인" style="width:50px"/>
+                    </a>
                 </div>
             </div>
-
-            <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
-
-            <button type="submit" class="btn btn-primary">로그인</button>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
-        </form>
-        <div>
-            <div class="btn-group col" role="group" aria-label="Third group" >
-                <a href="/oauth2/authorization/google" class="btn btn-outline-light" >
-                    <img src="/img/google_login_btn2.png" class="oa_btn_img" alt="구글 로그인" style="width:50px">
-                </a>
+            <div class="ms-2 mt-5 d-flex flex-column align-items-center">
+                <p style="font-size:12px;">계정이 없으신가요?</p>
+                <a class="link-secondary joinLink" href="/members/join">이메일로 회원가입</a>
             </div>
-            <div class="btn-group col" role="group" aria-label="Third group">
-                <a href="/oauth2/authorization/kakao">
-                    <img src="/img/k_login.png" alt="카카오 로그인" style="width:50px"/>
-                </a>
-            </div>
-        </div>
-        <div class="container ms-2">
-            <a class="btn btn-sm btn-success" href="/members/join">회원가입</a>
-            <a class="btn btn-sm btn-secondary" href="#">아이디 찾기</a>
-            <a class="btn btn-sm btn-secondary" href="#">비밀번호 찾기</a>
-        </div>
     </div>
 
 </div>

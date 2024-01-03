@@ -51,8 +51,8 @@
         <!--    <form th:action="@{'/lodging/list/' + ${items.number}}" role="form" method="get" th:object="${items}">-->
         <form th:action="@{'/lodging/list/'}" role="form" method="get" th:object="${lodgingDtoList}">
             <table class="table table-hover">
-                <thead class="bg-dark text-white">
-                <tr>
+                <thead>
+                <tr class="fw-semibold">
                     <td>번호</td>
                     <td>숙소명</td>
                     <td>등록자</td>

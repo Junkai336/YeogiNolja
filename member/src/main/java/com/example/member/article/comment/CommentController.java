@@ -50,8 +50,10 @@ public class CommentController {
         try {
             commentService.validation(commentId, email);
             commentService.deleteComment(commentId);
-        }catch (IllegalArgumentException e){
+        }catch (Exception e){
             model.addAttribute("error", e.getMessage());
+            System.out.println("nnn comment delete catch" + e.getStackTrace());
+            System.out.println(e.getMessage());
         }
 
         return "redirect:/article/"+article_id;
@@ -67,11 +69,19 @@ public class CommentController {
 //    }
 
     @PostMapping(value = "/article/{article_id}/commentEdit/{comment_id}")
-    public void editComment(@PathVariable("comment_id") Long comment_id, @PathVariable("article_id") Long article_id
+    @ResponseBody
+    public HttpStatus editComment(@PathVariable("comment_id") Long comment_id, @PathVariable("article_id") Long article_id
             , @RequestBody EditCommentDto editCommentDto){
         System.out.println("view에서 넘어온 내용! : 아이디"+editCommentDto.getId());
         System.out.println("view에서 넘어온 내용! : 내용"+editCommentDto.getComment());
-        commentService.update(comment_id, editCommentDto);
+        try {
+            commentService.update(comment_id, editCommentDto);
+        }catch (Exception e){
+            System.out.println("aaaaaaaaaaaaaa" + e.getMessage());
+            return HttpStatus.BAD_REQUEST;
+        }
+
+        return HttpStatus.OK;
     }
 
 

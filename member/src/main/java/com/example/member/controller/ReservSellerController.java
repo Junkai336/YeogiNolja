@@ -92,10 +92,10 @@ public class ReservSellerController {
         String email = principal.getName();
         MemberDto memberDto = memberService.DtofindByEmail(email);
 
-        try{
             Lodging lodgingEntity = lodgingService.findById(lodgingId);
             LodgingDto lodgingDto = LodgingDto.toLodgingDto(lodgingEntity);
             LodgingDto lodgingDtoContainImage =  lodgingService.imageLoad(lodgingDto, lodgingId);
+        try{
 
             lodgingService.emptyRoomGrantedLodgingId(lodgingId, lodgingEntity);
             uploadFileService.refreshUploadFileCheck(lodgingId);
@@ -124,6 +124,7 @@ public class ReservSellerController {
 
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
+            System.out.println("ReservSellerController : lodgingReservContent catch !!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
 

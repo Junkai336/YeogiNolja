@@ -31,6 +31,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -101,7 +102,7 @@ public class ReservController {
     }
 
 
-    @GetMapping("/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
+    @GetMapping("/lodgingReservContent/{lodgingId}/checkIn={checkIn}/checkOut={checkOut}")
     public String dateForm(@PathVariable("lodgingId") Long lodging_id,
                            @PathVariable("checkIn") String checkIn,
                            @PathVariable("checkOut") String checkOut, Model model,
@@ -137,10 +138,11 @@ public class ReservController {
             model.addAttribute("prevPage", "LodgingController");
         }catch (Exception e){
             model.addAttribute("lodgingErrorMsg", e.getMessage());
+            System.out.println("ReservController : lodgingReservContent catch !!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
 
-        return "/reserv/lodgingReservContent";
+        return "reserv/lodgingReservContent";
     }
 
     // 결제 관련 수정중입니다.

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <div class="footer mt-5" th:fragment="footer">
-    <footer class="page-footer font-small cyan darken-3 mt-auto">
+    <footer class="page-footer font-small cyan darken-3">
         <div class="container d-flex text-nowrap justify-content-evenly">
             <div class="container">
                 <h5 class="fw-bold">고객센터</h5>
@@ -20,7 +20,7 @@
                 <div class="container">
                     <div class="d-flex flex-column">
                         <p>서비스</p>
-                        <a href="#" class="link-secondary" style="text-decoration:none">공지사항</a>
+                        <a th:href="@{/article/list}" class="link-secondary" style="text-decoration:none">공지사항</a>
                         <a href="#" class="link-secondary" style="text-decoration:none">자주 묻는 질문</a>
                         <a href="#" class="link-secondary" style="text-decoration:none">기업 출장/복지 서비스 문의</a>
                     </div>

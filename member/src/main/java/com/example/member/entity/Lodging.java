@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name="lodging")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class Lodging extends BaseEntity {

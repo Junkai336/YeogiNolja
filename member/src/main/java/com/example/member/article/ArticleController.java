@@ -4,21 +4,25 @@ import com.example.member.article.comment.CommentDto;
 import com.example.member.article.comment.CommentService;
 import com.example.member.entity.UploadFile;
 import com.example.member.repository.UploadFileRepository;
+import com.example.member.service.MainService;
 import com.example.member.service.UploadFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.Request;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +36,7 @@ public class ArticleController {
     private final ArticleService articleService;
     private final CommentService commentService;
     private final UploadFileService uploadFileService;
+    private final MainService mainService;
 
     // 게시판 -> 게시글 리스트
     @GetMapping(value = {"/list", "/list/{page}"})
@@ -95,6 +100,7 @@ public class ArticleController {
         String email = principal.getName();
         model.addAttribute("userEmail", email);
         ArticleDto articleDto =  articleService.findArticle(id);
+        articleDto.setRegDateStr(mainService.localDateToString(articleDto));
         // model에 선택한 글의 id를 가지고 글의 내용을 들고 있는 Dto 객체를 추가
         model.addAttribute("articleDto", articleDto);
         // 글의 id값을 가지고 있는 comment를 List로 하여 model에 추가
@@ -136,6 +142,7 @@ public class ArticleController {
             articleService.articleDelete(id);
         }catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
+            System.out.println("nnn article delete catch" + e.getMessage());
         }
         return "redirect:/article/list";
     }

@@ -43,49 +43,48 @@
 
 
     <div class="container">
-        <h5 class="fw-semibold mt-5">추천 숙소</h5>
-        <th:block>
-            <div class="d-flex">
-                <div class="col-3 margin mt-3 p-2" th:each="lodging : ${lodgingDtoList}"
-                     th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
-                    <div class="card border-0 mt-3">
-                        <div class="locationDiv" style="cursor:pointer">
-                            <input type="hidden" th:value="${lodging.id}" class="lodging_id">
-                            <div class="ratio ratio-4x3">
-                                <img th:src="${lodging.imgUrl}" class="card-img-top rounded-4"
-                                     th:alt="${lodging.name}">
-                            </div>
-                            <div class="card-body">
-                                <h4 class="card-title">[[${lodging.name}]]</h4>
-                                <p class="card-text">[[${lodging.detail}]]</p>
+        <h5 class="fw-semibold">추천 숙소</h5>
+        <div class="d-flex text-nowrap">
+            <div class="col-3 mt-3 p-2" th:each="lodging : ${lodgingDtoList}"
+                 th:if="${lodging.roomExist == T(com.example.member.constant.RoomExist).Y}">
+                <div class="card border mt-3 rounded-4 shadow">
+                    <div class="locationDiv" style="cursor:pointer">
+                        <input type="hidden" th:value="${lodging.id}" class="lodging_id">
+                        <div class="ratio ratio-4x3">
+                            <img th:src="${lodging.imgUrl}" class="card-img-top rounded-4"
+                                 th:alt="${lodging.name}"/>
+                        </div>
+                        <div class="card-body">
+                            <p style="font-size: 10px;" class="m-0 mb-3" th:text="${lodging.lodgingType}"></p>
+                            <h4 class="card-title" th:text="${lodging.name}"></h4>
+                            <div class="d-flex justify-content-end align-items-center">
+                                <p style="font-size: 10px;">(1박 기준)</p>
+                                <p class="fw-semibold ms-1" th:text="${lodging.minPrice}+'원~'"></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <script>
+        <script>
 
-                $(".locationDiv").click(function(){
-                    var sessionDate = sessionStorage.getItem("date");
-                    let index = $(".locationDiv").index(this);
-                    var lodging_id = $(".lodging_id").eq(index).val();
-                    if(sessionDate != null){
-                    var DateList = sessionDate.split('~');
-                    var checkIn = DateList[0];
-                    var checkOut = DateList[1];
-                    // session 에 일자가 등록 되어 있을 때
-                    location.href = `/reserv/${lodging_id}/checkIn=${checkIn}/checkOut=${checkOut}`;
-                    }else{
-                        // 등록한 일자가 없을 시
-                    location.href = `/reserv/lodgingReservContent/${lodging_id}`;
-                    }
-                });
-
-
-            </script>
-
-        </th:block>
+            $(".locationDiv").click(function(){
+                var sessionDate = sessionStorage.getItem("date");
+                let index = $(".locationDiv").index(this);
+                var lodging_id = $(".lodging_id").eq(index).val();
+                if(sessionDate != null){
+                var DateList = sessionDate.split('~');
+                var checkIn = DateList[0];
+                var checkOut = DateList[1];
+                // session 에 일자가 등록 되어 있을 때
+                location.href = `/reserv/lodgingReservContent/${lodging_id}/checkIn=${checkIn}/checkOut=${checkOut}`;
+                }else{
+                    // 등록한 일자가 없을 시
+                location.href = `/reserv/lodgingReservContent/${lodging_id}`;
+                }
+            });
+        </script>
     </div>
 
     <!--    페이지네이션과 검색어입력 관련 부분-->
