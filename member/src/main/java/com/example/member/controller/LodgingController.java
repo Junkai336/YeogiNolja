@@ -45,10 +45,6 @@ public class LodgingController {
     private final RoomService roomService;
     private final ItemImgService itemImgService;
     private final UploadFileService uploadFileService;
-    private final ReservedDateService reservedDateService;
-
-    private final LodgingRepository lodgingRepository;
-    private final ItemImgRepository itemImgRepository;
 
     @GetMapping(value = "/registration")
     public String toRegistration(Model model) {
